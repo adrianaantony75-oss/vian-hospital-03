@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head><body>
+<title>VIAN Design Studio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: concept picker strip on top, 3D stage left, concept sheet right. Single dark look shared with the VIAN 3D models. */
+:root{color-scheme:dark;--bg:#0A0F15;--panel:#0F1620;--card:#141D29;--line:#223042;--fg:#E7EEF5;--muted:#9AABBB;--faint:#62748A;--accent:#3FD3C2;--amber:#F2B33D;--good:#43D18F;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto auto minmax(0,1fr)}
+header{grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--panel)}
+.logo{height:15px}.logo path{fill:none;stroke:var(--fg);stroke-width:3.2;stroke-linecap:square;stroke-linejoin:miter}
+.ttl b{display:block;font-size:15px}.ttl span{font-size:12px;color:var(--muted)}
+.hdr-r{margin-left:auto;display:flex;gap:8px;flex-wrap:wrap}
+.navlink{font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:9px;border:1px solid var(--line);color:var(--fg);text-decoration:none}
+.picker{grid-column:1/-1;display:flex;gap:8px;overflow-x:auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);scrollbar-width:none}
+.picker::-webkit-scrollbar{display:none}
+.pk{flex:none;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);text-align:left;min-width:150px}
+.pk b{font-size:14px}.pk span{font-size:11.5px;color:var(--muted)}
+.pk[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.pk .rec{font:700 10px var(--mono);color:#04201c;background:var(--accent);padding:1px 6px;border-radius:99px;margin-top:3px}
+.stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(80% 70% at 50% 40%,#16222f,#0A0F15)}
+canvas#c{display:block;width:100%;height:100%;touch-action:none}
+.toolbar{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tb{display:flex;gap:2px;padding:3px;border-radius:12px;background:rgba(15,22,32,.92);border:1px solid var(--line)}
+.tb button{padding:7px 10px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--muted)}
+.tb button[aria-pressed="true"]{background:var(--card);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
+.sw{width:18px;height:18px;border-radius:50%;padding:0!important;margin:4px;border:2px solid transparent}.sw[aria-pressed="true"]{border-color:var(--fg)}
+.badge{position:absolute;top:12px;left:12px;background:rgba(15,22,32,.88);border:1px solid var(--line);border-radius:12px;padding:8px 12px;font-size:12px;color:var(--muted);max-width:calc(100% - 24px)}
+aside{min-height:0;overflow-y:auto;border-left:1px solid var(--line);background:var(--panel);padding:16px;display:grid;gap:14px;align-content:start;grid-auto-rows:max-content}
+h2{margin:2px 0 4px;font-size:22px;text-wrap:balance}
+.lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+p{margin:0;color:var(--muted);line-height:1.55}
+.kv{display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kv div{padding:8px 10px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45;min-width:0}
+.kv div:nth-child(-n+2){border-top:0}.kv div:nth-child(odd){color:var(--faint);background:var(--card)}
+.score{display:grid;gap:6px}
+.score div{display:grid;grid-template-columns:110px minmax(0,1fr) 28px;gap:8px;align-items:center;font-size:12.5px}
+.score i{display:block;height:6px;border-radius:9px;background:var(--line);overflow:hidden}.score i b{display:block;height:100%;background:var(--accent);border-radius:9px}
+ul{margin:0;padding-left:18px;color:var(--muted);display:grid;gap:4px;font-size:13px}
+.note{font-size:12px;color:var(--muted);border-left:2px solid var(--amber);padding-left:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{text-align:left;padding:6px;border-top:1px solid var(--line)}th{color:var(--faint);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border-top:0}
+td.best{color:var(--accent);font-weight:800}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto 58vh auto;height:auto;min-height:100%}aside{border-left:0;border-top:1px solid var(--line);overflow:visible}}
+</style>
+
+<div class="app">
+  <header>
+    <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
+    <div class="ttl"><b>VIAN Design Studio · 5 hospital shapes</b><span>No cylinders, no boxes · bar screens · illuminated VIAN logo</span></div>
+    <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">Hospital engineering model</a></div>
+  </header>
+  <div class="picker" id="picker"></div>
+  <section class="stage" id="stage">
+    <canvas id="c" aria-label="3D concept model"></canvas>
+    <div class="badge" id="badge">Drag to rotate · logo glows like the real backlit logo</div>
+    <div class="toolbar">
+      <div class="tb" id="tg"><button data-t="air" aria-pressed="true">Airflow</button><button data-t="light" aria-pressed="true">Logo light</button><button data-t="spin" aria-pressed="true">Turntable</button><button data-t="person" aria-pressed="false">Person for scale</button></div>
+      <div class="tb" id="fin"><button class="sw" data-f="0xE3E7EB" aria-pressed="true" style="background:#E3E7EB" aria-label="Silver-white"></button><button class="sw" data-f="0xD3E5F0" aria-pressed="false" style="background:#D3E5F0" aria-label="Ice blue"></button><button class="sw" data-f="0xACD9CE" aria-pressed="false" style="background:#ACD9CE" aria-label="Sea-glass teal"></button><button class="sw" data-f="0x3A3F45" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
+    </div>
+  </section>
+  <aside id="sheet"></aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const C=[
+ {id:"sail",name:"Sail",tag:"Leaning wave",rec:true,
+  idea:"A tall form shaped like a sail caught in wind. Flat calm front, a curved back, and a crest that rises at the rear. The crest is the outlet, so clean air is thrown up and away from the patient.",
+  dims:"440 W × 520 D × 1,150 H mm (crest)",filter:"One 305 × 610 × 115 mm pack, behind a side door",air:"In through the lower curved back and sides; out through the slot along the crest",
+  screen:"Bar touch screen across the flat front, at standing eye height",logo:"Vertical backlit VIAN along the front edge; glows softly, dims at night",
+  pros:["Nobody makes this shape","Flat front is easy to wipe and holds the screen","Air leaves high and backwards: good for theatres","One-piece front and back mouldings"],
+  risks:["Curved back needs a two-part mould (≈ 15% more tooling)","Must stand with the back facing the wall side"],
+  s:{unique:10,clean:9,cost:7,stable:8,air:9}},
+ {id:"prism",name:"Twisted Prism",tag:"Rounded triangle, quarter twist",
+  idea:"A soft triangle that twists 25° from base to top, like a glass sculpture. Three faces mean it looks different from every angle and fits into room corners.",
+  dims:"≈ 560 mm across the base triangle × 1,080 H mm",filter:"One pack, vertical, inside the triangle",air:"In through all three lower faces; out through a triangular top grille",
+  screen:"Bar screen on the front face near the top, where the twist is gentle",logo:"Horizontal backlit VIAN under the screen",
+  pros:["Striking from every side","Wide triangle base: very stable","Corner-friendly"],
+  risks:["Twisted surfaces need a more complex mould","Triangle wastes some inside space around a flat filter"],
+  s:{unique:9,clean:8,cost:6,stable:9,air:8}},
+ {id:"obelisk",name:"Faceted Obelisk",tag:"Diamond-cut tapered column",
+  idea:"A tapered column cut into diamond facets, wider at the bottom. The facets catch light like a gemstone; the lit logo runs up one ridge.",
+  dims:"≈ 520 mm base, 340 mm top × 1,080 H mm",filter:"One pack inside the wide lower half",air:"In through the lower facets; out through the top crown",
+  screen:"Bar screen set into the flat front facet",logo:"Backlit VIAN along the front ridge",
+  pros:["Premium jewel look","Very stable (wide base)","Facets hide fingerprints and dents"],
+  risks:["Facet edges need a deliberate wipe pattern in hospitals","More mould parting lines"],
+  s:{unique:8,clean:7,cost:7,stable:10,air:8}},
+ {id:"twin",name:"Twin Lungs",tag:"Two columns joined at the top",
+  idea:"Two slim rounded columns joined by a bridge, like a pair of lungs. Each column holds its own filter, so the filter area doubles and the fan can run slower and quieter.",
+  dims:"620 W × 300 D × 1,080 H mm",filter:"Two slim packs (305 × 610 × 60 mm), one per lung",air:"In through both columns; out through the bridge top",
+  screen:"Bar screen on the front of the bridge",logo:"Backlit VIAN on the bridge, under the screen",
+  pros:["A clear health symbol for hospitals","Double filter area: about 25% quieter at the same airflow","Slim depth: fits beside beds"],
+  risks:["Two filters to change","More parts: about 10% higher cost"],
+  s:{unique:9,clean:7,cost:6,stable:7,air:9}},
+ {id:"arch",name:"Halo Arch",tag:"Open portal with a light ring",
+  idea:"An arch with a glowing halo inside the opening. Filters sit in both legs; the halo shows air quality across the room.",
+  dims:"700 W × 360 D × 1,100 H mm",filter:"Two packs, one in each leg",air:"In through the inner faces of the legs; out through the top of the arch",
+  screen:"Bar screen on the arch crown",logo:"Backlit VIAN on the right leg",
+  pros:["Iconic, unforgettable shape","Great for lobbies and VIP wards","The halo is visible from across a ward"],
+  risks:["Inside corners take longer to clean","Largest footprint and highest tooling cost"],
+  s:{unique:10,clean:6,cost:5,stable:7,air:7}}];
+
+/* renderer */
+const canvas=$("#c"),stage=$("#stage");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.85;
+const scene=new THREE.Scene();if(THREE.RoomEnvironment){const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture}
+scene.add(new THREE.HemisphereLight(0xdfe9f3,0x1a2028,.45));const key=new THREE.DirectionalLight(0xffffff,.8);key.position.set(-900,1600,1300);scene.add(key);
+const camera=new THREE.PerspectiveCamera(32,1,5,30000);const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.target.set(0,560,0);controls.minDistance=600;controls.maxDistance=7000;controls.maxPolarAngle=Math.PI*.6;
+camera.position.set(2500,1250,1900);
+const floor=new THREE.Mesh(new THREE.CircleGeometry(1500,96),new THREE.MeshStandardMaterial({color:0x0b1118,roughness:1,envMapIntensity:.15}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+const grid=new THREE.PolarGridHelper(1400,16,8,96,0x22303f,0x172230);grid.position.y=.5;scene.add(grid);
+
+const body=new THREE.MeshStandardMaterial({color:0xE3E7EB,metalness:.35,roughness:.36,envMapIntensity:.6,side:THREE.DoubleSide});
+const graphite=new THREE.MeshStandardMaterial({color:0x1d2126,metalness:.2,roughness:.65,envMapIntensity:.35});
+const glass=new THREE.MeshStandardMaterial({color:0x05080c,metalness:.2,roughness:.12});
+const perf=new THREE.MeshStandardMaterial({color:0x6c737b,metalness:.3,roughness:.6});
+const glow=new THREE.MeshBasicMaterial({color:0x8FF3FF,toneMapped:false});
+const halo=new THREE.MeshBasicMaterial({color:0x4FE3D0,toneMapped:false});
+
+/* helpers */
+function screen(w,h,parent){const c=document.createElement("canvas");c.width=1024;c.height=Math.round(1024*h/w);const g=c.getContext("2d");g.fillStyle="#05080c";g.fillRect(0,0,c.width,c.height);
+  const s=c.height/370;g.font=`600 ${22*s}px JetBrains Mono, monospace`;g.fillStyle="#3FD3C2";g.fillText("THEATRE",40*s,52*s);g.fillStyle="#4b5a6a";g.fillText("UNIT    SERVICE",210*s,52*s);
+  const cell=(x,v,u,l)=>{g.fillStyle="#E7EEF5";g.font=`300 ${76*s}px Manrope, sans-serif`;g.fillText(v,x*s,190*s);const ww=g.measureText(v).width;g.font=`500 ${28*s}px Manrope`;g.fillStyle="#91A2B4";g.fillText(u,x*s+ww+8,190*s);g.font=`700 ${19*s}px Manrope`;g.fillStyle="#5E6F82";g.fillText(l,x*s,236*s)};
+  cell(40,"21.0","°C","TEMP");cell(300,"48","%","RH");cell(520,"+8","Pa","PRESSURE");cell(780,"712","m³/h","AIRFLOW");
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,toneMapped:false}));
+  const frame=new THREE.Mesh(new THREE.BoxGeometry(w+16,h+16,4),glass);frame.position.z=-2.5;const g2=new THREE.Group();g2.add(frame);g2.add(m);parent.add(g2);return g2}
+const LOGO=[[[0,1],[.35,0],[.7,1]],[[1,1],[1,0]],[[1.3,0],[1.65,1],[2,0]],[[2.3,0],[2.3,1],[2.95,0],[2.95,1]]];
+const lights=[];
+function litLogo(h,parent,vertical=false){const g=new THREE.Group();const r=h*.055;
+  const plate=new THREE.Mesh(new THREE.BoxGeometry(h*3.9,h*1.9,3),glass);plate.position.z=-1.5;g.add(plate);
+  LOGO.forEach(st=>{for(let i=0;i<st.length-1;i++){const a=new THREE.Vector3((st[i][0]-1.475)*h,(st[i][1]-.5)*h,0),b=new THREE.Vector3((st[i+1][0]-1.475)*h,(st[i+1][1]-.5)*h,0);
+    const len=a.distanceTo(b);const m=new THREE.Mesh(new THREE.BoxGeometry(len+r*1.2,r*1.6,r),glow);m.position.copy(a).add(b).multiplyScalar(.5);m.rotation.z=Math.atan2(b.y-a.y,b.x-a.x);g.add(m)}});
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex(),color:0x8ff0ff,transparent:true,opacity:.55,depthWrite:false,blending:THREE.AdditiveBlending}));sp.scale.set(h*4.4,h*2.2,1);sp.position.z=2;g.add(sp);
+  if(vertical)g.rotation.z=Math.PI/2;parent.add(g);lights.push(g);return g}
+let _gt;function glowTex(){if(_gt)return _gt;const c=document.createElement("canvas");c.width=c.height=128;const g=c.getContext("2d");const gr=g.createRadialGradient(64,64,4,64,64,64);gr.addColorStop(0,"rgba(255,255,255,.9)");gr.addColorStop(1,"rgba(255,255,255,0)");g.fillStyle=gr;g.fillRect(0,0,128,128);_gt=new THREE.CanvasTexture(c);return _gt}
+function plinth(shape,parent,h=70){const ge=new THREE.ExtrudeGeometry(shape,{depth:h,bevelEnabled:true,bevelThickness:3,bevelSize:3,bevelSegments:2,curveSegments:48});ge.rotateX(-Math.PI/2);const m=new THREE.Mesh(ge,graphite);parent.add(m);return m}
+function roundTri(r,k){const s=new THREE.Shape();const pts=[0,1,2].map(i=>{const a=Math.PI/2+i*2*Math.PI/3;return new THREE.Vector2(Math.cos(a)*r,Math.sin(a)*r)});
+  for(let i=0;i<3;i++){const p=pts[i],n=pts[(i+1)%3],pv=pts[(i+2)%3];const a=p.clone().lerp(pv,k),b=p.clone().lerp(n,k);if(i===0)s.moveTo(a.x,a.y);else s.lineTo(a.x,a.y);s.quadraticCurveTo(p.x,p.y,b.x,b.y)}s.closePath();return s}
+function perfTex(){const c=document.createElement("canvas");c.width=c.height=256;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,256,256);g.fillStyle="#555b62";for(let y=6;y<256;y+=12)for(let x=6+((y/12)%2)*6;x<256;x+=12){g.beginPath();g.arc(x,y,2.6,0,7);g.fill()}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(8,10);t.encoding=THREE.sRGBEncoding;return t}
+const perfMat=body.clone();perfMat.map=perfTex();
+
+/* concept builders: each returns {group, air:[[start points],[end points]]} */
+const B={};
+B.sail=()=>{const g=new THREE.Group();
+  const s=new THREE.Shape();s.moveTo(200,70);s.lineTo(200,980);s.bezierCurveTo(200,1080,40,1130,-150,1150);s.bezierCurveTo(-250,1000,-300,600,-250,320);s.bezierCurveTo(-230,180,-180,90,-120,70);s.lineTo(200,70);
+  const ge=new THREE.ExtrudeGeometry(s,{depth:420,bevelEnabled:true,bevelThickness:28,bevelSize:28,bevelSegments:8,curveSegments:64});ge.translate(0,0,-210);ge.rotateY(-Math.PI/2);
+  const m=new THREE.Mesh(ge,body);g.add(m);
+  const back=new THREE.Mesh(new THREE.PlaneGeometry(380,520),perfMat);back.position.set(0,380,-268);back.rotation.y=Math.PI;back.rotation.x=.12;g.add(back);
+  const crest=new THREE.Mesh(new THREE.BoxGeometry(380,10,120),graphite);crest.position.set(0,1128,-120);crest.rotation.x=-.5;g.add(crest);
+  const sc=screen(300,100,g);sc.position.set(0,900,229);
+  const lg=litLogo(34,g,true);lg.position.set(-176,600,229);
+  plinth(new THREE.Shape([new THREE.Vector2(-230,-240),new THREE.Vector2(230,-240),new THREE.Vector2(230,190),new THREE.Vector2(-230,190)]),g,60);
+  return {g,inP:[[0,300,-500],[0,450,-520],[-320,300,-150],[320,300,-150]],outP:[[0,1500,-500],[-100,1550,-450],[100,1550,-450]]}};
+B.prism=()=>{const g=new THREE.Group();const H=1080;
+  const TW=THREE.MathUtils.degToRad(60),y0=70,y1=780;  // twist happens in the lower body; top part stays straight for the screen
+  const twistAt=y=>TW*Math.min(1,Math.max(0,(y-y0)/(y1-y0)));
+  const ge=new THREE.ExtrudeGeometry(roundTri(340,.3),{depth:H-70,bevelEnabled:false,curveSegments:24,steps:60});ge.rotateX(-Math.PI/2);ge.translate(0,70,0);
+  const p=ge.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i),a=twistAt(y),x=p.getX(i),z=p.getZ(i);p.setXYZ(i,x*Math.cos(a)-z*Math.sin(a),y,x*Math.sin(a)+z*Math.cos(a))}ge.computeVertexNormals();
+  g.add(new THREE.Mesh(ge,body));
+  const topG=new THREE.Mesh(new THREE.ShapeGeometry(roundTri(318,.3),24),graphite);topG.rotation.x=-Math.PI/2;topG.rotation.z=TW;topG.position.y=H+1;g.add(topG);
+  const f=new THREE.Group();f.rotation.y=-TW+Math.PI;g.add(f);
+  const faceDist=340*Math.cos(Math.PI/3)*.99;const sc=screen(240,80,f);sc.position.set(0,930,faceDist+3);
+  const lg=litLogo(26,f);lg.position.set(0,830,faceDist+3);
+  plinth(roundTri(330,.28),g,70);
+  return {g,inP:[[0,300,520],[-450,300,-260],[450,300,-260]],outP:[[0,1500,0],[80,1550,60],[-80,1550,-40]]}};
+B.obelisk=()=>{const g=new THREE.Group();const ge=new THREE.CylinderGeometry(190,300,1010,6,5);ge.translate(0,575,0);
+  const p=ge.attributes.position;for(let i=0;i<p.count;i++){const y=p.getY(i);const ring=Math.round((y-70)/202);if(ring%2===1){const a=Math.PI/6,x=p.getX(i),z=p.getZ(i);p.setX(i,x*Math.cos(a)-z*Math.sin(a));p.setZ(i,x*Math.sin(a)+z*Math.cos(a))}}
+  const ng=ge.toNonIndexed();ng.computeVertexNormals();const m=new THREE.Mesh(ng,body.clone());m.material.flatShading=true;g.add(m);
+  const cap=new THREE.Mesh(new THREE.CylinderGeometry(178,178,8,6),graphite);cap.position.y=1083;g.add(cap);
+  const f=new THREE.Group();f.rotation.y=Math.PI/6;g.add(f);
+  const r=(yy)=>(300-(300-190)*(yy-70)/1010)*Math.cos(Math.PI/6);
+  const sc=screen(200,70,f);sc.position.set(0,890,r(890)+8);sc.rotation.x=-Math.atan((300-190)/1010);
+  const lg=litLogo(24,f);lg.position.set(0,780,r(780)+8);lg.rotation.x=-Math.atan((300-190)/1010);
+  plinth(new THREE.Shape(Array.from({length:6},(_,i)=>new THREE.Vector2(Math.cos(i*Math.PI/3+Math.PI/6)*310,Math.sin(i*Math.PI/3+Math.PI/6)*310))),g,70);
+  return {g,inP:[[0,280,520],[450,280,260],[-450,280,260],[0,280,-520]],outP:[[0,1500,0],[60,1560,50]]}};
+B.twin=()=>{const g=new THREE.Group();
+  [-170,170].forEach(x=>{const cg=new THREE.CapsuleGeometry(130,760,16,48);const c=new THREE.Mesh(cg,body);c.position.set(x,70+130+380,0);c.scale.z=.85;g.add(c);
+    const pl=new THREE.Mesh(new THREE.CylinderGeometry(131,131,420,48,1,true,-.9,1.8),perfMat);pl.position.set(x,360,0);pl.scale.z=.86;g.add(pl)});
+  const br=new THREE.Mesh(new THREE.BoxGeometry(360,180,200,1,1,1),body);br.position.set(0,930,0);g.add(br);
+  const sc=screen(260,80,g);sc.position.set(0,955,103);const lg=litLogo(24,g);lg.position.set(0,880,103);
+  const vent=new THREE.Mesh(new THREE.BoxGeometry(300,6,140),graphite);vent.position.set(0,1022,0);g.add(vent);
+  const s=new THREE.Shape();s.absarc(-170,0,150,Math.PI/2,Math.PI*1.5,false);s.absarc(170,0,150,-Math.PI/2,Math.PI/2,false);plinth(s,g,70);
+  return {g,inP:[[-420,350,250],[420,350,250],[-420,350,-250],[420,350,-250]],outP:[[0,1450,0],[60,1500,30]]}};
+B.arch=()=>{const g=new THREE.Group();
+  const s=new THREE.Shape();s.moveTo(-350,70);s.lineTo(-350,750);s.absarc(0,750,350,Math.PI,0,true);s.lineTo(350,70);s.lineTo(180,70);s.lineTo(180,750);s.absarc(0,750,180,0,Math.PI,false);s.lineTo(-180,70);s.lineTo(-350,70);
+  const ge=new THREE.ExtrudeGeometry(s,{depth:300,bevelEnabled:true,bevelThickness:30,bevelSize:24,bevelSegments:8,curveSegments:64});ge.translate(0,0,-150);g.add(new THREE.Mesh(ge,body));
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(150,6,12,96,Math.PI),halo);ring.position.set(0,750,0);g.add(ring);
+  [-150,150].forEach(x=>{const l=new THREE.Mesh(new THREE.BoxGeometry(7,680,7),halo);l.position.set(x,410,0);g.add(l);
+    const pl=new THREE.Mesh(new THREE.PlaneGeometry(260,480),perfMat);pl.position.set(x<0?-181:181,350,0);pl.rotation.y=x<0?Math.PI/2:-Math.PI/2;g.add(pl)});
+  // halo hangs on thin rods inside the opening
+  const rod=new THREE.Mesh(new THREE.CylinderGeometry(3,3,34,8),graphite);rod.position.set(0,916,0);g.add(rod);
+  const sc=screen(240,72,g);sc.position.set(0,1010,183);sc.rotation.x=-.25;const lg=litLogo(22,g,true);lg.position.set(265,450,183);
+  const vent=new THREE.Mesh(new THREE.BoxGeometry(260,6,180),graphite);vent.position.set(0,1128,0);g.add(vent);
+  const ps=new THREE.Shape([new THREE.Vector2(-380,-190),new THREE.Vector2(380,-190),new THREE.Vector2(380,190),new THREE.Vector2(-380,190)]);plinth(ps,g,60);
+  return {g,inP:[[0,350,300],[0,350,-300],[0,300,0]],outP:[[0,1500,0],[50,1560,-40]]}};
+
+/* person for scale */
+const person=new THREE.Group();{const m=new THREE.MeshStandardMaterial({color:0x2a3542,roughness:.9});const b=new THREE.Mesh(new THREE.CapsuleGeometry(170,950,8,24),m);b.position.y=170+475;b.scale.z=.55;person.add(b);
+  const h=new THREE.Mesh(new THREE.SphereGeometry(110,24,16),m);h.position.y=1640;person.add(h);person.position.set(-850,0,-200);person.visible=false;scene.add(person)}
+
+/* airflow particles */
+const PN=420,pg=new THREE.BufferGeometry(),pa=new Float32Array(PN*3),pc=new Float32Array(PN*3);pg.setAttribute("position",new THREE.BufferAttribute(pa,3));pg.setAttribute("color",new THREE.BufferAttribute(pc,3));
+const pts=new THREE.Points(pg,new THREE.PointsMaterial({size:14,vertexColors:true,transparent:true,depthWrite:false}));scene.add(pts);
+let paths=[],parts=[];const D=new THREE.Color(0xF2A34D),K=new THREE.Color(0x63E6FF);
+function makePaths(c){paths=[];for(let k=0;k<40;k++){const a=c.inP[k%c.inP.length],o=c.outP[k%c.outP.length];const j=()=>(Math.random()-.5)*160;
+  const cv=new THREE.CatmullRomCurve3([new THREE.Vector3(a[0]+j(),a[1]+j(),a[2]+j()),new THREE.Vector3(a[0]*.4,a[1],a[2]*.4),new THREE.Vector3(j()*.3,620,j()*.3),new THREE.Vector3(j()*.4,1050,j()*.4),new THREE.Vector3(o[0]+j(),o[1]+j()*.5,o[2]+j())]);paths.push(cv.getSpacedPoints(200))}
+  parts=Array.from({length:PN},()=>({p:Math.floor(Math.random()*40),t:Math.random()}))}
+
+/* scene switching */
+let cur=null,curId=null;
+function show(id){if(cur)scene.remove(cur.g);lights.length=0;const c=C.find(x=>x.id===id);cur=B[id]();scene.add(cur.g);curId=id;makePaths(cur);
+  $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();try{history.replaceState(null,"","#"+id)}catch(e){}}
+function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b></i><span>${v}</span></div>`}
+function renderSheet(c){const t=Object.values(c.s).reduce((a,b)=>a+b,0);
+  $("#sheet").innerHTML=`<div><div class="lbl">Concept ${C.indexOf(c)+1} of 5${c.rec?" · recommended":""}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
+  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>${esc(c.filter)}</div><div>Airflow</div><div>${esc(c.air)}</div><div>Screen</div><div>${esc(c.screen)}</div><div>Logo</div><div>${esc(c.logo)}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, ₹ 3,999 pack, sensors, main board, app</div></div>
+  <div><div class="lbl" style="margin-bottom:8px">Design score (out of 10) · total ${t}/50</div><div class="score">${bar("Uniqueness",c.s.unique)}${bar("Easy to clean",c.s.clean)}${bar("Cost to make",c.s.cost)}${bar("Stability",c.s.stable)}${bar("Airflow fit",c.s.air)}</div></div>
+  <div><div class="lbl" style="margin-bottom:6px">Strengths</div><ul>${c.pros.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+  <div><div class="lbl" style="margin-bottom:6px">Risks and answers</div><ul>${c.risks.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+  <div><div class="lbl" style="margin-bottom:6px">All 5 compared</div><table><tr><th>Concept</th><th>Unique</th><th>Clean</th><th>Cost</th><th>Total</th></tr>${C.map(x=>{const tt=Object.values(x.s).reduce((a,b)=>a+b,0);return `<tr><td${x.id===c.id?' class="best"':""}>${esc(x.name)}</td><td>${x.s.unique}</td><td>${x.s.clean}</td><td>${x.s.cost}</td><td>${tt}</td></tr>`}).join("")}</table></div>
+  <p class="note">Shapes are concepts for review. Scores are design judgement, not test results. Once a shape is chosen, the VIAN Home model can take the same design language.</p>`}
+$("#picker").innerHTML=C.map((c,i)=>`<button class="pk" data-id="${c.id}" aria-pressed="false"><b>${i+1}. ${esc(c.name)}</b><span>${esc(c.tag)}</span>${c.rec?'<span class="rec">RECOMMENDED</span>':""}</button>`).join("");
+$$(".pk").forEach(b=>b.onclick=()=>show(b.dataset.id));
+
+/* toggles */
+let spin=true,lightOn=true;
+function applyLight(){lights.forEach(l=>l.visible=lightOn)}
+$$("#tg button").forEach(b=>b.onclick=()=>{const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);const t=b.dataset.t;
+  if(t==="air")pts.visible=on;if(t==="light"){lightOn=on;applyLight()}if(t==="spin")spin=on;if(t==="person")person.visible=on});
+$$("#fin button").forEach(b=>b.onclick=()=>{$$("#fin button").forEach(x=>x.setAttribute("aria-pressed",x===b));body.color.setHex(+b.dataset.f);perfMat.color.setHex(+b.dataset.f)});
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<1?50:32;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(stage);resize();
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;let last=performance.now();
+function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.max(last,now);
+  if(spin&&!reduce&&cur)cur.g.rotation.y+=dt*.25;
+  if(pts.visible){for(let i=0;i<PN;i++){const q=parts[i];q.t+=dt*.18;if(q.t>=1){q.t=0;q.p=Math.floor(Math.random()*40)}const v=paths[q.p][Math.min(200,Math.floor(q.t*200))];
+    const ang=cur?cur.g.rotation.y:0,ca=Math.cos(ang),sa=Math.sin(ang);pa[i*3]=v.x*ca+v.z*sa;pa[i*3+1]=v.y;pa[i*3+2]=-v.x*sa+v.z*ca;const c=q.t<.45?D:K;pc[i*3]=c.r;pc[i*3+1]=c.g;pc[i*3+2]=c.b}
+    pg.attributes.position.needsUpdate=true;pg.attributes.color.needsUpdate=true}
+  const pulse=.85+.15*Math.sin(now/600);lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
+  controls.update();renderer.render(scene,camera)}
+function loop(n){tick(n);requestAnimationFrame(loop)}
+const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"sail");requestAnimationFrame(loop);
+window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(C.some(c=>c.id===h)&&h!==curId)show(h)});
+window.VIAN={show,frames:(n=60)=>{let t=last;for(let i=0;i<n;i++){t+=16.7;tick(t)}},shot:n=>fetch("/save/"+n,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),setSpin:v=>{spin=v}};
+})();
+</script>
+
+</body></html>
