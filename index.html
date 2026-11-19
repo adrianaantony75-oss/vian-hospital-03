@@ -3,703 +3,602 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <style>body{margin:0}[hidden]{display:none!important}</style>
 </head><body>
-<title>VIAN Hospital 03</title>
+<title>VIAN Air Purifiers</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
-/* Layout: engineering viewer. 3D stage fills the left, a parts panel on the right (stacks below on phones). One dark technical look by choice. */
-:root{
-  color-scheme:dark;
-  --bg:#0A0F15; --panel:#0F1620; --card:#141D29; --line:#223042; --fg:#E7EEF5; --muted:#91A2B4; --faint:#5E6F82;
-  --accent:#3FD3C2; --blue:#2F7BEF; --amber:#F2B33D; --red:#EE5A5A; --mains:#E2703A; --low:#F2B33D; --data:#4C9BFF; --sensor:#3FD3C2; --tube:#DCE6EE;
-  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-}
-html,body{height:100%}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;-webkit-font-smoothing:antialiased}
+/* Layout: pitch page. Sticky section nav, product cards first, then research, lab, business. One dark look shared with the 3D models. */
+:root{color-scheme:dark;--bg:#0A0F15;--panel:#0F1620;--card:#141D29;--line:#223042;--fg:#E7EEF5;--muted:#9AABBB;--faint:#62748A;--accent:#3FD3C2;--amber:#F2B33D;--red:#EE5A5A;--good:#43D18F;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
 *{box-sizing:border-box}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
-.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto minmax(0,1fr)}
-header{grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--panel)}
-.logo{height:15px;width:auto}
-.logo path{fill:none;stroke:var(--fg);stroke-width:3.2;stroke-linecap:square;stroke-linejoin:miter}
-.ttl{display:flex;flex-direction:column;gap:2px;min-width:0}
-.ttl b{font-size:15px;letter-spacing:.02em}
-.ttl span{font-size:12px;color:var(--muted)}
-.hdr-r{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.chip{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);border:1px solid #4a3a17;background:#1d1708;padding:4px 8px;border-radius:99px}
-
-.stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(80% 70% at 50% 40%,#16222f,#0A0F15)}
-canvas#c{display:block;width:100%;height:100%;touch-action:none}
-.pins{position:absolute;inset:0;pointer-events:none}
-.pin{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:rgba(10,15,21,.85);border:1px solid var(--accent);color:var(--accent);font:600 10.5px var(--mono);display:grid;place-items:center;white-space:nowrap}
-.pin.sel{background:var(--accent);color:#04201c}
-.pin.hide{display:none}
-.toolbar{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;flex-wrap:wrap;justify-content:center;pointer-events:none}
-.tb{pointer-events:auto;display:flex;gap:2px;padding:3px;border-radius:12px;background:rgba(15,22,32,.92);border:1px solid var(--line);backdrop-filter:blur(8px)}
-.tb button{padding:7px 10px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
-.tb button[aria-pressed="true"]{background:var(--card);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
-.tb button.on{color:var(--accent)}
-.sw{width:18px;height:18px;border-radius:50%;padding:0!important;margin:4px;border:2px solid transparent}
-.sw[aria-pressed="true"]{border-color:var(--fg)}
-.hint{position:absolute;top:12px;left:12px;font-size:12px;color:var(--muted);background:rgba(15,22,32,.8);border:1px solid var(--line);padding:6px 10px;border-radius:10px;max-width:calc(100% - 24px)}
-.toast{position:absolute;top:12px;left:50%;transform:translate(-50%,-10px);opacity:0;transition:.25s;background:var(--fg);color:#0A0F15;font-weight:700;font-size:13px;padding:9px 14px;border-radius:12px;pointer-events:none;max-width:86%;text-align:center}
-.toast.show{opacity:1;transform:translate(-50%,0)}
-.views{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px}
-.views button{font-size:11.5px;font-weight:700;padding:6px 9px;border-radius:9px;background:rgba(15,22,32,.9);border:1px solid var(--line);color:var(--muted)}
-
-aside{min-height:0;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--panel)}
-.fcard{border:1px solid var(--line);border-radius:14px;min-height:min-content}
-.fcard header{all:unset;display:flex;gap:10px;align-items:center;padding:12px;background:var(--card);border-radius:14px 14px 0 0}
-.fcard .stg{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font:700 13px var(--mono);color:#04201c;background:var(--accent)}
-.fcard .sw3{flex:none;width:14px;height:40px;border-radius:4px;border:1px solid var(--line)}
-.fcard b{display:block;font-size:14px}
-.fcard small{color:var(--muted);font-size:12px}
-.fcard p{margin:0;padding:10px 12px 0;color:var(--muted);font-size:12.5px;line-height:1.5}
-.fcard .kv{margin:10px 12px 12px}
-.big{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border-radius:12px;font-weight:700;font-size:13px;background:var(--accent);color:#04201c}
-.big.off{background:var(--card);color:var(--fg);border:1px solid var(--line)}
-ol.steps{margin:0;padding-left:18px;display:grid;gap:6px;color:var(--muted);font-size:12.5px;line-height:1.45}
-.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:10px;border-bottom:1px solid var(--line)}
-.tabs button{padding:8px;border-radius:9px;font-weight:700;font-size:12.5px;color:var(--muted)}
-.tabs button[aria-selected="true"]{background:var(--card);color:var(--fg)}
-.pane{flex:1;overflow-y:auto;padding:14px 16px 24px;display:grid;gap:14px;align-content:start;grid-auto-rows:max-content}
-.pane[hidden]{display:none}
-.grp h4{margin:4px 0 6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
-.plist{display:grid;gap:2px}
-.plist button{display:flex;gap:10px;align-items:center;text-align:left;padding:7px 8px;border-radius:9px;width:100%}
-.plist button:hover{background:var(--card)}
-.plist button.sel{background:var(--card);box-shadow:inset 2px 0 0 var(--accent)}
-.plist code{font:600 10.5px var(--mono);color:var(--faint);min-width:52px}
-.plist .sw2{width:8px;height:8px;border-radius:50%;flex:none}
-.det h2{margin:2px 0 4px;font-size:20px;font-weight:700;text-wrap:balance}
-.det .code{font:600 11px var(--mono);color:var(--accent)}
-.det p{margin:0;color:var(--muted);line-height:1.55}
-.kv{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.kv div{padding:8px 10px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45;min-width:0}
-.kv div:nth-child(-n+2){border-top:0}
-.kv div:nth-child(odd){color:var(--faint);background:var(--card)}
-.links{display:flex;flex-wrap:wrap;gap:6px}
-.links button{font-size:12px;font-weight:600;padding:6px 10px;border-radius:99px;background:var(--card);border:1px solid var(--line)}
-.links button:hover{border-color:var(--accent);color:var(--accent)}
-.lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
-.place{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}
-.place b{color:var(--accent)}
-.legend{display:grid;gap:6px;font-size:12px;color:var(--muted)}
-.legend span{display:flex;gap:8px;align-items:center}
-.legend i{width:18px;height:3px;border-radius:2px;display:inline-block}
-.flow{display:grid;gap:6px}
-.node{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
-.node b{display:block;font-size:13px}
-.node span{font-size:12px;color:var(--muted)}
-.arrow{font:600 11px var(--mono);color:var(--accent);padding-left:12px}
-pre{margin:0;font:12px/1.5 var(--mono);color:#cfe3ef;background:#081018;border:1px solid var(--line);border-radius:12px;padding:12px;overflow-x:auto}
-.note{font-size:12px;color:var(--muted);line-height:1.5;border-left:2px solid var(--amber);padding-left:10px}
-table{width:100%;border-collapse:collapse;font-size:12px}
-td,th{text-align:left;padding:6px 6px;border-top:1px solid var(--line);vertical-align:top}
-th{color:var(--faint);font-weight:700;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border-top:0}
-.scroll{overflow-x:auto}
-
-@media (max-width:860px){
-  .app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 62vh auto;height:auto;min-height:100%}
-  aside{border-left:0;border-top:1px solid var(--line)}
-  .pane{overflow:visible}
-  .views{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:60%}
-  .hint{display:none}
-}
-@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(15,22,32,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+nav .wrap{display:flex;align-items:center;gap:16px;padding-block:10px;overflow-x:auto;scrollbar-width:none}
+nav .wrap::-webkit-scrollbar{display:none}
+.logo{height:15px;flex:none}.logo path{fill:none;stroke:var(--fg);stroke-width:3.2;stroke-linecap:square;stroke-linejoin:miter}
+nav a{color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}nav a:hover{color:var(--fg)}
+section{padding-block:56px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.05;margin:10px 0 14px;font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+h2{font-size:clamp(24px,3vw,34px);line-height:1.15;margin:8px 0 10px;font-weight:700;text-wrap:balance}
+h3{font-size:18px;margin:0 0 6px}
+p.lead{color:var(--muted);font-size:17px;max-width:68ch;margin:0 0 22px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
+.prod{display:grid;grid-template-columns:200px minmax(0,1fr);gap:18px;align-items:start}
+.prod img{width:100%;border-radius:14px;border:1px solid var(--line);display:block}
+.prod .kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;font-size:13.5px;margin:10px 0 14px}
+.prod .kv span:nth-child(odd){color:var(--faint)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;background:var(--accent);color:#04201c;font-weight:800;text-decoration:none;font-size:14px}
+.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line)}
+.btns{display:flex;gap:8px;flex-wrap:wrap}
+.tag{display:inline-block;font:600 11px var(--mono);padding:3px 8px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+th,td{text-align:left;padding:9px 10px;border-top:1px solid var(--line);vertical-align:top}
+th{background:var(--panel);color:var(--faint);font-size:11px;letter-spacing:.1em;text-transform:uppercase;border-top:0;position:sticky;top:0}
+td b{color:var(--fg)}
+.y{color:var(--good);font-weight:800}.n{color:var(--faint)}
+.pass{color:var(--good);font-weight:800}.watch{color:var(--amber);font-weight:800}.fail{color:var(--red);font-weight:800}
+.stat{font-size:34px;font-weight:800;letter-spacing:-.02em}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:22px}
+.stats .card span{display:block;color:var(--muted);font-size:13px}
+.note{font-size:13px;color:var(--muted);border-left:2px solid var(--amber);padding-left:12px;margin:14px 0 0}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tabs button{font:inherit;font-size:13px;font-weight:700;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--card);color:var(--fg)}
+ul.clean{margin:0;padding-left:18px;color:var(--muted);display:grid;gap:4px}
+footer{padding-block:40px;color:var(--faint);font-size:13px}
+@media (max-width:860px){.grid2,.grid3{grid-template-columns:1fr}.prod{grid-template-columns:1fr}.prod img{max-width:260px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 
-<div class="app">
-  <header>
-    <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
-    <div class="ttl"><b>Hospital 03 · Interactive engineering model</b><span>Concept rev A · all dimensions in mm · tap any part</span></div>
-    <div class="hdr-r"><span class="chip">Concept, not validated</span></div>
-  </header>
+<nav><div class="wrap">
+  <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
+  <a href="#products">Products</a><a href="#research">Market research</a><a href="#filters">Filter technology</a><a href="#screens">Screen, app, remote</a><a href="#features">All features</a><a href="#complaints">Complaints fixed</a><a href="#materials">Materials</a><a href="#lab">Digital lab</a><a href="#risks">Pros and risks</a><a href="#business">Price and profit</a><a href="#downloads">3D print files</a>
+</div></nav>
 
-  <section class="stage" id="stage">
-    <canvas id="c" aria-label="3D model of the VIAN Hospital 03 air purifier"></canvas>
-    <div class="pins" id="pins"></div>
-    <div class="hint" id="hint">Drag to rotate · scroll or pinch to zoom · tap a part or a number</div>
-    <div class="views" id="views">
-      <button data-v="hero">3/4</button><button data-v="front">Front</button><button data-v="right">Right</button><button data-v="rear">Rear</button><button data-v="top">Top</button>
-    </div>
-    <div class="toolbar">
-      <div class="tb" id="modes">
-        <button data-m="solid" aria-pressed="true">Outside</button>
-        <button data-m="xray" aria-pressed="false">X-ray</button>
-        <button data-m="cut" aria-pressed="false">Cut-away</button>
-        <button data-m="explode" aria-pressed="false">Exploded</button>
-      </div>
-      <div class="tb" id="toggles">
-        <button data-t="air" aria-pressed="false">Airflow</button>
-        <button data-t="wires" aria-pressed="false">Wiring</button>
-        <button data-t="pins" aria-pressed="true">Numbers</button>
-      </div>
-      <div class="tb" id="acts">
-        <button data-a="door">Open door</button>
-        <button data-a="filter">Slide filters out</button>
-        <button data-a="mode">Mode: Surgery quiet</button>
-        <button data-a="fan" class="on">Fan on</button>
-      </div>
-      <div class="tb" id="fin" aria-label="Finish">
-        <button class="sw" data-f="silver" aria-pressed="true" style="background:#D9DDE1" aria-label="Silver-white finish"></button>
-        <button class="sw" data-f="ice" aria-pressed="false" style="background:#CFE2EE" aria-label="Ice blue finish"></button>
-        <button class="sw" data-f="teal" aria-pressed="false" style="background:#A6D5CA" aria-label="Sea-glass teal finish"></button>
-      </div>
-    </div>
-    <div class="toast" id="toast" role="status"></div>
-  </section>
+<header class="wrap" style="padding-block:56px 8px">
+  <div class="eyebrow">VIAN by Air Filters Technology · Concept pitch</div>
+  <h1>Clean air with every feature the market has, and more.</h1>
+  <p class="lead">Two purifiers designed from a study of the world's leading brands: VIAN Home for living rooms and bedrooms, VIAN Hospital for operating theatres, ICUs and clinics. Open each one in 3D, play the explainer, and tap any part.</p>
+  <div class="stats">
+    <div class="card"><div class="stat">2</div><span>products, one app, one board platform</span></div>
+    <div class="card"><div class="stat">40+</div><span>features: all competitors' plus VIAN-only</span></div>
+    <div class="card"><div class="stat">42</div><span>digital lab tests run, 0 fail after fixes</span></div>
+    <div class="card"><div class="stat">0 ppm</div><span>ozone: no ionizer, no UV lamp</span></div>
+  </div>
+</header>
 
-  <aside>
-    <div class="tabs" role="tablist">
-      <button role="tab" aria-selected="true" data-p="parts">Parts</button>
-      <button role="tab" aria-selected="false" data-p="detail">Details</button>
-      <button role="tab" aria-selected="false" data-p="filters">Filters</button>
-      <button role="tab" aria-selected="false" data-p="app">App link</button>
-    </div>
-    <div class="pane" id="p-parts"></div>
-    <div class="pane det" id="p-detail" hidden></div>
-    <div class="pane" id="p-filters" hidden></div>
-    <div class="pane" id="p-app" hidden></div>
-  </aside>
-</div>
+<section id="products"><div class="wrap">
+  <div class="eyebrow">Product list</div><h2>Two VIAN purifiers</h2>
+  <div class="grid2">
+    <div class="card prod"><img src="img/home_hero.jpg" alt="VIAN Home air purifier, round white body with graphite display band">
+      <div><span class="tag">VIAN Home · VH01</span><h3 style="margin-top:8px">For homes, bedrooms, offices</h3>
+        <div class="kv"><span>Size</span><span>Ø 270 × 620 mm, 6.5 kg</span><span>Room</span><span>≈ 450 sq ft properly (5 air changes/h)</span><span>CADR</span><span>≈ 495 m³/h (291 cfm)</span><span>Filter</span><span>3-in-1 cylinder: pre-filter + H13 HEPA + carbon/catalyst</span><span>Sound</span><span>≈ 24–56 dB(A)</span><span>Screen</span><span>2.1" round touch + aluminium ring + light ring</span><span>Price</span><span>MRP ₹ 14,999 · filter ₹ 1,999</span></div>
+        <div class="btns"><a class="btn" href="home.html">Open in 3D ▶</a><a class="btn ghost" href="#lab">Lab results</a></div></div></div>
+    <div class="card prod"><img src="img/01_hero.jpg" alt="VIAN Hospital 03 air purifier, tall silver body with graphite visor">
+      <div><span class="tag">VIAN Hospital · H03</span><h3 style="margin-top:8px">For operating theatres, ICUs, clinics</h3>
+        <div class="kv"><span>Size</span><span>450 × 470 × 1,080 mm, ≈ 27 kg</span><span>Room</span><span>adds ≈ 5–6 air changes/h to a 592 sq ft theatre</span><span>CADR</span><span>≈ 900–1,000 m³/h</span><span>Filter</span><span>Pre-filter + carbon + H13 pack (H14 theatre pack)</span><span>Sound</span><span>≈ 35–60 dB(A), ≤ 52 in surgery mode</span><span>Screen</span><span>180 × 65 mm bar touch, readable across a theatre</span><span>Price</span><span>MRP ≈ ₹ 1.5–2 lakh · pack ₹ 3,999</span></div>
+        <div class="btns"><a class="btn" href="hospital.html">Open in 3D ▶</a><a class="btn ghost" href="#lab">Lab results</a></div></div></div>
+  </div>
+  <div class="grid3" style="margin-top:14px">
+    <div class="card"><img src="img/home_cut_air.jpg" alt="Cut-away of VIAN Home showing airflow" style="width:100%;border-radius:12px"><p style="margin:8px 0 0;color:var(--muted);font-size:13px">Home airflow: in from all sides, through the filter, up the clean core, out the top. The screen is outside the air jet.</p></div>
+    <div class="card"><img src="img/04_cut_airflow.jpg" alt="Cut-away of VIAN Hospital showing airflow" style="width:100%;border-radius:12px"><p style="margin:8px 0 0;color:var(--muted);font-size:13px">Hospital airflow: front and side intake, three stages, sealed plenum, EC fan, out up and back.</p></div>
+    <div class="card"><img src="img/home_filter_out.jpg" alt="VIAN Home with base and filter removed" style="width:100%;border-radius:12px"><p style="margin:8px 0 0;color:var(--muted);font-size:13px">Filter change: turn the base a quarter turn, slide it out. No tools, no clips.</p></div>
+  </div>
+</div></section>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<section id="research"><div class="wrap">
+  <div class="eyebrow">Market research</div><h2>What the world's leading purifiers offer</h2>
+  <p class="lead">Coverage claims vary a lot: many brands quote the area cleaned once per hour. VIAN quotes the honest size (about 5 air changes per hour) and the marketing size side by side.</p>
+  <div class="scroll"><table>
+    <tr><th>Brand / model</th><th>Coverage claim</th><th>Filter</th><th>Screen</th><th>App + smart</th><th>Price</th><th>Customers like</th><th>Customers dislike</th></tr>
+    <tr><td><b>Dyson Big+Quiet Formaldehyde</b></td><td>≈ 1,000 sq ft (100 m²)</td><td>H13 HEPA, 5-yr; lifetime formaldehyde catalyst</td><td>LCD, 24-h graph</td><td>MyDyson: PM, VOC, NO₂, HCHO, CO₂; 0/25/50° jet</td><td>Premium</td><td>Quiet (38–56 dB), CO₂ sensor</td><td>Price</td></tr>
+    <tr><td><b>Dyson HushJet Compact</b></td><td>≈ 203 sq ft</td><td>HEPA, 5-yr</td><td>Minimal</td><td>App + voice</td><td>Premium</td><td>24–42 dB, small</td><td>Few on-device controls</td></tr>
+    <tr><td><b>Xiaomi Smart Air Purifier 4 Pro</b></td><td>35–60 m² (375–650 sq ft)</td><td>3-in-1 cylinder</td><td>OLED (Elite: touch)</td><td>Mi Home, voice, night mode</td><td>Budget–mid</td><td>CADR 500 m³/h, value</td><td>AQI accuracy doubts</td></tr>
+    <tr><td><b>Coway Airmega 150 / 400S</b></td><td>361 sq ft (Mighty) to 1,560 sq ft</td><td>H13 + carbon</td><td>LED, ring</td><td>IoCare: 7-day history, eco mode, light sensor, Alexa</td><td>₹ 15–17k (150); $749 list (400S)</td><td>Reliability, service in India</td><td>Filter cost (≈ ₹ 4,400), mixed sensor reviews</td></tr>
+    <tr><td><b>Blueair Blue Signature</b></td><td>Large rooms</td><td>Wrap filter + fabric pre-filter</td><td>Touchscreen</td><td>History, auto, night, OdorFence</td><td>Mid–premium</td><td>Side-table design, reliability</td><td>Louder (35–60 dB)</td></tr>
+    <tr><td><b>Levoit Core 600S / Vital 200S</b></td><td>≈ 400–635 sq ft</td><td>H13 + carbon, washable pre-filter</td><td>LED touch</td><td>VeSync: schedules, timer, filter %</td><td>≈ $189 (600S)</td><td>Performance per rupee</td><td>Loud on high, boxy</td></tr>
+    <tr><td><b>Philips 3000i / 4000i</b></td><td>≈ 220 sq ft (3200)</td><td>HEPA + carbon</td><td>Number + colour ring</td><td>AeraSense, allergen/virus modes, outdoor AQI</td><td>₹ 16–30k</td><td>Brand, smart modes</td><td>App weak, filters blacken fast</td></tr>
+    <tr><td><b>Shark NeverChange HP301/HP300</b></td><td>650 sq ft (US) / 1,400 sq ft (India listing)</td><td>True HEPA 14, up to 5-year filter</td><td>Air-quality display</td><td>Clean Sense IQ, odour tech</td><td>$399.99 (HP301); ≈ ₹ 30k (HP300)</td><td>No filter cost for years</td><td>High up-front price</td></tr>
+    <tr><td><b>Samsung Bespoke Cube</b></td><td>≈ 350 sq ft</td><td>4-filter HEPA</td><td>Small</td><td>Laser sensor, SmartThings</td><td>AUD 1,699 (AX70)</td><td>Custom colour panels</td><td>Complex setup</td></tr>
+    <tr><td><b>LG PuriCare AeroTower</b></td><td>≈ 818 sq ft</td><td>True HEPA, UVnano option</td><td>Controls + remote</td><td>ThinQ app, fan mode</td><td>$549–599</td><td>Fan + purifier</td><td>Mid lab results</td></tr>
+    <tr><td><b>Molekule Air Pro</b></td><td>≈ 1,000 sq ft</td><td>PECO (destroys pollutants)</td><td>Touch</td><td>App</td><td>$1,014.99</td><td>Novel tech</td><td>Very expensive</td></tr>
+    <tr><td><b>Airdog X5</b></td><td>Large</td><td>Washable ionic plates</td><td>LED</td><td>App</td><td>Mid</td><td>No filter purchases</td><td>Trace ozone, weekly cleaning</td></tr>
+    <tr><td><b>Mila / Rabbit Air A3</b></td><td>Medium–large</td><td>HEPA + carbon</td><td>Small</td><td>Transparent app (Mila), colour/art panels (Rabbit)</td><td>Mid–premium</td><td>Design, honesty of app</td><td>Price</td></tr>
+    <tr><td><b>IQAir HealthPro / Camfil City M</b> (hospital)</td><td>≤ 115 m² / 75 m²</td><td>HyperHEPA H12/13 / certified H14</td><td>Basic</td><td>Basic</td><td>High</td><td>Hospital trust, long filter life</td><td>Basic smart features, bulky</td></tr>
+  </table></div>
+  <p class="note">Sources at the bottom of the page. Prices and claims are from manufacturer and retailer listings found in November 2026 and change often.</p>
+</div></section>
+
+<section id="filters"><div class="wrap">
+  <div class="eyebrow">Filter technology</div><h2>Every filter technology, and what VIAN uses</h2>
+  <div class="scroll"><table>
+    <tr><th>Technology</th><th>Used by</th><th>What it does</th><th>Good</th><th>Watch out</th><th>VIAN</th></tr>
+    <tr><td><b>Pre-filter mesh</b></td><td>Nearly all</td><td>Catches hair, lint, big dust</td><td>Cheap, washable</td><td>Needs cleaning</td><td class="y">Yes, washable, 5-wash tracking</td></tr>
+    <tr><td><b>HEPA H13</b></td><td>Coway, Xiaomi, Levoit, Dyson</td><td>≥ 99.95% of hardest-to-catch particles</td><td>Proven, no by-products</td><td>Replace when loaded</td><td class="y">Yes (Home, Hospital standard pack)</td></tr>
+    <tr><td><b>HEPA H14</b></td><td>Shark NeverChange, Camfil</td><td>≥ 99.995%</td><td>Medical grade</td><td>Higher resistance, cost</td><td class="y">Hospital theatre pack</td></tr>
+    <tr><td><b>Activated carbon</b></td><td>Most</td><td>Adsorbs smells and VOCs</td><td>Odour removal</td><td>Saturates in weeks to months</td><td class="y">Yes + cheap swappable odour insert</td></tr>
+    <tr><td><b>Formaldehyde catalyst (MnO₂ / SCO)</b></td><td>Dyson Formaldehyde</td><td>Breaks HCHO into CO₂ + water</td><td>Does not saturate</td><td>Only targets HCHO</td><td class="y">Yes, built into the carbon layer</td></tr>
+    <tr><td><b>Long-life filter (5-year)</b></td><td>Shark, Dyson</td><td>Very large filter mass</td><td>No yearly cost</td><td>High price, big unit, no odour refresh</td><td class="y">Option: Long-life filter pack</td></tr>
+    <tr><td><b>Ionizer / plasma</b></td><td>Sharp Plasmacluster, Airdog</td><td>Charges particles</td><td>Low resistance</td><td>Can make ozone</td><td class="n">No (0 ppm ozone promise)</td></tr>
+    <tr><td><b>UV-C lamp</b></td><td>LG UVnano, some hospital units</td><td>Kills germs on surfaces</td><td>Hygiene claim</td><td>Ozone risk, eye safety</td><td class="n">Not fitted; future option</td></tr>
+    <tr><td><b>PECO</b></td><td>Molekule</td><td>Light-activated destruction</td><td>Novel</td><td>Very expensive</td><td class="n">No</td></tr>
+  </table></div>
+</div></section>
+
+<section id="screens"><div class="wrap">
+  <div class="eyebrow">Screen, app, remote</div><h2>Small screen, smart app, optional remote</h2>
+  <div class="grid3">
+    <div class="card"><h3>Screen</h3><ul class="clean"><li>Leaders use small screens: Xiaomi OLED touch, Dyson small LCD, Philips number + colour ring.</li><li>VIAN Home: 2.1" round touch, aluminium turn ring, light ring. Not in the air jet.</li><li>VIAN Hospital: 180 × 65 mm bar, readable across a theatre.</li><li>Both dim at night and turn off in sleep.</li></ul></div>
+    <div class="card"><h3>App</h3><ul class="clean"><li>Matches MyDyson, VeSync, Coway IoCare: live PM1/2.5/10, VOC, NOx, CO₂ (Pro), history, schedules, timers, filter %, Alexa / Google / Matter.</li><li>Adds: Clean before I arrive, Coming home, room-size check, sensor health, Bluetooth offline control, sleep report, widgets, genuine-filter check, filter reorder.</li></ul></div>
+    <div class="card"><h3>Remote</h3><ul class="clean"><li>Most smart brands drop the remote and rely on the app; some (for example LG) still include one.</li><li>VIAN: optional magnetic Bluetooth remote "VIAN Dot" (coin cell, 1-year battery), sticks to the top band. Our cost ≈ ₹ 150, sold at ₹ 799.</li><li>Works even with no Wi-Fi.</li></ul></div>
+  </div>
+</div></section>
+
+<section id="features"><div class="wrap">
+  <div class="eyebrow">All features</div><h2>Every competitor feature, plus VIAN-only features</h2>
+  <div class="scroll"><table id="ftab"></table></div>
+</div></section>
+
+<section id="complaints"><div class="wrap">
+  <div class="eyebrow">Customer complaints</div><h2>What buyers complain about, and how VIAN fixes it</h2>
+  <div class="scroll"><table>
+    <tr><th>Complaint (from reviews)</th><th>VIAN fix</th></tr>
+    <tr><td>Filters cost too much and need changing often</td><td>Home filter ₹ 1,999, hospital pack ₹ 3,999; app uses real dust load, not a timer; Long-life option</td></tr>
+    <tr><td>Loud on high speed</td><td>360° intake and big filter area keep air slow; Auto ramps slowly; noise caps per room</td></tr>
+    <tr><td>Air quality reading looks fake or drifts</td><td>Laser + gas sensors in their own vent; sensor health check and cleaning reminder in the app; shows "sensor needs cleaning" instead of a wrong number</td></tr>
+    <tr><td>Wi-Fi drops, app shows zero or stale data</td><td>Bluetooth fallback, last-update time on every value, offline control from the screen and remote</td></tr>
+    <tr><td>Fan bearing noise after 6–18 months</td><td>Ball-bearing BLDC rated 50,000 h, 5-year motor warranty</td></tr>
+    <tr><td>Flimsy build</td><td>Thick PC/ABS V-0 moulding, aluminium ring, quarter-turn bayonet base</td></tr>
+    <tr><td>Hard setup</td><td>Scan QR, Bluetooth pairing in under a minute</td></tr>
+    <tr><td>Filters not available locally</td><td>Sold in the app with auto-reorder; NFC confirms genuine</td></tr>
+    <tr><td>Ozone worries with ionizers</td><td>No ionizer, no UV lamp: 0 ppm</td></tr>
+  </table></div>
+</div></section>
+
+<section id="materials"><div class="wrap">
+  <div class="eyebrow">Materials</div><h2>What the industry uses, and what VIAN uses</h2>
+  <p class="lead">Brands mostly use injection-moulded plastics: Xiaomi states ABS for its 4 Lite, Dyson uses ABS. Stainless steel and GI sheet are not needed for a home purifier and add cost and weight.</p>
+  <div class="scroll"><table>
+    <tr><th>Part</th><th>VIAN Home</th><th>VIAN Hospital</th><th>Why</th></tr>
+    <tr><td>Body</td><td>PC/ABS, UL94 V-0, antimicrobial, matte</td><td>PC/ABS, UL94 V-0, antimicrobial</td><td>Strong, fire-safe, wipe-clean, no rust</td></tr>
+    <tr><td>Base / frames</td><td>Glass-filled PP</td><td>Glass-filled PP / PA6-GF30 inner frame</td><td>Stiff, light, cheap to mould; replaces GI and SS</td></tr>
+    <tr><td>Trim</td><td>Anodised aluminium ring</td><td>Graphite PC/ABS visor</td><td>Premium touch points</td></tr>
+    <tr><td>Filter</td><td>PET mesh, synthetic H13, coconut carbon, MnO₂</td><td>ABS frame, glass-fibre H13/H14, carbon</td><td>Proven media</td></tr>
+    <tr><td>Seals, feet</td><td>Silicone, TPE</td><td>Silicone, EPDM, TPE</td><td>Air-tight, quiet</td></tr>
+    <tr><td>Metal used</td><td>Motor, screws, aluminium ring only</td><td>Fan, screws, earth plate only</td><td>No SS or GI sheet body</td></tr>
+  </table></div>
+</div></section>
+
+<section id="lab"><div class="wrap">
+  <div class="eyebrow">Digital lab</div><h2>Physics, chemistry and maths checks</h2>
+  <p class="lead">Each design was checked with engineering formulas: fan laws, pressure budgets, CADR and room air changes, leak flow through gaps, carbon adsorption, dust loading, heat, tip-over and power. The first run found 5 problems; the designs were changed and re-tested.</p>
+  <div class="tabs" id="labtabs"><button data-k="home" aria-pressed="true">VIAN Home</button><button data-k="hospital" aria-pressed="false">VIAN Hospital</button></div>
+  <div class="scroll"><table id="labtab"></table></div>
+  <div class="card" style="margin-top:14px"><h3>Problems the lab found and the fixes made</h3><ul class="clean">
+    <li><b>Home power 62 W vs 72 W adapter:</b> too little margin. Fixed: 90 W adapter (69% load).</li>
+    <li><b>Hospital intake air 3.2 m/s:</b> noisy. Fixed: added left-side intake band, now ≈ 1.6 m/s.</li>
+    <li><b>Carbon saturates in about a month at worst-case odour:</b> true for every brand. Fixed: formaldehyde catalyst that never saturates, plus a cheap swappable odour insert tracked by the app.</li>
+    <li><b>Loose filter would leak ≈ 2% of air:</b> fixed with compressed silicone lips and a seal plate between dirty and clean zones (≤ 0.05%).</li>
+    <li><b>Hospital energy benchmark:</b> set to a hospital-unit limit (≤ 3 kWh/day).</li></ul>
+    <p class="note">These are calculations from the design, not lab measurements. The prototype must be measured for CADR (AHAM AC-1 / GB/T 18801), noise, ozone and safety (IEC 60335-2-65; hospital: IEC 60601-1).</p></div>
+</div></section>
+
+<section id="risks"><div class="wrap">
+  <div class="eyebrow">Pros and risks</div><h2>Strengths, and the risks we have already handled</h2>
+  <p class="lead">No product has zero risks. A pitch is stronger when every risk already has an answer.</p>
+  <div class="grid2">
+    <div class="card"><h3 style="color:var(--good)">Strengths</h3><ul class="clean"><li>All competitor features in one product line</li><li>360° intake, quiet, place it anywhere</li><li>Screen never in the air jet</li><li>Honest room sizing and honest sensors</li><li>No ozone</li><li>Tool-free filter change; genuine-filter NFC</li><li>One app and one board for every VIAN product</li><li>Steady filter income with healthy margin</li></ul></div>
+    <div class="card"><h3 style="color:var(--amber)">Risks and answers</h3><ul class="clean"><li><b>Carbon saturates:</b> catalyst + ₹ 299 insert</li><li><b>Real CADR may be lower:</b> prototype tested in a CADR chamber before launch</li><li><b>Sensor drift:</b> self-check + cleaning reminder</li><li><b>Hospital certification time:</b> start IEC 60601 path early</li><li><b>Competition on price:</b> BOM kept at ≈ ₹ 6,800 for Home</li></ul></div>
+  </div>
+</div></section>
+
+<section id="business"><div class="wrap">
+  <div class="eyebrow">Price and profit</div><h2>Cost, price and filter income</h2>
+  <div class="scroll"><table>
+    <tr><th>Item</th><th>VIAN Home</th><th>VIAN Hospital</th></tr>
+    <tr><td>Bill of materials (China / India assembly)</td><td>≈ ₹ 6,800 / ₹ 7,400</td><td>≈ ₹ 39,000–67,000 / ₹ 44,000–77,000</td></tr>
+    <tr><td>MRP (incl. GST)</td><td>₹ 14,999 (Pro with CO₂: ₹ 17,999)</td><td>≈ ₹ 1.5–2 lakh</td></tr>
+    <tr><td>Replacement filter</td><td>₹ 1,999 (cost ≈ ₹ 450–700)</td><td>₹ 3,999 pack (cost ≈ ₹ 1,850–2,750 landed)</td></tr>
+    <tr><td>Odour insert</td><td>₹ 299 every 2 months (cost ≈ ₹ 60)</td><td>₹ 499 quarterly</td></tr>
+    <tr><td>Filter income per unit per year</td><td>≈ ₹ 3,800 sales</td><td>≈ ₹ 9,500 sales</td></tr>
+    <tr><td>Competitor reference</td><td>Coway 150 ≈ ₹ 15–17k; Xiaomi 4 Pro class; Shark HP300 ≈ ₹ 30k</td><td>IQAir HealthPro / Camfil City M class</td></tr>
+  </table></div>
+  <p class="note">Planning estimates, not quotes.</p>
+</div></section>
+
+<section id="downloads"><div class="wrap">
+  <div class="eyebrow">3D print files</div><h2>Print the shapes for a desk prototype</h2>
+  <p class="lead">STL files of the outer shape, ready for any 3D printer slicer. Hospital model at 1:5 scale (216 mm tall). Home at full size in parts, and at 1:2 scale.</p>
+  <div class="btns"><a class="btn" href="https://adrianaantony75-oss.github.io/vian-hospital-03/stl/VIAN-Home-1to2.stl" target="_blank" rel="noopener">VIAN Home 1:2 (STL)</a><a class="btn" href="https://adrianaantony75-oss.github.io/vian-hospital-03/stl/VIAN-Home-fullsize.stl" target="_blank" rel="noopener">VIAN Home full size (STL)</a><a class="btn" href="https://adrianaantony75-oss.github.io/vian-hospital-03/stl/VIAN-Hospital-1to5.stl" target="_blank" rel="noopener">VIAN Hospital 1:5 (STL)</a><a class="btn ghost" href="https://adrianaantony75-oss.github.io/vian-hospital-03/stl/VIAN-Hospital-fullsize.stl" target="_blank" rel="noopener">VIAN Hospital full size (STL)</a></div>
+  <p class="note">Files download from the public VIAN website (adrianaantony75-oss.github.io/vian-hospital-03).</p>
+</div></section>
+
+<footer class="wrap">
+  <b style="color:var(--fg)">Sources</b> (manufacturer, retailer and review pages, November 2026):
+  <a href="https://www.dyson.com/commercial/air-treatment/purifier-big-quiet-formaldehyde">Dyson Big+Quiet</a> ·
+  <a href="https://www.rtings.com/air-purifier/reviews/dyson/hushjet">RTINGS HushJet</a> ·
+  <a href="https://www.mi.com/se/product/xiaomi-smart-air-purifier-4-pro/">Xiaomi 4 Pro</a> ·
+  <a href="https://housefresh.com/xiaomi-4-pro-review/">HouseFresh Xiaomi</a> ·
+  <a href="https://www.slashgear.com/coway-airmega-400s-air-purifier-review-19554352">Coway 400S review</a> ·
+  <a href="https://housefresh.com/blueair-blue-signature-review/">Blueair Signature</a> ·
+  <a href="https://www.rtings.com/air-purifier/reviews/levoit/core-600s">Levoit 600S</a> ·
+  <a href="https://www.philips.com/c-p/AC3858_51/air-purifier-4000i-series">Philips 4000i</a> ·
+  <a href="https://www.sharkninja.com/shark-neverchange-air-purifier-max/HP301.html">Shark HP301</a> ·
+  <a href="https://www.vijaysales.com/p/256579/shark-hp300-air-purifier-for-home-1400-sq-ft-coverage-true-hepa-14-filter-99-98-dust-allergen-capture-4-layer-filtration-hp300in-white">Shark HP300 India</a> ·
+  <a href="https://www.homesandgardens.com/reviews/samsung-bespoke-cube-air-purifier-review">Samsung Cube</a> ·
+  <a href="https://moderncastle.com/air-purifiers/lg-puricare-aerotower-review/">LG AeroTower</a> ·
+  <a href="https://www.techhive.com/article/3625502/rabbit-air-a3-review.html">Rabbit Air A3</a> ·
+  <a href="https://breathesafeair.com/airdog-x5-review/">Airdog X5</a> ·
+  <a href="https://camfil.com/dam/files/6773/1645895/Data-Sheet---International--en----City-M.pdf">Camfil City M</a> ·
+  <a href="https://www.iqair.com/products/air-purifiers/healthpro-compact-2-pack">IQAir HealthPro</a> ·
+  <a href="https://www.mi.com/global/support/faq/details/KA-691592">Xiaomi materials FAQ</a> ·
+  <a href="https://www.valueformoney.in/reviews/best-air-purifiers-india">India buying guide</a> ·
+  <a href="https://clootrack.com/insights/air-purifiers-top-3-aspects-driving-negative-customer-experience">Complaint analysis</a> ·
+  <a href="https://www.team-bhp.com/forum/gadgets-computers-software/228686-home-air-purifier-thread-reviews-comparisons-3.html">Team-BHP owners</a>
+  <p>VIAN concept pack · all figures are estimates until prototypes are measured.</p>
+</footer>
+
 <script>
-const DATA = {"groups": [["exterior", "Outside"], ["air", "Air path"], ["electronics", "Boards and power"], ["sensors", "Sensors and switches"], ["wiring", "Cables and tubes"]], "parts": {"shell": {"name": "Outer shell", "group": "exterior", "code": "EX-01", "what": "The main body. Seamless, wipe-down surface so hospital disinfectants (alcohol, chlorine) can be used. The VIAN name is laser-engraved below the display, not a sticker.", "spec": [["Envelope", "450 W × 470 D × 1,080 H mm"], ["Weight", "≈ 33 kg with all filters"], ["Body panels", "PC/ABS, flame-retardant UL94 V-0, antimicrobial additive, injection-moulded"], ["Option", "1.5 mm aluminium, antimicrobial powder coat"], ["Finishes", "Silver-white, ice blue, sea-glass teal; graphite visor and base"], ["Branding", "Laser-engraved VIAN wordmark, Z ≈ 820 mm"], ["Cleaning", "Wipe with 70% alcohol or 1,000 ppm chlorine"]], "place": "Wraps the whole unit. Front = display side.", "links": ["base", "door", "top_outlet", "intake"]}, "intake": {"name": "Front intake skin", "group": "exterior", "code": "EX-02", "what": "Perforated lower front band where room air enters. Behind it sits the washable pre-filter.", "spec": [["Band height", "Z 95 to 630 mm"], ["Open area target", "35–40% (balance noise and pressure loss)"], ["Hole size", "≈ 3 mm, 9 mm pitch (finger-safe)"]], "place": "Front lower half of the shell.", "links": ["prefilter"]}, "display": {"name": "Touch display", "group": "exterior", "code": "EX-03", "what": "Bar-shaped touch screen behind a glass window in the graphite visor. Tap the screen in this model to switch pages: Theatre, Unit and Service.", "spec": [["Visible window", "180 × 65 mm, centre Z ≈ 915 mm"], ["Module", "6.86-inch bar IPS LCD, 480 × 1280 pixels (active ≈ 63 × 168 mm)"], ["Brightness", "700–1,000 nits, auto-dim with ambient light sensor"], ["Touch", "Projected capacitive (PCAP), works through 1.1 mm glass and with gloves"], ["Cover glass", "Chemically strengthened, anti-glare + antimicrobial coating, IP54 front seal"], ["Interface", "16-bit RGB from the ESP32-S3; GT911 touch over I²C"], ["Pages", "Theatre (from BMS), Unit (airflow, filters, mode), Service (PIN)"]], "place": "Front top, inside the graphite visor.", "links": ["display_board", "w_display", "status_led"]}, "status_led": {"name": "Status light bar", "group": "exterior", "code": "EX-04", "what": "Thin light line under the display. Its colour shows status at a glance from across the theatre. The meaning is also shown as text on the screen, never by colour alone.", "spec": [["Colours", "Blue running · amber filter due · red fault · off standby"], ["Type", "Addressable RGB LEDs (SK6812 class)"]], "place": "Under the display window, front.", "links": ["main_board", "w_led"]}, "door": {"name": "Right service door", "group": "exterior", "code": "EX-05", "what": "Rear-hinged side door for changing the HEPA cassette. Opening it stops the fan instantly through the safety interlock. Press Open door in this model to try it.", "spec": [["Clear opening", "330 D × 640 H mm"], ["Hinge", "Rear edge, swing ≥ 100°"], ["Side work zone", "Keep 500 mm free on the right"], ["Latch", "Blue push-latch, gloved-hand friendly"]], "place": "Right side, between Z 110 and 750 mm.", "links": ["handle", "door_switch", "hepa"]}, "handle": {"name": "Door latch", "group": "exterior", "code": "EX-06", "what": "Blue push-latch on the front edge of the service door. Large enough to operate with surgical gloves.", "spec": [["Size", "≈ 26 × 90 mm"], ["Colour", "VIAN blue (service touchpoint colour)"]], "place": "Right side, front edge of the door, Z ≈ 570 mm.", "links": ["door", "door_switch"]}, "top_outlet": {"name": "Sloped top outlet and finger guard", "group": "exterior", "code": "EX-07", "what": "Clean air leaves through radial vanes on a top that is higher at the rear. This throws the air up and back, away from the sterile field in front. The vanes act as a finger guard over the fan.", "spec": [["Slope", "Front ≈ 990 mm → rear 1,080 mm"], ["Guard", "Passes IEC test-finger probe"], ["Hub", "Status light ring in the centre"]], "place": "Top of the unit, above the fan.", "links": ["fan", "led_ring"]}, "led_ring": {"name": "Outlet light ring", "group": "exterior", "code": "EX-08", "what": "Ring of light at the outlet centre, visible from above. Same colours as the status bar.", "spec": [["Type", "Addressable RGB ring, 24 LEDs"], ["Night mode", "Dims automatically"]], "place": "Centre of the top outlet.", "links": ["main_board", "w_led"]}, "base": {"name": "Graphite chassis and feet", "group": "exterior", "code": "EX-09", "what": "Steel base that carries the heavy parts low down for stability. Four recessed anti-slip feet. Holds the power compartment.", "spec": [["Height", "0–80 mm"], ["Feet", "4 recessed anti-slip pads (castor option for wards)"], ["Weight target", "≈ 30–35 kg total with filter"]], "place": "Bottom of the unit.", "links": ["power_board", "psu", "power_entry"]}, "power_entry": {"name": "Mains power entry", "group": "exterior", "code": "EX-10", "what": "Recessed socket at the rear, below the filter chamber. Fused, with a power switch and a cable clip so the plug cannot be pulled out by accident.", "spec": [["Socket", "IEC C14 with fuse + EMI filter, 2-pole switch"], ["Supply", "230 V AC, 50 Hz"], ["Cord", "Hospital-grade, with retention clip"]], "place": "Rear, low, recessed.", "links": ["power_board", "w_mains"]}, "port_panel": {"name": "Data port panel", "group": "exterior", "code": "EX-11", "what": "Low-voltage connections, kept separate from mains. Ethernet for hospitals that do not allow Wi-Fi. RS-485 to read room data from the building system. Alarm contact for the nurse station.", "spec": [["Ethernet", "RJ45, 10/100"], ["Building link", "RS-485 Modbus RTU, read-only"], ["Alarm out", "Dry contact relay, 30 V 1 A"], ["Service", "USB-C behind a cover (firmware, logs)"]], "place": "Rear, low, left of the power entry.", "links": ["main_board", "w_ports"]}, "prefilter": {"name": "Stage 1: Washable pre-filter", "group": "air", "code": "AP-01", "what": "First filter the air meets. A fine nylon/polyester mesh that catches hair, lint, dust and insects so the expensive filters behind it last longer. Wash it with water, dry it, put it back. Maximum 5 washes, then replace it. The app counts washes and also detects them automatically from the pressure sensor.", "spec": [["Size", "300 W × 620 H × 10 D mm"], ["Weight", "≈ 0.35 kg"], ["Material", "Polyester or nylon mesh in an ABS frame (antimicrobial)"], ["Grade", "ISO Coarse 60% (catches particles larger than about 10 µm)"], ["Change", "Wash every 2–4 weeks · 5 washes max · then replace"], ["Detection", "Presence micro-switch + pressure drop after cleaning"]], "place": "Directly behind the front intake skin.", "links": ["intake", "prefilter_switch", "carbon"]}, "carbon": {"name": "Stage 2: Carbon layer (in the main filter pack)", "group": "air", "code": "AP-08", "what": "A 20 mm activated carbon layer built into the front of the main filter pack. It removes smells and gases a HEPA cannot catch: disinfectant and alcohol vapour, surgical smoke odour, formaldehyde and other VOCs (volatile organic compounds). It is replaced together with the HEPA as one pack, so staff change one thing.", "spec": [["Size", "305 W × 610 H × 20 D mm (front layer of the pack)"], ["Carbon", "≈ 0.9 kg coconut-shell activated carbon, bonded granules"], ["Faces", "Non-woven cloth both sides, no carbon dust"], ["Air resistance", "≈ 30–40 Pa at full airflow"], ["Change", "With the pack, every 6–12 months"]], "place": "Front 20 mm of the main filter pack, behind the pre-filter.", "links": ["prefilter", "hepa", "filter_id", "rails"]}, "hepa": {"name": "Stage 3: HEPA layer (main filter pack VIAN HC-2)", "group": "air", "code": "AP-02", "what": "The main filter pack: carbon layer in front, mini-pleat HEPA behind, in one ABS frame with a foam gasket, pull handle, magnet and NFC tag. The standard pack uses H13 HEPA (99.95%) to hit a ₹3,999 replacement price with profit. A Theatre pack with H14 HEPA (99.995%) is offered for operating theatres. Slides out through the right door.", "spec": [["Pack size", "305 W × 610 H × 115 D mm (carbon 20 + gap 5 + HEPA 90)"], ["Pack weight", "≈ 3.8 kg"], ["Standard HEPA", "H13 mini-pleat glass micro-fibre (≥ 99.95% at MPPS, EN 1822)"], ["Theatre option", "H14 mini-pleat (≥ 99.995%), pack VIAN HC-2T"], ["Frame", "Injection-moulded antimicrobial ABS, PU foam gasket on the rear"], ["Air resistance", "≈ 300–350 Pa new at 1,000 m³/h; replace at ≈ 600 Pa (to confirm in test)"], ["Change", "6 months in 24-hour wards and theatres; 9–12 months in clinics"], ["Price", "Standard ₹3,999 · Theatre ₹6,999–7,999 (incl. GST)"], ["ID", "NFC tag: pack type, serial, install date, run hours"]], "place": "Centre of the cabinet, Z 115–725 mm, air flows front to rear.", "links": ["carbon", "rails", "seal_cam", "filter_id", "dp_board"]}, "seal_cam": {"name": "Seal compression cam", "group": "air", "code": "AP-03", "what": "Lever that presses the cassette gasket tight so no air leaks around the filter. A micro-switch confirms it is locked. The unit will not run if the seal is open.", "spec": [["Action", "Quarter-turn cam, gloved hand"], ["Check", "Micro-switch to filter ID board"]], "place": "Front right of the cassette, inside the door.", "links": ["hepa", "filter_id"]}, "rails": {"name": "Keyed slide rails", "group": "air", "code": "AP-04", "what": "Stainless rails that carry the main filter pack in and out, so it never drops. Keyed so only genuine VIAN packs fit.", "spec": [["Material", "Stainless steel"], ["Travel", "Full extension, ≈ 360 mm"]], "place": "Above and below the cassette, running left to right.", "links": ["hepa"]}, "plenum": {"name": "Clean-side plenum", "group": "air", "code": "AP-05", "what": "Sealed duct behind the HEPA that carries cleaned air up to the fan. Holds the downstream pressure tap and the clean-air particle sensor.", "spec": [["Material", "Sealed sheet steel or ABS duct"], ["Taps", "HEPA downstream pressure tap"], ["Sensor", "Downstream PM2.5 (filter leak check)"]], "place": "Rear of the cabinet, from the filter up to the fan.", "links": ["hepa", "fan", "pm_out", "dp_board"]}, "fan": {"name": "EC centrifugal blower", "group": "air", "code": "AP-06", "what": "Backward-curved centrifugal 'plug' fan driven by a brushless EC (electronically commutated) motor with built-in electronics. It pulls air through all three filters and pushes it out of the top. In Auto it changes speed by itself from the air sensors, slowly so the sound never jumps. The app and screen can set modes and a maximum noise limit.", "spec": [["Fan type", "Backward-curved centrifugal plug fan, 7 blades, Ø ≈ 280 mm impeller"], ["Motor", "EC external-rotor brushless motor, 230 V AC in, built-in drive"], ["Speed range", "≈ 600 to 2,800 RPM (revolutions per minute)"], ["Airflow", "≈ 225 to 1,050 m³/h (cubic metres per hour)"], ["Noise (estimate)", "≈ 31 dB(A) silent to ≈ 60 dB(A) boost, at 1 m"], ["Power", "≈ 10 W silent · ≈ 105 W medium · ≈ 330 W boost"], ["Control", "0–10 V speed in, tachometer out, fault relay"], ["Rotation", "One direction, marked by the maker; air in from below, out at the top"], ["Mounting", "Rubber anti-vibration mounts, melamine acoustic foam around the fan"], ["Example", "ebm-papst RadiCal R3G 280 class (confirm fan curve)"]], "place": "Top rear, on anti-vibration mounts.", "links": ["inlet_ring", "top_outlet", "w_fanpower", "w_fanctl"]}, "inlet_ring": {"name": "Fan inlet ring", "group": "air", "code": "AP-07", "what": "Shaped nozzle where air enters the fan. Four small pressure taps in it give the real airflow: airflow = k × √(pressure). This is how the display shows measured m³/h, not a guess.", "spec": [["Method", "Inlet-ring K-factor (from fan maker)"], ["Taps", "4 piezometer holes, joined to one tube"]], "place": "Directly under the fan.", "links": ["fan", "dp_board", "t_ring"]}, "main_board": {"name": "Main control board", "group": "electronics", "code": "PCB-01", "what": "The brain. The ESP32-S3 chip on it runs the display, reads every sensor, controls the fan and connects the unit to the VIAN app over Wi-Fi, Bluetooth or Ethernet. One of these goes in every purifier.", "spec": [["Processor", "ESP32-S3-WROOM-1U-N16R8 (Wi-Fi + Bluetooth LE, external antenna)"], ["Ethernet", "WIZnet W5500"], ["Building link", "RS-485 transceiver, Modbus RTU read-only"], ["Fan control", "0–10 V output, isolated tach input, enable relay"], ["Safety", "Tilt/knock sensor (LIS2DH12), watchdog"], ["Memory", "16 MB flash event log, RTC with supercap"], ["Sound", "85 dB alarm buzzer"], ["Size", "≈ 160 × 110 mm, 4-layer"], ["Connectors", "JST-GH (signals), Molex Micro-Fit (24 V)"], ["Temperature", "3 NTC inputs: fan motor housing, electronics bay, power supply"]], "place": "Sealed electronics bay behind the visor, out of the air path.", "links": ["display_board", "sensor_pod", "dp_board", "filter_id", "pm_out", "antenna", "psu", "port_panel", "fan", "door_switch"]}, "display_board": {"name": "Display and touch board", "group": "electronics", "code": "PCB-02", "what": "Small adapter board behind the screen. Carries the touch controller, the backlight driver and the ambient light sensor that dims the screen.", "spec": [["Touch IC", "GT911 class, I²C"], ["Backlight", "Constant-current LED driver, PWM dimming"], ["Light sensor", "Ambient light sensor for auto-brightness"], ["Link", "FPC ribbon to main board, < 150 mm"]], "place": "Directly behind the display.", "links": ["display", "main_board", "w_display"]}, "power_board": {"name": "Power and safety board", "group": "electronics", "code": "PCB-03", "what": "Handles mains power. Feeds the fan through the door interlock (a hardware cut-off that does not depend on software) and feeds the 24 V supply.", "spec": [["Protection", "Fuse, surge MOV, inrush NTC, EMI filter"], ["Fan feed", "Safety relay; its coil runs through the door interlock, so opening the door drops the relay in hardware"], ["Monitoring", "Relay contact feedback + 24 V rail monitor to main board"], ["Earth", "Bonding stud to chassis, shell and door"], ["Size", "≈ 200 × 120 mm, 2-layer, 2 oz copper"]], "place": "Isolated power compartment in the base.", "links": ["power_entry", "psu", "fan", "door_switch", "w_mains", "w_fanpower"]}, "psu": {"name": "24 V medical power supply", "group": "electronics", "code": "PWR-01", "what": "Converts mains to safe 24 V for all the electronics. Medical-grade so it can be used near patients.", "spec": [["Output", "24 V DC, 60 W"], ["Rating", "IEC 60601-1, 2 × MOPP"], ["Example", "Mean Well MPM-65-24 class"]], "place": "Power compartment in the base, next to the power board.", "links": ["power_board", "main_board", "w_24v"]}, "antenna": {"name": "Wi-Fi / Bluetooth antenna", "group": "electronics", "code": "RF-01", "what": "Flexible 2.4 GHz antenna inside the plastic visor. A metal shell would block the signal, so the antenna sits behind plastic and connects to the ESP32 with a small coax cable.", "spec": [["Type", "FPC antenna, 2.4 GHz, u.FL connector"], ["Cable", "≈ 100 mm micro-coax"]], "place": "Inside the graphite visor, top left.", "links": ["main_board", "w_antenna"]}, "sensor_pod": {"name": "Room air sensor pod", "group": "sensors", "code": "SN-01", "what": "Measures the room air before it is cleaned: particles, CO₂, temperature, humidity, VOC and NOx. It breathes through its own small louvre on the left side, away from the clean-air outlet, so readings are honest.", "spec": [["Sensor", "Sensirion SEN66 (PM1/2.5/4/10, CO₂, RH, T, VOC, NOx)"], ["Interface", "I²C to main board"], ["Height", "≈ 720 mm (breathing zone, away from floor dust)"], ["Quantity", "1 per unit"], ["Labelling", "Shown as \"VIAN local\". Theatre values come from hospital sensors"]], "place": "Left side wall, behind the side louvre.", "links": ["main_board", "w_i2c_pod"]}, "dp_board": {"name": "Pressure sensor board", "group": "sensors", "code": "SN-02", "what": "Two pressure sensors with tubes to small holes in the air path. Sensor 1 measures across the carbon + HEPA: the dirtier the filter, the higher the pressure, and this gives the filter health %. Sensor 2 reads the fan inlet ring for real airflow. An optional third reads across the pre-filter, so washes are detected automatically.", "spec": [["Sensor 1", "Across HEPA, ±1,000 Pa class (e.g. Honeywell ABP2 differential)"], ["Sensor 2", "Fan inlet ring, ±500 Pa (e.g. Sensirion SDP810-500Pa)"], ["Sensor 3 (option)", "Across pre-filter, ±125 Pa"], ["Tubes", "4 mm silicone, short and equal length"], ["Interface", "I²C to main board"]], "place": "Top of the plenum, near the electronics bay.", "links": ["main_board", "hepa", "inlet_ring", "t_up", "t_down", "t_ring"]}, "pm_out": {"name": "Clean-air particle sensor", "group": "sensors", "code": "SN-03", "what": "Counts particles after the HEPA. If clean-side particles rise compared with room air, the filter or its seal is leaking and the unit raises a \"Check filter seal\" alert.", "spec": [["Sensor", "Sensirion SPS30 class"], ["Alert rule", "Downstream > 5% of upstream for 10 min"], ["Interface", "I²C to main board"]], "place": "Inside the clean-side plenum.", "links": ["plenum", "main_board", "w_i2c_pm"]}, "filter_id": {"name": "Filter ID board (NFC + Hall)", "group": "sensors", "code": "SN-04", "what": "Knows which filters are fitted, which ones they are, and whether they are sealed. Magnets in the HEPA cassette and carbon panel trigger Hall sensors when fully home. One NFC reader reads the tags in both filters. The seal-cam switch reports the seal.", "spec": [["Presence", "Hall sensor (DRV5032 class) + magnet in cassette"], ["Identity", "NFC reader (NXP PN7150 / ST25R3916 class), tag NTAG 216"], ["Tag stores", "Filter type, serial, made date, install date, run hours, genuine check"], ["Seal", "Seal-cam micro-switch input"], ["Health %", "From HEPA pressure: 100 × (final − now) ÷ (final − initial)"]], "place": "Left end stop of the cassette bay (the deep end).", "links": ["hepa", "seal_cam", "main_board", "w_i2c_fid"]}, "door_switch": {"name": "Door safety interlock", "group": "sensors", "code": "SN-05", "what": "Coded magnetic safety switch on the door frame. It does not carry the fan current itself: it breaks the coil of the fan safety relay, so opening the door cuts the fan in hardware, and a second contact tells the main board so the app shows \"Door open\".", "spec": [["Type", "Coded magnetic safety switch (Schmersal BNS class)"], ["Contacts", "Safety contact in fan supply + signal contact to main board"]], "place": "Right door frame, near the latch.", "links": ["door", "power_board", "main_board", "w_interlock"]}, "prefilter_switch": {"name": "Pre-filter presence switch", "group": "sensors", "code": "SN-06", "what": "Micro-switch that confirms the pre-filter is in place. The unit warns if someone forgets to put it back after washing.", "spec": [["Type", "Sealed micro-switch"], ["Interface", "Digital input via filter ID board"]], "place": "Top edge of the pre-filter frame.", "links": ["prefilter", "filter_id"]}, "w_mains": {"name": "Mains cable", "group": "wiring", "code": "W-01", "what": "From the power socket to the power board.", "spec": [["Type", "L / N / PE, 1.0 mm², double-insulated"], ["Connector", "Faston to inlet, screw terminal on board"]], "place": "Inside the base.", "links": ["power_entry", "power_board"]}, "w_fanpower": {"name": "Fan power cable", "group": "wiring", "code": "W-02", "what": "Switched mains to the EC fan from the safety relay on the power board. The door interlock breaks the relay coil, so opening the door cuts the fan.", "spec": [["Type", "L / N / PE, 0.75 mm², 230 V"], ["Route", "Rear right corner, clipped, away from signal cables"]], "place": "Base up the rear right corner to the fan.", "links": ["power_board", "door_switch", "fan"]}, "w_24v": {"name": "24 V supply cable", "group": "wiring", "code": "W-03", "what": "Low-voltage power from the supply to the main board.", "spec": [["Type", "2 × 0.5 mm²"], ["Connector", "Molex Micro-Fit 3.0, 2-pin"]], "place": "Front left corner, base to electronics bay.", "links": ["psu", "main_board"]}, "w_fanctl": {"name": "Fan control cable", "group": "wiring", "code": "W-04", "what": "Speed command and speed feedback between main board and fan.", "spec": [["Signals", "0–10 V speed, tach pulses, fault, GND"], ["Type", "4-core shielded"], ["Connector", "JST-GH 4-pin"]], "place": "Electronics bay to fan.", "links": ["main_board", "fan"]}, "w_i2c_pod": {"name": "Sensor pod cable", "group": "wiring", "code": "W-05", "what": "Power and I²C data to the room sensor pod.", "spec": [["Signals", "3.3 V, GND, SDA, SCL"], ["Connector", "JST-GH 4-pin"], ["Length", "≈ 350 mm (100 kHz I²C)"]], "place": "Along the left wall.", "links": ["main_board", "sensor_pod"]}, "w_i2c_dp": {"name": "Pressure board cable", "group": "wiring", "code": "W-06", "what": "I²C to the pressure sensor board.", "spec": [["Signals", "3.3 V, GND, SDA, SCL"], ["Connector", "JST-GH 4-pin"]], "place": "Electronics bay.", "links": ["main_board", "dp_board"]}, "w_i2c_fid": {"name": "Filter ID cable", "group": "wiring", "code": "W-07", "what": "Power, data and switch signals for the filter ID board.", "spec": [["Signals", "3.3 V, GND, SDA, SCL, IRQ, Hall, seal, pre-filter"], ["Connector", "JST-GH 8-pin"]], "place": "Down the left front corner.", "links": ["main_board", "filter_id"]}, "w_i2c_pm": {"name": "Clean-air sensor cable", "group": "wiring", "code": "W-08", "what": "I²C to the downstream particle sensor, through a sealed grommet into the plenum.", "spec": [["Signals", "5 V, GND, SDA, SCL"], ["Connector", "JST-GH 5-pin"]], "place": "Electronics bay into the plenum.", "links": ["main_board", "pm_out"]}, "w_display": {"name": "Display ribbon", "group": "wiring", "code": "W-09", "what": "Flat ribbon carrying the picture, touch and backlight signals.", "spec": [["Signals", "16-bit RGB, sync, I²C touch, backlight PWM"], ["Type", "40-pin FPC, < 150 mm"]], "place": "Behind the visor.", "links": ["main_board", "display_board"]}, "w_led": {"name": "Light cable", "group": "wiring", "code": "W-10", "what": "Data for the status bar and outlet light ring.", "spec": [["Signals", "5 V, GND, data"], ["Connector", "JST-GH 3-pin"]], "place": "Electronics bay to visor and top.", "links": ["main_board", "status_led", "led_ring"]}, "w_ports": {"name": "Port panel cable", "group": "wiring", "code": "W-11", "what": "Ethernet, RS-485, alarm contact and USB-C down to the rear port panel.", "spec": [["Type", "Shielded multi-core + Cat6 patch"], ["Route", "Rear left corner, separated from mains"]], "place": "Electronics bay down to the rear port panel.", "links": ["main_board", "port_panel"]}, "w_interlock": {"name": "Interlock signal cable", "group": "wiring", "code": "W-12", "what": "Tells the main board the door state.", "spec": [["Signals", "Door contact, GND"], ["Connector", "JST-GH 2-pin"]], "place": "Right door frame to electronics bay.", "links": ["door_switch", "main_board"]}, "w_antenna": {"name": "Antenna coax", "group": "wiring", "code": "W-13", "what": "Micro-coax from the ESP32 module to the visor antenna.", "spec": [["Type", "1.13 mm micro-coax, u.FL"], ["Length", "≈ 100 mm"]], "place": "Inside the visor.", "links": ["main_board", "antenna"]}, "t_up": {"name": "Pressure tube: before HEPA", "group": "wiring", "code": "T-01", "what": "Tube from the dirty side of the HEPA to pressure sensor 1 (+).", "spec": [["Tube", "4 mm silicone"], ["Tap", "Between pre-filter and HEPA"]], "place": "Front of the cassette bay.", "links": ["dp_board", "hepa"]}, "t_down": {"name": "Pressure tube: after HEPA", "group": "wiring", "code": "T-02", "what": "Tube from the clean plenum to pressure sensor 1 (−).", "spec": [["Tube", "4 mm silicone"], ["Tap", "Clean-side plenum"]], "place": "Rear plenum.", "links": ["dp_board", "plenum"]}, "t_ring": {"name": "Pressure tube: fan inlet", "group": "wiring", "code": "T-03", "what": "Tube from the fan inlet ring taps to pressure sensor 2, used for measured airflow.", "spec": [["Tube", "4 mm silicone"], ["Tap", "Inlet ring manifold"]], "place": "Under the fan.", "links": ["dp_board", "inlet_ring"]}}, "filters": [{"id": "prefilter", "stage": "1", "model": "VIAN PF-1", "name": "Washable pre-filter", "color": "#9AA3AD", "job": "Catches hair, lint, insects and large dust so the main pack lasts longer. Wash it, dry it, refit it. 5 washes, then replace.", "spec": [["Shape", "Flat rectangular panel"], ["Size (W × H × D)", "300 × 620 × 10 mm"], ["Weight", "≈ 0.35 kg"], ["Media", "Polyester monofilament mesh, ≈ 0.4 mm openings (ISO Coarse 60%)"], ["Frame", "Antimicrobial ABS, 2 cross-braces"], ["Washing", "Every 2–4 weeks; 5 washes max, then replace (≈ every 4 months)"], ["Detection", "Presence switch; washes detected by pressure sensor"], ["Per unit / spares a year", "1 fitted · ≈ 3 a year"], ["Our cost", "₹ 150–250"], ["Selling price", "₹ 499"], ["Profit per piece", "≈ ₹ 170–270 after GST"]]}, {"id": "hepa", "stage": "2 + 3", "model": "VIAN HC-2", "name": "Main filter pack: carbon + H13 HEPA", "color": "#F4F1E8", "job": "One replacement for staff: a carbon layer for smells and gases in front, an H13 HEPA for fine particles and germs behind, in one frame.", "spec": [["Shape", "Flat box pack with pull handle"], ["Size (W × H × D)", "305 × 610 × 115 mm"], ["Inside", "20 mm bonded coconut-shell carbon (≈ 0.9 kg) + 5 mm gap + 90 mm H13 mini-pleat glass micro-fibre"], ["Weight", "≈ 3.8 kg"], ["Efficiency", "H13: ≥ 99.95% at the hardest particle size"], ["Frame and seal", "Injection-moulded antimicrobial ABS, PU foam gasket, blue pull handle"], ["Smart parts", "NFC tag + magnet (≈ ₹ 25)"], ["Air resistance", "≈ 300–350 Pa new at 1,000 m³/h; change at ≈ 600 Pa"], ["Life", "6 months (24-hour use) · 9–12 months (clinics)"], ["Per unit / spares a year", "1 fitted · 1–2 a year"], ["Our cost (China, 1,000 pcs)", "≈ ₹ 1,500–2,200 (media pack 900–1,300, carbon 250–400, frame + gasket 250–350, tag, bag, carton)"], ["Landed in India", "≈ ₹ 1,850–2,750 (freight + duty)"], ["Selling price", "₹ 3,999 incl. 18% GST (₹ 3,389 before GST)"], ["Profit per pack", "≈ ₹ 640–1,540 (≈ 20–45%)"]]}, {"id": "hepa", "stage": "2 + 3", "model": "VIAN HC-2T", "name": "Theatre pack: carbon + H14 HEPA (option)", "color": "#DDEFF2", "job": "Same size and fit as HC-2, with H14 HEPA (≥ 99.995%) for operating theatres that ask for H14. Higher price, same profit share.", "spec": [["Size", "305 × 610 × 115 mm (fits the same unit)"], ["HEPA", "H14 mini-pleat, individually scan-tested with test sheet"], ["Our cost", "≈ ₹ 2,600–3,600"], ["Selling price", "₹ 6,999–7,999 incl. GST"], ["Profit per pack", "≈ ₹ 2,300–3,100"]]}], "filter_summary": {"total": "2 filters to replace per unit: the washable pre-filter and one main pack (carbon + HEPA together), ≈ 4.2 kg in total", "yearly": "Per unit each year: 3 pre-filters (₹ 1,497) + 2 main packs (₹ 7,998) ≈ ₹ 9,500 of sales, ≈ ₹ 2,000–3,900 profit", "custom": "Custom VIAN frames, keyed rails and NFC tags mean only genuine VIAN filters fit and are recognised, so replacement sales come back to VIAN. The HEPA media uses a standard 610 × 305 mini-pleat size so several factories can quote.", "change": ["Tap Change filters in the app or on the screen", "Open the right door (the fan stops by itself)", "Turn the blue seal cam to release the pack", "Slide the old pack out on the rails and put it straight into a sealed bag", "Slide the new pack in until it clicks; turn the seal cam back; refit the pre-filter", "Close the door: the unit reads the new tag, resets filter health to 100% and logs the change"], "pack": "Each filter in a sealed plastic bag inside its own carton, with the serial and test sheet; HEPA carton marked This side up"}};
-(function(){
-"use strict";
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const P=DATA.parts;
-const GROUP_COL={exterior:"#D9DDE1",air:"#3FD3C2",electronics:"#4C9BFF",sensors:"#F2B33D",wiring:"#E2703A"};
-
-/* ---------- renderer ---------- */
-const canvas=$("#c"), stage=$("#stage");
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setClearColor(0x000000,0);
-renderer.outputEncoding=THREE.sRGBEncoding;
-renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=0.82;
-renderer.localClippingEnabled=true;
-const scene=new THREE.Scene();
-if(THREE.RoomEnvironment){const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),0.04).texture}
-scene.add(new THREE.HemisphereLight(0xdfe9f3,0x1a2028,0.55));
-const key=new THREE.DirectionalLight(0xffffff,0.9); key.position.set(-900,1600,1300); scene.add(key);
-const rim=new THREE.DirectionalLight(0x9fd8ff,0.35); rim.position.set(900,900,-1200); scene.add(rim);
-const camera=new THREE.PerspectiveCamera(32,1,5,30000);
-const controls=new THREE.OrbitControls(camera,canvas);
-controls.enableDamping=true; controls.dampingFactor=0.08; controls.target.set(0,520,0);
-controls.minDistance=400; controls.maxDistance=6000; controls.maxPolarAngle=Math.PI*0.62;
-
-// floor
-const floor=new THREE.Mesh(new THREE.CircleGeometry(1400,96),new THREE.MeshStandardMaterial({color:0x0b1118,roughness:1,envMapIntensity:.15}));
-floor.rotation.x=-Math.PI/2; scene.add(floor);
-const grid=new THREE.PolarGridHelper(1300,16,8,96,0x22303f,0x172230); grid.position.y=.5; scene.add(grid);
-
-/* ---------- geometry constants (mm) ---------- */
-const A=225,B=235,H=1080,BASE=80;
-const topY=z=>1035-45*(z/B);            // rear-high slope: front 990, rear 1080
-const DOOR={zr:-175,zf:155,y0:110,y1:750}; // right service door region
-function seRaw(phi,n=3.0){const c=Math.cos(phi),s=Math.sin(phi);return [A*Math.sign(c)*Math.pow(Math.abs(c),2/n),B*Math.sign(s)*Math.pow(Math.abs(s),2/n)]}
-const RAW=[],CUM=[0];let LEN=0;
-for(let i=0;i<=4000;i++){const p=seRaw(i/4000*Math.PI*2);if(i){const q=RAW[i-1];LEN+=Math.hypot(p[0]-q[0],p[1]-q[1]);CUM.push(LEN)}RAW.push(p)}
-function atS(s){s=((s%LEN)+LEN)%LEN;let lo=0,hi=CUM.length-1;while(hi-lo>1){const m=(lo+hi)>>1;if(CUM[m]<=s)lo=m;else hi=m}
-  const t=(s-CUM[lo])/((CUM[hi]-CUM[lo])||1);return [RAW[lo][0]+(RAW[hi][0]-RAW[lo][0])*t,RAW[lo][1]+(RAW[hi][1]-RAW[lo][1])*t]}
-const U_FRONT=CUM[1000]/LEN, U_LEFT=CUM[2000]/LEN;
-function xAtZ(z){let best=0,bd=1e9;for(let i=0;i<=1000;i++){const s=i<500?i:i+3000;const p=RAW[s%4001]||RAW[0];if(p[0]>0){const d=Math.abs(p[1]-z);if(d<bd){bd=d;best=p[0]}}}return best}
-
-/* ---------- materials ---------- */
-const FIN={silver:0xE3E7EB,ice:0xD3E5F0,teal:0xACD9CE};
-const shellTex=makeShellTexture();
-const shellMat=new THREE.MeshStandardMaterial({color:FIN.silver,map:shellTex,metalness:.45,roughness:.34,envMapIntensity:.55,side:THREE.DoubleSide});
-const graphite=new THREE.MeshStandardMaterial({color:0x1d2126,metalness:.2,roughness:.7,envMapIntensity:.35});
-const SHELL_MATS=[shellMat,graphite];
-function M(c,o={}){return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o))}
-const MAT={
-  alu:M(0xC9CED4,{metalness:.8,roughness:.32}), steel:M(0x8E959D,{metalness:.7,roughness:.4}),
-  pcb:M(0x0E5A43,{roughness:.6}), chip:M(0x16181b,{roughness:.4}), gold:M(0xC8A24A,{metalness:.9,roughness:.3}),
-  can:M(0xBFC5CC,{metalness:.9,roughness:.25}), white:M(0xEDEFF1,{roughness:.7}), media:M(0xF4F1E8,{roughness:.9}),
-  blue:M(0x2F7BEF,{roughness:.35}), dark:M(0x1a1e23,{roughness:.6}), rubber:M(0x101214,{roughness:.9}),
-  mesh:M(0x9AA3AD,{roughness:.6,metalness:.4,transparent:true,opacity:.8}), plenum:M(0x7FB9D6,{transparent:true,opacity:.18,roughness:.2,depthWrite:false}),
-  safety:M(0xD9482B,{roughness:.5}), fanblue:M(0x1d3f63,{metalness:.5,roughness:.35}), glow:new THREE.MeshBasicMaterial({color:0x4FA3FF})
+const LAB = {
+ "home": [
+  {
+   "area": "Airflow",
+   "test": "Intake air speed at max",
+   "result": "1.09 m/s",
+   "limit": "≤ 2.5 m/s (quiet, no whistle)",
+   "pass": true,
+   "note": "Big open intake keeps air slow and quiet"
+  },
+  {
+   "area": "Filtration",
+   "test": "HEPA media velocity",
+   "result": "5.2 cm/s",
+   "limit": "≤ 5.5 cm/s for H13 to hold efficiency",
+   "pass": true,
+   "note": "Face speed 0.63 m/s over 2.8 m² of pleated media"
+  },
+  {
+   "area": "Fan",
+   "test": "Fan pressure available vs needed (new filter)",
+   "result": "445 Pa vs 190 Pa",
+   "limit": "available ≥ 1.2 × needed",
+   "pass": true,
+   "note": "Needed = intake 12 Pa, pre-filter 8 Pa, H13 media (synthetic electret) 110 Pa, carbon pockets 35 Pa, core + fan inlet + outlet 25 Pa"
+  },
+  {
+   "area": "Fan",
+   "test": "Airflow at filter end of life (max speed)",
+   "result": "520 m³/h",
+   "limit": "≥ 80% of 520",
+   "pass": true,
+   "note": "App asks for a new filter before airflow drops further"
+  },
+  {
+   "area": "Fan",
+   "test": "Flow coefficient (fan suits the job)",
+   "result": "φ = 0.17",
+   "limit": "0.10–0.30 for backward-curved",
+   "pass": true,
+   "note": "Blade tip speed 27.2 m/s"
+  },
+  {
+   "area": "Electrical",
+   "test": "Power at max (new filter)",
+   "result": "62 W",
+   "limit": "≤ 85% of 90 W adapter (24 V 3.75 A)",
+   "pass": true,
+   "note": "Air power 27 W; fan 55%, motor+drive 85% efficient"
+  },
+  {
+   "area": "Electrical",
+   "test": "Energy per day in Auto (24 h)",
+   "result": "0.34 kWh ≈ ₹2.7",
+   "limit": "≤ 1.2 kWh (less than a ceiling fan)",
+   "pass": true,
+   "note": "Average 14 W"
+  },
+  {
+   "area": "Sound",
+   "test": "Noise range at 1 m (fan-law estimate)",
+   "result": "24–56 dB(A)",
+   "limit": "≤ 25 dB(A) in sleep",
+   "pass": true,
+   "note": "Sleep speed below a whisper; measure in a sound lab"
+  },
+  {
+   "area": "Performance",
+   "test": "Particle CADR (estimate)",
+   "result": "494 m³/h = 291 cfm",
+   "limit": "≥ 450 m³/h (Xiaomi 4 Pro class 500)",
+   "pass": true,
+   "note": "Airflow × 0.97 single-pass × 0.98 room mixing"
+  },
+  {
+   "area": "Performance",
+   "test": "Room size it cleans properly",
+   "result": "436 sq ft at 5.1 air changes/h",
+   "limit": "≥ 4.8 air changes/h (AHAM 2/3 rule)",
+   "pass": true,
+   "note": "Same honest rule Coway, Blueair and Levoit use; marketing 'up to 1,000 sq ft' would be 1 air change/h"
+  },
+  {
+   "area": "Performance",
+   "test": "Time to remove 90% / 99% of particles",
+   "result": "27 / 54 min",
+   "limit": "90% in ≤ 40 min",
+   "pass": true,
+   "note": "Well-mixed room, doors closed"
+  },
+  {
+   "area": "Sealing",
+   "test": "Air leak around filter: 0.2 mm gap vs compressed seal",
+   "result": "2.0% vs 0.03% leak",
+   "limit": "≤ 0.05% to keep H13 rating",
+   "pass": true,
+   "note": "A loose filter would drop real efficiency to ≈ 97.9%. Fix used: silicone lip compressed 1.5 mm + seal plate between dirty and clean zones"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Carbon odour capacity, typical home/ward air (100 µg/m³ adsorbable VOC)",
+   "result": "≈ 71 days",
+   "limit": "≥ 60 days (odour insert interval)",
+   "pass": true,
+   "note": "Fix used: 300 g carbon in the filter plus a clip-on 120 g odour insert (₹299, every 2 months, our cost ≈ ₹60). Every brand's carbon saturates; VIAN makes it cheap and tracked by the app"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Carbon odour capacity, worst case (300 µg/m³)",
+   "result": "≈ 24 days",
+   "limit": "information only",
+   "pass": "watch",
+   "note": "Fix used: 300 g carbon in the filter plus a clip-on 120 g odour insert (₹299, every 2 months, our cost ≈ ₹60). Every brand's carbon saturates; VIAN makes it cheap and tracked by the app"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Formaldehyde removal",
+   "result": "MnO₂ room-temperature catalyst: breaks HCHO into CO₂ + water",
+   "limit": "does not saturate",
+   "pass": true,
+   "note": "Same idea as Dyson's lifetime formaldehyde filter; no extra cost to the customer"
+  },
+  {
+   "area": "Filtration",
+   "test": "HEPA dust life at 80 µg/m³ city air",
+   "result": "≈ 176 days",
+   "limit": "≥ 120 days in Delhi-level air",
+   "pass": true,
+   "note": "App tracks real dust load, not a fixed timer"
+  },
+  {
+   "area": "Thermal",
+   "test": "Air temperature rise from motor and electronics",
+   "result": "0.14 °C",
+   "limit": "≤ 1 °C (no warm-air feel)",
+   "pass": true,
+   "note": "Motor is cooled by its own airflow; driver chip has thermal shutdown"
+  },
+  {
+   "area": "Safety",
+   "test": "Tip-over angle / push force at top",
+   "result": "28° / 14 N",
+   "limit": "stable on 10° slope (IEC 60335)",
+   "pass": true,
+   "note": "6.5 kg, centre of gravity 250 mm high"
+  },
+  {
+   "area": "Safety",
+   "test": "Ozone produced",
+   "result": "0 ppm (no ionizer, no UV lamp)",
+   "limit": "≤ 0.050 ppm (CARB)",
+   "pass": true,
+   "note": "Pure mechanical + carbon filtration"
+  },
+  {
+   "area": "Design",
+   "test": "Clean air hitting the screen",
+   "result": "No: outlet is above / behind the screen",
+   "limit": "screen outside the air jet",
+   "pass": true,
+   "note": "Round screen on the side band at 515 mm; air leaves straight up at 620 mm"
+  },
+  {
+   "area": "Electrical",
+   "test": "Wi-Fi through the body",
+   "result": "PC/ABS body: no shielding",
+   "limit": "plastic or antenna outside metal",
+   "pass": true,
+   "note": "Bluetooth fallback if Wi-Fi drops"
+  }
+ ],
+ "hospital": [
+  {
+   "area": "Airflow",
+   "test": "Intake air speed at max",
+   "result": "2.28 m/s",
+   "limit": "≤ 2.5 m/s (quiet, no whistle)",
+   "pass": true,
+   "note": "Big open intake keeps air slow and quiet"
+  },
+  {
+   "area": "Filtration",
+   "test": "HEPA media velocity",
+   "result": "4.0 cm/s",
+   "limit": "≤ 5.5 cm/s for H13 to hold efficiency",
+   "pass": true,
+   "note": "Face speed 1.49 m/s over 7.0 m² of pleated media"
+  },
+  {
+   "area": "Fan",
+   "test": "Fan pressure available vs needed (new filter)",
+   "result": "910 Pa vs 350 Pa",
+   "limit": "available ≥ 1.2 × needed",
+   "pass": true,
+   "note": "Needed = intake skin 15 Pa, pre-filter 15 Pa, carbon layer 50 Pa, H13 mini-pleat 230 Pa, plenum + fan inlet + guard 40 Pa"
+  },
+  {
+   "area": "Fan",
+   "test": "Airflow at filter end of life (max speed)",
+   "result": "1000 m³/h",
+   "limit": "≥ 80% of 1000",
+   "pass": true,
+   "note": "App asks for a new filter before airflow drops further"
+  },
+  {
+   "area": "Fan",
+   "test": "Flow coefficient (fan suits the job)",
+   "result": "φ = 0.11",
+   "limit": "0.10–0.30 for backward-curved",
+   "pass": true,
+   "note": "Blade tip speed 41.1 m/s"
+  },
+  {
+   "area": "Electrical",
+   "test": "Power at max (new filter)",
+   "result": "190 W",
+   "limit": "EC fan on 230 V (≈ 500 W rating)",
+   "pass": true,
+   "note": "Air power 97 W; fan 62%, motor+drive 88% efficient"
+  },
+  {
+   "area": "Electrical",
+   "test": "Energy per day in Auto (24 h)",
+   "result": "2.28 kWh ≈ ₹18.2",
+   "limit": "≤ 3 kWh (≈ ₹25) for a 1,000 m³/h unit",
+   "pass": true,
+   "note": "Average 95 W"
+  },
+  {
+   "area": "Sound",
+   "test": "Noise range at 1 m (fan-law estimate)",
+   "result": "27–60 dB(A)",
+   "limit": "≤ 52 dB(A) in surgery mode",
+   "pass": true,
+   "note": "Sleep speed below a whisper; measure in a sound lab"
+  },
+  {
+   "area": "Performance",
+   "test": "Particle CADR (estimate)",
+   "result": "922 m³/h = 542 cfm",
+   "limit": "≈ 900–1,000 m³/h",
+   "pass": true,
+   "note": "Airflow × 0.97 single-pass × 0.95 room mixing"
+  },
+  {
+   "area": "Performance",
+   "test": "Room size it cleans properly",
+   "result": "592 sq ft at 5.6 air changes/h",
+   "limit": "adds ≥ 4 air changes/h",
+   "pass": true,
+   "note": "Average operating theatre of 20 hospitals (592 sq ft); adds to the hospital's own 20 air changes/h"
+  },
+  {
+   "area": "Performance",
+   "test": "Time to remove 90% / 99% of particles",
+   "result": "25 / 49 min",
+   "limit": "90% in ≤ 40 min",
+   "pass": true,
+   "note": "Well-mixed room, doors closed"
+  },
+  {
+   "area": "Sealing",
+   "test": "Air leak around filter: 0.2 mm gap vs compressed seal",
+   "result": "1.9% vs 0.03% leak",
+   "limit": "≤ 0.05% to keep H13 rating",
+   "pass": true,
+   "note": "A loose filter would drop real efficiency to ≈ 98.0%. Fix used: silicone lip compressed 1.5 mm + seal plate between dirty and clean zones"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Carbon odour capacity, typical home/ward air (100 µg/m³ adsorbable VOC)",
+   "result": "≈ 115 days",
+   "limit": "≥ 90 days (odour insert interval)",
+   "pass": true,
+   "note": "Fix used: carbon layer raised to 30 mm (1.35 kg) + quarterly odour insert (₹499). Light alcohols (ethanol) adsorb weakly, so theatre ventilation still handles alcohol vapour"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Carbon odour capacity, worst case (300 µg/m³)",
+   "result": "≈ 38 days",
+   "limit": "information only",
+   "pass": "watch",
+   "note": "Fix used: carbon layer raised to 30 mm (1.35 kg) + quarterly odour insert (₹499). Light alcohols (ethanol) adsorb weakly, so theatre ventilation still handles alcohol vapour"
+  },
+  {
+   "area": "Chemistry",
+   "test": "Formaldehyde removal",
+   "result": "MnO₂ room-temperature catalyst: breaks HCHO into CO₂ + water",
+   "limit": "does not saturate",
+   "pass": true,
+   "note": "Same idea as Dyson's lifetime formaldehyde filter; no extra cost to the customer"
+  },
+  {
+   "area": "Filtration",
+   "test": "HEPA dust life at 40 µg/m³ city air",
+   "result": "≈ 446 days",
+   "limit": "≥ 180 days in a hospital room",
+   "pass": true,
+   "note": "App tracks real dust load, not a fixed timer"
+  },
+  {
+   "area": "Thermal",
+   "test": "Air temperature rise from motor and electronics",
+   "result": "0.36 °C",
+   "limit": "≤ 1 °C (no warm-air feel)",
+   "pass": true,
+   "note": "Motor is cooled by its own airflow; driver chip has thermal shutdown"
+  },
+  {
+   "area": "Safety",
+   "test": "Tip-over angle / push force at top",
+   "result": "27° / 55 N",
+   "limit": "stable on 10° slope (IEC 60335)",
+   "pass": true,
+   "note": "27 kg, centre of gravity 450 mm high"
+  },
+  {
+   "area": "Safety",
+   "test": "Ozone produced",
+   "result": "0 ppm (no ionizer, no UV lamp)",
+   "limit": "≤ 0.050 ppm (CARB)",
+   "pass": true,
+   "note": "Pure mechanical + carbon filtration"
+  },
+  {
+   "area": "Design",
+   "test": "Clean air hitting the screen",
+   "result": "No: outlet is above / behind the screen",
+   "limit": "screen outside the air jet",
+   "pass": true,
+   "note": "Display window on the front visor; outlet is on the rear-high sloped top, air goes up and back"
+  },
+  {
+   "area": "Electrical",
+   "test": "Wi-Fi through the body",
+   "result": "PC/ABS body + antenna in plastic visor",
+   "limit": "plastic or antenna outside metal",
+   "pass": true,
+   "note": "Bluetooth fallback if Wi-Fi drops"
+  }
+ ]
 };
-
-/* ---------- registry ---------- */
-const REG={};            // id -> {root, meshes:[], home:Vector3, explode:Vector3}
-const pickables=[];
-function reg(id,obj,explode=[0,0,0]){
-  if(!P[id]) console.warn("no data for",id);
-  const r=REG[id]||(REG[id]={id,roots:[],meshes:[]});
-  r.roots.push(obj); obj.userData.home=obj.position.clone(); obj.userData.explode=new THREE.Vector3(...explode);
-  obj.traverse(m=>{if(m.isMesh){m.userData.cid=id; if(!m.userData.shared){m.material=m.material.clone()} r.meshes.push(m); pickables.push(m)}});
-  return obj;
-}
-function box(w,h,d,mat,pos,parent){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(...pos);(parent||scene).add(m);return m}
-function cyl(r,h,mat,pos,parent,seg=48,rt){const m=new THREE.Mesh(new THREE.CylinderGeometry(rt??r,r,h,seg),mat);m.position.set(...pos);(parent||scene).add(m);return m}
-function grp(pos,parent){const g=new THREE.Group();g.position.set(...pos);(parent||scene).add(g);return g}
-function pcb(w,h,pos,parent,chips){ // vertical board in XY plane facing +z by default
-  const g=grp(pos,parent); box(w,h,1.6,MAT.pcb,[0,0,0],g);
-  (chips||[]).forEach(c=>box(c[2],c[3],c[4]||2.5,c[5]||MAT.chip,[c[0],c[1],(c[4]||2.5)/2+.8],g));
-  return g;
-}
-
-/* ---------- shell + door ---------- */
-const NP=200, LEVELS=[];for(let y=BASE;y<=H;y+=20)LEVELS.push(y);[110,750].forEach(v=>{if(!LEVELS.includes(v))LEVELS.push(v)});LEVELS.sort((a,b)=>a-b);
-const inDoor=(x,y,z)=>x>150&&z>DOOR.zr&&z<DOOR.zf&&y>DOOR.y0&&y<DOOR.y1;
-const pos=[],uv=[],idxShell=[],idxDoor=[];
-const NL=LEVELS.length;
-for(let i=0;i<=NP;i++){const s=i/NP*LEN;const [x,z]=atS(s);const top=topY(z);
-  for(let j=0;j<NL;j++){const y=Math.min(LEVELS[j],top);pos.push(x,y,z);uv.push(i/NP,y/H)}}
-const V=(i,j)=>i*NL+j;
-for(let i=0;i<NP;i++)for(let j=0;j<NL-1;j++){
-  const a=V(i,j),b=V(i+1,j),c=V(i+1,j+1),d=V(i,j+1);
-  let cx=0,cy=0,cz=0;[a,b,c,d].forEach(k=>{cx+=pos[k*3];cy+=pos[k*3+1];cz+=pos[k*3+2]});cx/=4;cy/=4;cz/=4;
-  const arr=inDoor(cx,cy,cz)?idxDoor:idxShell; arr.push(a,c,b,a,d,c);
-}
-function geo(idx){const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));g.setAttribute("uv",new THREE.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g}
-const shellMesh=new THREE.Mesh(geo(idxShell),shellMat); shellMesh.userData.shared=true; scene.add(shellMesh);
-reg("shell",shellMesh,[0,0,0]);
-// door on a hinge
-const hingeX=xAtZ(DOOR.zr)+2;
-const hinge=grp([hingeX,0,DOOR.zr]);
-const doorMesh=new THREE.Mesh(geo(idxDoor),shellMat); doorMesh.userData.shared=true; doorMesh.position.set(-hingeX,0,-DOOR.zr); hinge.add(doorMesh);
-const doorInner=new THREE.Group(); hinge.add(doorInner);
-reg("door",hinge,[160,0,0]);
-// latch handle (on the door)
-const hx=xAtZ(140);
-const handle=box(10,90,26,MAT.blue,[hx+4-hingeX,570,140-DOOR.zr],hinge);
-reg("handle",handle,[0,0,0]);
-// intake skin hotspot (invisible pick target in front of the perforation band)
-const intakePick=box(300,520,4,new THREE.MeshBasicMaterial({visible:false}),[0,362,B-6]); reg("intake",intakePick);
-
-/* top outlet */
-const topShape=new THREE.Shape();
-for(let i=0;i<=160;i++){const [x,z]=atS(i/160*LEN);i?topShape.lineTo(x*.94,z*.94):topShape.moveTo(x*.94,z*.94)}
-const tg=new THREE.ShapeGeometry(topShape,6);
-{const p=tg.attributes.position,u=tg.attributes.uv;for(let i=0;i<p.count;i++){const x=p.getX(i),z=p.getY(i);p.setXYZ(i,x,topY(z)-5,z);u.setXY(i,(x+A)/(2*A),(z+B)/(2*B))}tg.computeVertexNormals()}
-const topMat=new THREE.MeshStandardMaterial({color:0x2a2f35,map:makeGrilleTexture(),metalness:.4,roughness:.5,side:THREE.DoubleSide});
-const topOut=new THREE.Mesh(tg,topMat); scene.add(topOut); reg("top_outlet",topOut,[0,260,0]);
-const ring=new THREE.Mesh(new THREE.TorusGeometry(34,3.2,12,64),MAT.glow.clone()); ring.rotation.x=Math.PI/2-Math.atan(45/B/1); ring.position.set(0,topY(0)-2,0);
-scene.add(ring); reg("led_ring",ring,[0,280,0]);
-
-/* base */
-const baseShape=new THREE.Shape();
-for(let i=0;i<=160;i++){const [x,z]=atS(i/160*LEN);i?baseShape.lineTo(x*.985,z*.985):baseShape.moveTo(x*.985,z*.985)}
-const bg=new THREE.ExtrudeGeometry(baseShape,{depth:BASE-6,bevelEnabled:true,bevelThickness:3,bevelSize:3,bevelSegments:3,curveSegments:48});
-bg.rotateX(-Math.PI/2); bg.translate(0,6,0);
-const baseG=grp([0,0,0]); const baseMesh=new THREE.Mesh(bg,graphite); baseMesh.userData.shared=true; baseG.add(baseMesh);
-[[-140,-150],[140,-150],[-140,150],[140,150]].forEach(([x,z])=>cyl(26,8,MAT.rubber,[x,4,z],baseG));
-box(120,2.5,2,MAT.glow,[0,16,B*.985+3.5],baseG);
-reg("base",baseG,[0,-140,0]);
-
-/* display + visor status */
-const dispCanvas=document.createElement("canvas"); dispCanvas.width=1024; dispCanvas.height=370;
-const dispTex=new THREE.CanvasTexture(dispCanvas); dispTex.encoding=THREE.sRGBEncoding; dispTex.anisotropy=4;
-const display=new THREE.Mesh(new THREE.PlaneGeometry(180,65),new THREE.MeshBasicMaterial({map:dispTex,toneMapped:false}));
-display.position.set(0,915,B+2.2); scene.add(display); reg("display",display,[0,40,320]);
-const sled=box(46,2.4,1,new THREE.MeshBasicMaterial({color:0x4FA3FF,toneMapped:false}),[0,871,B+1.6]); reg("status_led",sled,[0,40,320]);
-
-/* rear power entry + port panel */
-const pe=grp([70,48,-B+8]); box(60,40,16,MAT.dark,[0,0,0],pe); box(30,22,4,MAT.rubber,[-8,0,-9],pe); box(14,10,4,MAT.safety,[18,6,-9],pe);
-reg("power_entry",pe,[0,-60,-160]);
-const pp=grp([-70,48,-B+8]); box(90,36,14,MAT.dark,[0,0,0],pp); box(18,14,4,MAT.steel,[-26,2,-8],pp); box(22,10,4,M(0x2e8b57),[2,2,-8],pp); box(12,5,4,MAT.steel,[28,2,-8],pp);
-reg("port_panel",pp,[0,-60,-160]);
-
-/* ---------- internals ---------- */
-// prefilter
-const pre=grp([0,422,185]); box(300,620,10,new THREE.MeshStandardMaterial({color:0x9AA3AD,map:makeMeshTexture(),metalness:.3,roughness:.6,transparent:true,opacity:.42,depthWrite:false}),[0,0,0],pre);
-box(300,10,18,MAT.dark,[0,310,0],pre);box(300,10,18,MAT.dark,[0,-310,0],pre);
-reg("prefilter",pre,[0,0,300]);
-// Stage 2: activated carbon honeycomb panel (slides out with the HEPA)
-const carb=grp([0,420,140]);
-box(303,606,20,new THREE.MeshStandardMaterial({color:0x2b2f33,map:makeHoneyTexture(),roughness:.9}),[0,0,0],carb);
-reg("carbon",carb,[0,0,180]);
-// Main filter pack HC-2: carbon layer (above) + H13 mini-pleat HEPA, one ABS frame (slides along +x)
-const cas=grp([0,420,82]);
-const pleatTex=makePleatTexture();
-box(301,604,90,new THREE.MeshStandardMaterial({color:0xF4F1E8,map:pleatTex,roughness:.9}),[0,0,0],cas);
-const frameM=M(0xD8DCE0,{roughness:.6});
-box(309,8,124,frameM,[0,306,28],cas); box(309,8,124,frameM,[0,-306,28],cas); box(8,610,124,frameM,[-152,0,28],cas); box(8,610,124,frameM,[152,0,28],cas);
-box(300,600,4,MAT.rubber,[0,0,-47],cas);                  // gasket
-box(10,26,90,MAT.blue,[158,0,20],cas);                    // pull handle
-box(2,24,40,MAT.white,[-157,40,0],cas);                   // NFC tag label on deep end
-reg("hepa",cas,[0,0,0]);
-// seal cam
-const cam=grp([168,560,118]); box(14,60,14,MAT.blue,[0,0,0],cam); cyl(10,18,MAT.steel,[0,-30,0],cam);
-reg("seal_cam",cam,[120,0,80]);
-// rails
-const rails=grp([0,0,100]); box(430,8,30,MAT.steel,[20,108,0],rails); box(430,8,30,MAT.steel,[20,732,0],rails);
-reg("rails",rails,[0,0,0]);
-// plenum
-const plen=grp([0,450,-80]); box(330,700,250,MAT.plenum,[0,0,0],plen);
-reg("plenum",plen,[0,0,-240]);
-// fan
-const fanG=grp([0,880,-40]);
-const housing=new THREE.Mesh(new THREE.CylinderGeometry(165,165,120,64,1,true),M(0x2b3138,{side:THREE.DoubleSide,metalness:.4,roughness:.5})); fanG.add(housing);
-const imp=new THREE.Group(); fanG.add(imp);
-cyl(140,4,MAT.fanblue,[0,-46,0],imp,64); const shroud=new THREE.Mesh(new THREE.TorusGeometry(120,6,8,64),MAT.fanblue); shroud.rotation.x=Math.PI/2; shroud.position.y=40; imp.add(shroud);
-for(let i=0;i<9;i++){const bl=box(70,86,3,MAT.fanblue,[0,0,0],imp);const a=i/9*Math.PI*2;bl.position.set(Math.cos(a)*95,-2,Math.sin(a)*95);bl.rotation.y=-a+0.7}
-const motor=cyl(58,70,MAT.steel,[0,92,0],fanG); cyl(62,10,MAT.dark,[0,62,0],fanG);
-reg("fan",fanG,[0,180,-80]);
-const inring=new THREE.Mesh(new THREE.TorusGeometry(110,9,12,64),MAT.alu); inring.rotation.x=Math.PI/2; inring.position.set(0,808,-40); scene.add(inring);
-reg("inlet_ring",inring,[0,110,-80]);
-// electronics bay: main board, display board, antenna
-const mb=pcb(170,112,[0,872,206],null,[[ -40,10,18,25,3.2,MAT.can],[22,22,14,14],[45,-20,10,10],[-10,-30,8,8],[60,30,7,7],[-70,-40,12,6,6,MAT.white],[70,-44,18,8,7,MAT.white],[0,48,28,6,4,MAT.dark]]);
-mb.rotation.y=Math.PI; reg("main_board",mb,[0,120,330]);
-const db=pcb(70,34,[55,912,224],null,[[-15,0,8,8],[18,4,6,4],[24,-8,5,3]]); db.rotation.y=Math.PI; reg("display_board",db,[0,60,420]);
-const ant=box(44,10,1,M(0xC8A24A,{metalness:.6,roughness:.4}),[-110,962,200]); reg("antenna",ant,[-80,90,330]);
-// power compartment
-const pb=pcb(190,118,[50,40,-110],null,[[-50,10,30,22,22,MAT.dark],[20,20,22,18,18,M(0x2a63c4)],[60,-30,14,30,10,MAT.dark],[-70,-40,16,16,8,M(0xffd27a)]]);
-pb.rotation.x=-Math.PI/2; reg("power_board",pb,[0,-150,-60]);
-const psu=box(100,40,62,M(0xB9BEC4,{metalness:.7,roughness:.35}),[-120,30,-140]); reg("psu",psu,[-80,-150,-60]);
-// sensors
-const pod=grp([-198,720,40]); box(30,40,58,MAT.white,[0,0,0],pod); box(4,22,40,MAT.dark,[-16,0,0],pod); reg("sensor_pod",pod,[-220,0,0]);
-const dpb=pcb(78,52,[-150,782,120],null,[[-18,4,16,16,9,MAT.dark],[18,4,14,14,7,MAT.white],[0,-16,10,6]]); dpb.rotation.x=-Math.PI/2; reg("dp_board",dpb,[-60,120,120]);
-const pmo=grp([110,700,-190]); box(41,41,12,MAT.white,[0,0,0],pmo); box(20,6,13,MAT.dark,[0,10,0],pmo); reg("pm_out",pmo,[0,0,-300]);
-const fid=pcb(40,46,[-168,420,90],null,[[0,0,26,26,1,MAT.gold],[0,-16,8,6]]); fid.rotation.y=Math.PI/2; reg("filter_id",fid,[-200,0,0]);
-const ds=grp([198,575,128]); box(10,30,14,MAT.safety,[0,0,0],ds); reg("door_switch",ds,[120,0,60]);
-const pfs=box(16,10,10,MAT.dark,[130,736,180]); reg("prefilter_switch",pfs,[0,40,260]);
-
-/* ---------- wiring ---------- */
-const WIRE_COL={mains:0xE2703A,low:0xF2B33D,data:0x4C9BFF,sensor:0x3FD3C2,tube:0xDCE6EE,rf:0xC8A24A};
-const wiresG=new THREE.Group(); scene.add(wiresG); wiresG.visible=false;
-function wire(id,type,pts,r=3.2){
-  const curve=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)),false,"catmullrom",0.2);
-  const m=new THREE.Mesh(new THREE.TubeGeometry(curve,Math.max(24,pts.length*20),r,8,false),new THREE.MeshStandardMaterial({color:WIRE_COL[type],roughness:.5,emissive:WIRE_COL[type],emissiveIntensity:.15}));
-  wiresG.add(m); reg(id,m); return m;
-}
-wire("w_mains","mains",[[70,48,-215],[70,40,-180],[60,44,-130],[50,44,-110]]);
-wire("w_fanpower","mains",[[120,44,-120],[180,60,-170],[190,300,-180],[192,560,-120],[196,575,118],[190,700,-140],[150,850,-150],[60,900,-120]]);
-wire("w_24v","low",[[-120,52,-110],[-180,90,-40],[-185,400,120],[-160,800,170],[-60,860,200]]);
-wire("w_fanctl","data",[[30,900,200],[60,940,130],[60,950,40],[40,950,-20]]);
-wire("w_i2c_pod","sensor",[[-60,870,200],[-170,820,160],[-195,760,90],[-198,740,60]]);
-wire("w_i2c_dp","sensor",[[-40,860,200],[-120,820,160],[-150,786,130]]);
-wire("w_i2c_fid","sensor",[[-70,850,200],[-170,760,160],[-185,500,110],[-180,430,40],[-170,420,20]]);
-wire("w_i2c_pm","sensor",[[40,850,200],[120,800,140],[140,770,-120],[115,710,-170]]);
-wire("w_display","data",[[0,900,210],[30,912,220],[55,912,222]],5);
-wire("w_led","data",[[20,850,205],[0,868,228],[0,871,233]],2.4);
-wire("w_ports","data",[[-50,830,200],[-195,700,-60],[-190,300,-190],[-90,70,-215],[-70,55,-222]]);
-wire("w_interlock","data",[[196,560,128],[180,700,150],[120,840,195],[60,860,203]],2.4);
-wire("w_antenna","rf",[[-50,900,203],[-90,940,203],[-110,962,201]],1.6);
-wire("t_up","tube",[[-150,790,120],[-160,760,170],[-160,600,175],[-140,600,172]],2.6);
-wire("t_down","tube",[[-140,790,110],[-160,770,-100],[-160,600,-170],[-130,600,-176]],2.6);
-wire("t_ring","tube",[[-130,790,115],[-115,800,40],[-112,808,-40]],2.6);
-
-/* ---------- textures ---------- */
-function makeShellTexture(){
-  const W=4096,Hh=2048,c=document.createElement("canvas");c.width=W;c.height=Hh;const g=c.getContext("2d");
-  g.fillStyle="#ffffff";g.fillRect(0,0,W,Hh);
-  const uX=u=>((u%1)+1)%1*W, yY=y=>(1-y/H)*Hh, mmU=mm=>mm/LEN;
-  // perforation band (front): Z 95–630, ±170 mm of arc from front centre
-  g.fillStyle="#4a5058";
-  for(let y=100;y<=626;y+=9)for(let d=-168;d<=168;d+=9){const x=uX(U_FRONT+mmU(d));g.beginPath();g.arc(x,yY(y),2.6,0,7);g.fill()}
-  // side sensor louvre (left)
-  g.fillStyle="#3a3f45";for(let k=0;k<6;k++){const y=690+k*12;g.fillRect(uX(U_LEFT-mmU(26)),yY(y)-2,mmU(52)*W,4)}
-  // graphite visor
-  g.fillStyle="#262b31";const vx0=uX(U_FRONT-mmU(150)),vx1=uX(U_FRONT+mmU(150));roundRect(g,vx0,yY(1000),vx1-vx0,yY(860)-yY(1000),26);g.fill();
-  // engraved logo
-  g.strokeStyle="#7c838b";g.lineWidth=3.2;g.lineCap="square";
-  const LOGO=[[[0,1],[.35,0],[.7,1]],[[1,1],[1,0]],[[1.3,0],[1.65,1],[2,0]],[[2.3,0],[2.3,1],[2.95,0],[2.95,1]]], lh=13;
-  LOGO.forEach(st=>{g.beginPath();st.forEach(([x,z],i)=>{const px=uX(U_FRONT-mmU((x-1.475)*lh)),py=yY(818+(z-.5)*lh);i?g.lineTo(px,py):g.moveTo(px,py)});g.stroke()});
-  // door seam
-  g.strokeStyle="#9aa1a9";g.lineWidth=3;
-  const sF=uFromZ(DOOR.zf),sR=uFromZ(DOOR.zr);
-  [[sR,sF+1],[sR-1,sF]].forEach(([a,b])=>{const x0=a*W,x1=b*W;g.strokeRect(x0,yY(DOOR.y1),x1-x0,yY(DOOR.y0)-yY(DOOR.y1))});
-  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t;
-}
-function uFromZ(z){let best=0,bd=1e9;for(let i=0;i<=4000;i++){const p=RAW[i];if(p[0]>0&&Math.abs(p[1]-z)<bd){bd=Math.abs(p[1]-z);best=CUM[i]/LEN}}return best}
-function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
-function makeGrilleTexture(){
-  const S=1024,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");
-  g.fillStyle="#3a4048";g.fillRect(0,0,S,S);g.strokeStyle="#0d1013";g.lineWidth=7;
-  for(let i=0;i<72;i++){const a=i/72*Math.PI*2;g.beginPath();for(let r=60;r<520;r+=8){const aa=a+r*0.0022;const x=S/2+Math.cos(aa)*r,y=S/2+Math.sin(aa)*r;r===60?g.moveTo(x,y):g.lineTo(x,y)}g.stroke()}
-  g.fillStyle="#22272c";g.beginPath();g.arc(S/2,S/2,70,0,7);g.fill();
-  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;
-}
-function makeMeshTexture(){const c=document.createElement("canvas");c.width=c.height=256;const g=c.getContext("2d");g.fillStyle="#b9c0c7";g.fillRect(0,0,256,256);g.strokeStyle="#6c757e";g.lineWidth=2;for(let i=0;i<256;i+=8){g.beginPath();g.moveTo(i,0);g.lineTo(i,256);g.stroke();g.beginPath();g.moveTo(0,i);g.lineTo(256,i);g.stroke()}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(4,7);t.encoding=THREE.sRGBEncoding;return t}
-function makeHoneyTexture(){const c=document.createElement("canvas");c.width=c.height=256;const g=c.getContext("2d");g.fillStyle="#1d2023";g.fillRect(0,0,256,256);g.strokeStyle="#3d4349";g.lineWidth=2;
-  for(let y=0;y<280;y+=22)for(let x=0;x<280;x+=26){const ox=(Math.round(y/22)%2)*13;g.beginPath();for(let k=0;k<6;k++){const a=Math.PI/3*k+Math.PI/6;const px=x+ox+Math.cos(a)*12,py=y+Math.sin(a)*12;k?g.lineTo(px,py):g.moveTo(px,py)}g.closePath();g.stroke()}
-  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,6);t.encoding=THREE.sRGBEncoding;return t}
-function makePleatTexture(){const c=document.createElement("canvas");c.width=512;c.height=64;const g=c.getContext("2d");for(let i=0;i<512;i+=16){const gr=g.createLinearGradient(i,0,i+16,0);gr.addColorStop(0,"#d9d4c6");gr.addColorStop(.5,"#fbf8f0");gr.addColorStop(1,"#cfc9ba");g.fillStyle=gr;g.fillRect(i,0,16,64)}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(3,1);t.encoding=THREE.sRGBEncoding;return t}
-
-/* ---------- live state ---------- */
-const MODES={surgery:{name:"Surgery quiet",cap:1900,note:"≤ 52 dB(A) during surgery"},icu:{name:"ICU night",cap:1300,note:"≤ 43 dB(A) for sleeping patients"},clinic:{name:"Clinic",cap:2400,note:"≤ 57 dB(A)"},boost:{name:"Boost",cap:2800,note:"between cases or after cleaning"}};
-const st={fan:true,door:false,filterOut:false,page:1,rpm:1900,dp:200,flow:712,pmIn:18,pmOut:0.3,health:93,carbon:88,washes:2,mode:"surgery",db:52,watts:110};
-const DP_INIT=250, DP_FINAL=500;
-
-function drawDisplay(){
-  const g=dispCanvas.getContext("2d"),W=1024,Hh=370;
-  g.fillStyle="#05080c";g.fillRect(0,0,W,Hh);
-  const pages=["THEATRE","UNIT","SERVICE"];
-  g.font="600 22px JetBrains Mono, monospace";
-  pages.forEach((p,i)=>{g.fillStyle=i===st.page?"#3FD3C2":"#4b5a6a";g.fillText(p,40+i*170,52)});
-  g.fillStyle="#4b5a6a";g.textAlign="right";g.fillText(st.door?"DOOR OPEN":(st.fan?"RUNNING":"STANDBY"),W-40,52);g.textAlign="left";
-  g.fillStyle="#1b2633";g.fillRect(40,70,W-80,2);
-  const cell=(x,val,unit,lab,col)=>{g.fillStyle=col||"#E7EEF5";g.font="300 76px Manrope, sans-serif";g.fillText(val,x,190);const w=g.measureText(val).width;g.font="500 28px Manrope, sans-serif";g.fillStyle="#91A2B4";g.fillText(unit,x+w+8,190);g.font="700 19px Manrope, sans-serif";g.fillStyle="#5E6F82";g.fillText(lab,x,236)};
-  if(st.page===0){cell(40,"21.0","°C","TEMPERATURE");cell(290,"48","%","HUMIDITY");cell(500,"+8","Pa","ROOM PRESSURE");cell(770,"20","ACH","HVAC");g.font="500 20px Manrope";g.fillStyle="#3FD3C2";g.fillText("● BMS live · updated 12 s ago",40,320)}
-  if(st.page===1){const on=st.fan&&!st.door;cell(40,on?"Auto":"Stopped","","MODE · "+MODES[st.mode].name.toUpperCase(),on?"#3FD3C2":"#F2B33D");cell(330,Math.round(st.flow).toLocaleString("en-IN"),"m³/h","AIRFLOW");cell(620,on?Math.round(st.db)+"":"—","dB","SOUND");cell(800,st.filterOut?"—":st.health+"%","",st.filterOut?"FILTERS OUT":"HEPA",st.filterOut?"#EE5A5A":null);g.font="500 20px Manrope";g.fillStyle="#91A2B4";g.fillText(st.door?"Door open: fan stopped by safety interlock":"Carbon "+st.carbon+"% · pre-filter washed "+st.washes+" of 5 · "+Math.round(st.rpm)+" rpm",40,320)}
-  if(st.page===2){cell(40,Math.round(st.dp),"Pa","HEPA ΔP");cell(300,Math.round(st.rpm).toLocaleString("en-IN"),"rpm","FAN");cell(590,st.pmIn.toFixed(0)+" / "+st.pmOut.toFixed(1),"µg","PM2.5 IN / OUT");g.font="500 20px Manrope";g.fillStyle="#91A2B4";g.fillText("Service · PIN protected · last event 09:14 filter check OK",40,320)}
-  dispTex.needsUpdate=true;
-}
-
-/* ---------- airflow particles ---------- */
-const PN=700, paths=[];
-for(let k=0;k<48;k++){const x=(Math.random()-.5)*280,y0=120+Math.random()*500,rx=(Math.random()-.5)*300,rz=-40+(Math.random()-.5)*260;
-  const c=new THREE.CatmullRomCurve3([[x,y0,420],[x,y0,250],[x*.95,y0,190],[x*.9,y0,0],[x*.85,y0,-150],[x*.6,y0+40,-185],[x*.4,760,-170],[x*.2,815,-60],[0,860,-40],[rx*.5,980,rz*.6-20],[rx,1300,rz-80]].map(p=>new THREE.Vector3(...p)));
-  paths.push(c.getSpacedPoints(300))}
-const pg=new THREE.BufferGeometry(),pp3=new Float32Array(PN*3),pc=new Float32Array(PN*3);
-pg.setAttribute("position",new THREE.BufferAttribute(pp3,3));pg.setAttribute("color",new THREE.BufferAttribute(pc,3));
-const parts=Array.from({length:PN},()=>({p:Math.floor(Math.random()*48),t:Math.random()}));
-const airPts=new THREE.Points(pg,new THREE.PointsMaterial({size:15,vertexColors:true,transparent:true,opacity:.95,depthWrite:false,sizeAttenuation:true}));
-scene.add(airPts); airPts.visible=false;
-const DIRTY=new THREE.Color(0xF2A34D),CLEAN=new THREE.Color(0x63E6FF);
-
-/* ---------- modes ---------- */
-let mode="solid",explodeT=0,explodeTarget=0,doorT=0,filterT=0,showPins=true;
-const clipPlane=new THREE.Plane(new THREE.Vector3(-1,0,0),0);
-function applyMode(m){
-  mode=m; explodeTarget=m==="explode"?1:0;
-  const xr=m==="xray"||m==="explode", cut=m==="cut";
-  if(m==="explode")setView("far");
-  [shellMat,graphite,topMat].forEach(mt=>{mt.transparent=xr;mt.opacity=xr?(m==="explode"?.05:.13):1;mt.depthWrite=!xr;mt.clippingPlanes=cut?[clipPlane]:[];mt.needsUpdate=true});
-  Object.values(REG).forEach(r=>{const g=P[r.id].group;if(g==="air"||g==="exterior")r.meshes.forEach(mm=>{mm.material.clippingPlanes=cut?[clipPlane]:[];mm.material.clipShadows=true;mm.material.needsUpdate=true})});
-  [housing.material].forEach(mt=>{mt.clippingPlanes=cut?[clipPlane]:[];mt.needsUpdate=true});
-  $$("#modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===m));
-  if(cut){toast("Cut-away: right half removed. View from the right to see inside.");setView("right")}
-}
-$$("#modes button").forEach(b=>b.onclick=()=>applyMode(b.dataset.m));
-$$("#toggles button").forEach(b=>b.onclick=()=>{
-  const on=b.getAttribute("aria-pressed")!=="true"; b.setAttribute("aria-pressed",on);
-  if(b.dataset.t==="air"){airPts.visible=on; if(on&&mode==="solid")applyMode("xray"); toast(on?"Amber = room air · cyan = cleaned air":"Airflow hidden")}
-  if(b.dataset.t==="wires"){wiresG.visible=on; if(on&&mode==="solid")applyMode("xray"); if(on)toast("Orange mains · yellow 24 V · blue data · teal sensors · white pressure tubes")}
-  if(b.dataset.t==="pins"){showPins=on}
-});
-$$("#acts button").forEach(b=>b.onclick=()=>{
-  const a=b.dataset.a;
-  if(a==="door"){st.door=!st.door; b.textContent=st.door?"Close door":"Open door"; if(st.door)toast("Door open: safety interlock cut fan power"); else {if(st.filterOut){st.filterOut=false;$('[data-a="filter"]').textContent="Slide filter out"}toast("Door closed")}}
-  if(a==="filter"){ if(!st.door){toast("Open the service door first");return} st.filterOut=!st.filterOut; b.textContent=st.filterOut?"Slide filters in":"Slide filters out"; toast(st.filterOut?"Main filter pack removed: Hall sensors and NFC report \"no filter\"":"Filters seated: NFC read VIAN HC-2 pack, seal locked")}
-  if(a==="mode"){const keys=Object.keys(MODES);st.mode=keys[(keys.indexOf(st.mode)+1)%keys.length];b.textContent="Mode: "+MODES[st.mode].name;toast(MODES[st.mode].name+": "+MODES[st.mode].note)}
-  if(a==="fan"){st.fan=!st.fan; b.textContent=st.fan?"Fan on":"Fan off"; b.classList.toggle("on",st.fan)}
-  drawDisplay(); renderApp();
-});
-$$("#fin button").forEach(b=>b.onclick=()=>{$$("#fin button").forEach(x=>x.setAttribute("aria-pressed",x===b));shellMat.color.setHex(FIN[b.dataset.f]);REG.door.meshes.forEach(m=>m.material.color.setHex(FIN[b.dataset.f]))});
-
-/* views */
-const VIEWS={hero:[1250,1020,1700],far:[1900,1350,2600],front:[0,620,2300],right:[2300,620,0],rear:[0,700,-2300],top:[0,2700,300]};
-let camAnim=null;
-function setView(v){const to=new THREE.Vector3(...VIEWS[v]);camAnim={from:camera.position.clone(),to,ft:controls.target.clone(),tt:new THREE.Vector3(0,v==="top"?600:(v==="far"?600:520),0),t:0}}
-$$("#views button").forEach(b=>b.onclick=()=>setView(b.dataset.v));
-camera.position.set(...VIEWS.hero);
-
-/* ---------- picking ---------- */
-const ray=new THREE.Raycaster(); const mouse=new THREE.Vector2(); let downAt=null;
-canvas.addEventListener("pointerdown",e=>{downAt=[e.clientX,e.clientY]});
-canvas.addEventListener("pointerup",e=>{
-  if(!downAt||Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>6)return;
-  const r=canvas.getBoundingClientRect(); mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);
-  ray.setFromCamera(mouse,camera);
-  const xr=mode!=="solid";
-  const list=pickables.filter(m=>{if(!m.visible)return false;let o=m;while(o){if(!o.visible)return false;o=o.parent}return !(xr&&(m.userData.cid==="shell"||m.userData.cid==="door"||m.userData.cid==="top_outlet"))});
-  const hit=ray.intersectObjects(list,false).find(h=>{if(mode==="cut"&&(h.object.userData.cid==="shell"||h.object.userData.cid==="door"))return h.point.x<=0;return true});
-  if(!hit){return}
-  const id=hit.object.userData.cid;
-  if(ffOn&&FF_IDS.includes(id)){showTab("filters");const i=FF_IDS.indexOf(id);const c=$$("#p-filters .fcard")[i];if(c)c.scrollIntoView({block:"start",behavior:"smooth"});return}
-  if(id==="display"){st.page=(st.page+1)%3;drawDisplay();toast("Touch: "+["Theatre","Unit","Service"][st.page]+" page")}
-  select(id);
-});
-
-/* ---------- selection + panels ---------- */
-let selected=null;
-function setHi(id,on){const r=REG[id];if(!r)return;r.meshes.forEach(m=>{const mt=m.material;if(mt.emissive){mt.emissive.setHex(on?0x3FD3C2:(m.parent===wiresG?mt.color.getHex():0x000000));mt.emissiveIntensity=on?.55:(m.parent===wiresG?.15:1)}})}
-function select(id,fromList){
-  if(selected)setHi(selected,false); selected=id; setHi(id,true);
-  if(P[id].group==="wiring"&&!wiresG.visible){$('[data-t="wires"]').click()}
-  renderDetail(id); showTab("detail");
-  $$(".plist button").forEach(b=>b.classList.toggle("sel",b.dataset.id===id));
-  $$(".pin").forEach(p=>p.classList.toggle("sel",p.dataset.id===id));
-}
-function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
-function renderDetail(id){
-  const p=P[id];
-  const links=p.links.filter(l=>P[l]).map(l=>`<button data-go="${l}">${esc(P[l].name)}</button>`).join("");
-  const used=Object.keys(P).filter(k=>k!==id&&P[k].links.includes(id)&&!p.links.includes(k)).map(l=>`<button data-go="${l}">${esc(P[l].name)}</button>`).join("");
-  $("#p-detail").innerHTML=`
-    <div><span class="code">${esc(p.code)}</span> <span class="lbl">· ${esc(DATA.groups.find(g=>g[0]===p.group)[1])}</span><h2>${esc(p.name)}</h2><p>${esc(p.what)}</p></div>
-    <div class="place"><b>Where</b><span>${esc(p.place)}</span></div>
-    <div><div class="lbl" style="margin-bottom:6px">Specification</div><div class="kv">${p.spec.map(([k,v])=>`<div>${esc(k)}</div><div>${esc(v)}</div>`).join("")}</div></div>
-    <div><div class="lbl" style="margin-bottom:6px">Connected to</div><div class="links">${links}${used}</div></div>
-    ${id==="display"?`<div class="links"><button data-pg="0">Theatre page</button><button data-pg="1">Unit page</button><button data-pg="2">Service page</button></div>`:""}
-    ${id==="main_board"||id==="antenna"?`<button class="links" data-tab="app" style="justify-self:start"><span style="font-weight:700;color:var(--accent)">See how it connects to the VIAN app →</span></button>`:""}`;
-  $$("#p-detail [data-go]").forEach(b=>b.onclick=()=>select(b.dataset.go));
-  $$("#p-detail [data-pg]").forEach(b=>b.onclick=()=>{st.page=+b.dataset.pg;drawDisplay()});
-  $$("#p-detail [data-tab]").forEach(b=>b.onclick=()=>showTab("app"));
-  if(FF_IDS.includes(id)){const b=document.createElement("button");b.className="big";b.style.justifySelf="start";b.textContent="Full filter specification →";b.onclick=()=>showTab("filters");$("#p-detail").appendChild(b)}
-}
-function renderParts(){
-  let h=`<p class="note">Tap a part here or in the model. Use X-ray, Cut-away or Exploded to see inside. Wiring shows every cable and pressure tube.</p>`;
-  DATA.groups.forEach(([gid,gname])=>{
-    h+=`<div class="grp"><h4>${esc(gname)}</h4><div class="plist">`;
-    Object.entries(P).filter(([,p])=>p.group===gid).forEach(([id,p])=>{h+=`<button data-id="${id}"><span class="sw2" style="background:${GROUP_COL[gid]}"></span><code>${esc(p.code)}</code><span>${esc(p.name)}</span></button>`});
-    h+=`</div></div>`;
-  });
-  h+=`<div class="grp"><h4>Cable colours</h4><div class="legend">
-    <span><i style="background:var(--mains)"></i>230 V mains</span><span><i style="background:var(--low)"></i>24 V power</span>
-    <span><i style="background:var(--data)"></i>Data and control</span><span><i style="background:var(--sensor)"></i>Sensor I²C</span><span><i style="background:var(--tube)"></i>Pressure tubes</span></div></div>`;
-  $("#p-parts").innerHTML=h;
-  $$(".plist button").forEach(b=>b.onclick=()=>select(b.dataset.id,true));
-}
-function renderApp(){
-  const on=st.fan&&!st.door;
-  const tele={device:"VH03-000127",fw:"1.0.0",state:st.door?"door_open":(on?"running":"standby"),mode:st.mode,auto:true,airflow_m3h:Math.round(st.flow),fan_rpm:Math.round(st.rpm),sound_dba:on?Math.round(st.db):0,power_w:Math.round(st.watts),filters_dp_pa:Math.round(st.dp),
-    hepa:st.filterOut?{present:false}:{present:true,type:"HC-2 carbon+H13 305x610x115",serial:"VF-HC2-260117",health_pct:st.health,sealed:true},carbon_layer_pct:st.carbon,prefilter:{present:true,washes:st.washes,max_washes:5},
-    pm25:{room:+st.pmIn.toFixed(0),clean_side:+st.pmOut.toFixed(1)},room_bms:{temp_c:21.0,rh_pct:48,dp_pa:8,ach:20,age_s:12}};
-  $("#p-app").innerHTML=`
-    <div><div class="lbl">How the unit talks to the VIAN app</div><h2 style="margin:4px 0 0;font-size:18px">One chip, three ways to connect</h2></div>
-    <div class="flow">
-      <div class="node"><b>VIAN app (Android / iPhone)</b><span>Same app as the home purifiers. Hospital mode adds roles: nurse, biomedical engineer, admin.</span></div>
-      <div class="arrow">↕ first setup: Bluetooth (scan QR on the unit)</div>
-      <div class="node"><b>ESP32-S3 on the main control board</b><span>Sends Wi-Fi or Ethernet details, then joins the network.</span></div>
-      <div class="arrow">↕ Wi-Fi 2.4 GHz or Ethernet (hospital IT choice)</div>
-      <div class="node"><b>VIAN cloud or hospital server</b><span>Secure MQTT over TLS, one certificate per unit, flashed at the factory. Hospitals can keep data on their own server.</span></div>
-      <div class="arrow">↕ app reads live data and sends allowed commands</div>
-      <div class="node"><b>Every sensor and switch</b><span>Room sensors, pressure, filter ID, door, fan RPM, BMS room data.</span></div>
-    </div>
-    <div class="scroll"><div class="lbl" style="margin-bottom:6px">Automatic speed and sound (Auto mode)</div><table>
-      <tr><th>Room air (PM2.5)</th><th>Fan</th><th>Airflow</th><th>Sound*</th></tr>
-      <tr><td>Very clean, under 5</td><td>900 rpm</td><td>340 m³/h</td><td>≈ 35 dB(A)</td></tr>
-      <tr><td>Clean, 5–12</td><td>1,300 rpm</td><td>490 m³/h</td><td>≈ 43 dB(A)</td></tr>
-      <tr><td>Moderate, 12–25</td><td>1,900 rpm</td><td>710 m³/h</td><td>≈ 52 dB(A)</td></tr>
-      <tr><td>Poor, 25–35</td><td>2,400 rpm</td><td>900 m³/h</td><td>≈ 57 dB(A)</td></tr>
-      <tr><td>Very poor, over 35</td><td>2,800 rpm</td><td>1,050 m³/h</td><td>≈ 60 dB(A)</td></tr>
-    </table><p class="note" style="margin-top:8px">The app sets a room mode that caps the noise: Surgery quiet ≤ 52 dB(A), ICU night ≤ 43 dB(A), Clinic ≤ 57 dB(A), Boost for cleaning between cases. Speed changes slowly so nobody notices. *Estimates from fan laws, to be measured. Try the Mode button below the model.</p></div>
-    <div><div class="lbl" style="margin-bottom:6px">Live data the app receives (from this model)</div><pre id="tele">${esc(JSON.stringify(tele,null,2))}</pre></div>
-    <div class="scroll"><table>
-      <tr><th>App screen</th><th>Hospital 03 data</th></tr>
-      <tr><td>Air</td><td>Room PM2.5, measured airflow, state, door</td></tr>
-      <tr><td>Insights</td><td>Hours run, energy, ΔP trend, clean-side PM2.5</td></tr>
-      <tr><td>Pilot</td><td>Schedules by theatre list, speed limits set by facilities</td></tr>
-      <tr><td>Care</td><td>HEPA health % from ΔP, NFC filter ID, pre-filter wash count (auto-detected), warranty</td></tr>
-      <tr><td>Notifications</td><td>Filter due, seal leak, door open, fan fault, BMS data stale</td></tr>
-      <tr><td>Widgets</td><td>Theatre status tile for the nurse station</td></tr>
-    </table></div>
-    <div class="scroll"><table>
-      <tr><th>Topic</th><th>Direction</th></tr>
-      <tr><td><code>vian/VH03-000127/telemetry</code></td><td>unit → app, every 10 s</td></tr>
-      <tr><td><code>vian/VH03-000127/event</code></td><td>unit → app, alerts</td></tr>
-      <tr><td><code>vian/VH03-000127/cmd</code></td><td>app → unit, role-checked</td></tr>
-      <tr><td><code>vian/VH03-000127/ota</code></td><td>signed firmware updates</td></tr>
-    </table></div>
-    <p class="note">Offline: the unit keeps running on its last settings and logs events. The display always works without the network. Room clinical values come from the hospital's own sensors (BMS) and are marked stale if they stop updating.</p>`;
-}
-/* ---------- Filters tab + filters-only 3D view ---------- */
-let ffOn=false, ffT=0; const FF_IDS=["prefilter","carbon","hepa"], FF_OFF={prefilter:[0,0,320],carbon:[0,0,200],hepa:[0,0,0]};
-function renderFilters(){
-  const S=DATA.filter_summary;
-  let h=`<div><div class="lbl">Custom VIAN filters</div><h2 style="margin:4px 0 0;font-size:18px">3 filter stages, 2 parts to replace</h2><p style="margin:6px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5">${esc(S.total)}.</p></div>
-    <button class="big ${ffOn?"off":""}" id="ffBtn">${ffOn?"Back to full model":"Show filters only in 3D"}</button>`;
-  DATA.filters.forEach(f=>{
-    h+=`<div class="fcard"><header><span class="stg" style="width:auto;padding:0 8px">${f.stage}</span><span class="sw3" style="background:${f.color}"></span><span><b>${esc(f.name)}</b><small>${esc(f.model)} · stage ${f.stage}</small></span></header>
-      <p>${esc(f.job)}</p><div class="kv">${f.spec.map(([k,v])=>`<div>${esc(k)}</div><div>${esc(v)}</div>`).join("")}</div></div>`;
-  });
-  h+=`<div><div class="lbl" style="margin-bottom:6px">Order of the stages (front to back)</div>
-    <div class="flow"><div class="node"><b>Room air in</b><span>Front holes, Z 95–630 mm</span></div><div class="arrow">↓ 1 · pre-filter, 10 mm (washable)</div>
-    <div class="node"><b>Gap 15 mm</b><span>Pressure tap before the main pack</span></div><div class="arrow">↓ 2 · carbon layer, 20 mm  ┐ one main pack</div><div class="arrow">↓ 3 · H13 HEPA, 90 mm     ┘ 115 mm, ₹ 3,999</div>
-    <div class="node"><b>Clean-side plenum</b><span>Up to the fan, out of the top</span></div></div></div>
-    <div><div class="lbl" style="margin-bottom:6px">How to change the filters</div><ol class="steps">${S.change.map(s=>`<li>${esc(s)}</li>`).join("")}</ol></div>
-    <p class="note">${esc(S.custom)}</p>
-    <div class="place"><b>Cost</b><span>${esc(S.yearly)}</span></div>
-    <div class="place"><b>Packing</b><span>${esc(S.pack)}</span></div>`;
-  $("#p-filters").innerHTML=h;
-  $("#ffBtn").onclick=()=>filterFocus(!ffOn);
-}
-function filterFocus(on){
-  ffOn=on;
-  if(on){ if(mode!=="solid")applyMode("solid"); if(st.door)$('[data-a="door"]').click(); if(st.filterOut)st.filterOut=false; }
-  Object.values(REG).forEach(r=>{const keep=FF_IDS.includes(r.id)||r.id==="rails"&&false;r.roots.forEach(o=>{o.visible=on?keep:true})});
-  [topOut,ring].forEach(o=>o.visible=!on);
-  if(on){wiresG.visible=false;airPts.visible=false;$$('#toggles [data-t="wires"],#toggles [data-t="air"]').forEach(b=>b.setAttribute("aria-pressed","false"));
-    camAnim={from:camera.position.clone(),to:new THREE.Vector3(1500,900,1300),ft:controls.target.clone(),tt:new THREE.Vector3(0,420,150),t:0}; toast("Filters only: pre-filter · carbon layer · H13 HEPA (carbon + HEPA = one ₹3,999 pack). Tap one for details")}
-  else setView("hero");
-  renderFilters();
-}
-function showTab(t){$$(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===t));$$(".pane").forEach(p=>p.hidden=p.id!=="p-"+t)}
-$$(".tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.p));
-
-/* numbered pins */
-const PIN_IDS=["display","hepa","prefilter","carbon","fan","main_board","sensor_pod","dp_board","filter_id","pm_out","door_switch","power_board","psu","seal_cam","antenna","top_outlet","power_entry","port_panel","inlet_ring","plenum","handle"];
-const pinsEl=$("#pins");
-PIN_IDS.forEach((id,i)=>{const b=document.createElement("button");b.className="pin";b.dataset.id=id;b.textContent=i+1;b.title=P[id].name;b.onclick=()=>select(id);pinsEl.appendChild(b)});
-const tmpV=new THREE.Vector3(), tmpB=new THREE.Box3();
-function updatePins(){
-  const r=canvas.getBoundingClientRect();
-  $$(".pin").forEach(el=>{
-    const id=el.dataset.id, root=REG[id]&&REG[id].roots[0];
-    const internal=!["display","top_outlet","power_entry","port_panel","handle"].includes(id);
-    const rearOnly=id==="power_entry"||id==="port_panel";
-    const show=showPins&&root&&root.visible&&(!internal||mode!=="solid"||ffOn)&&!(rearOnly&&mode==="solid"&&camera.position.z>-100);
-    if(!show){el.classList.add("hide");return}
-    tmpB.setFromObject(root); tmpB.getCenter(tmpV); tmpV.project(camera);
-    if(tmpV.z>1){el.classList.add("hide");return}
-    el.classList.remove("hide"); el.style.left=((tmpV.x+1)/2*r.width)+"px"; el.style.top=((1-tmpV.y)/2*r.height)+"px";
-  });
-}
-
-/* ---------- toast ---------- */
-let tt;function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),2600)}
-
-/* ---------- resize + loop ---------- */
-function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
-new ResizeObserver(resize).observe(stage); resize();
-
-const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
-let last=performance.now(), simAcc=0;
-function loop(now){ tick(now); requestAnimationFrame(loop) }
-function tick(now){
-  const dt=Math.max(0,Math.min(.05,(now-last)/1000)); last=Math.max(last,now);
-  // explode
-  explodeT+=(explodeTarget-explodeT)*Math.min(1,dt*5);
-  Object.values(REG).forEach(r=>r.roots.forEach(o=>{if(o===hinge||o.parent===wiresG)return;o.position.copy(o.userData.home).addScaledVector(o.userData.explode,explodeT)}));
-  wiresG.visible=wiresG.visible; // wires stay in place
-  // door + filter
-  doorT+=((st.door?1:0)-doorT)*Math.min(1,dt*4); hinge.rotation.y=doorT*1.75;
-  hinge.position.copy(hinge.userData.home).addScaledVector(hinge.userData.explode,explodeT);
-  filterT+=((st.filterOut?1:0)-filterT)*Math.min(1,dt*3);
-  cas.position.x=cas.userData.home.x+filterT*400; cas.position.z=cas.userData.home.z;
-  carb.position.x=carb.userData.home.x+filterT*400+explodeT*0;
-  ffT+=((ffOn?1:0)-ffT)*Math.min(1,dt*3);
-  if(ffT>0.001)FF_IDS.forEach(id=>{const o=REG[id].roots[0],v=FF_OFF[id];o.position.x+=v[0]*ffT;o.position.y+=v[1]*ffT;o.position.z+=v[2]*ffT});
-  // sim: Auto mode picks speed from room PM2.5, capped by the noise limit of the current room mode
-  const running=st.fan&&!st.door;
-  const want=st.pmIn>35?2800:st.pmIn>25?2400:st.pmIn>12?1900:st.pmIn>5?1300:900;
-  const tr=running?Math.min(want,MODES[st.mode].cap):0; st.rpm+=(tr-st.rpm)*Math.min(1,dt*0.8);
-  st.flow=1050*(st.rpm/2800); st.dp=st.filterOut?0:(268+48)*(st.rpm/2800)*(st.rpm/2800)+(Math.random()-.5);
-  st.db=st.rpm>50?60+50*Math.log10(st.rpm/2800):0; st.watts=st.rpm>50?330*Math.pow(st.rpm/2800,3)+8:3;
-  simAcc+=dt; if(simAcc>1){simAcc=0; st.pmIn=Math.max(6,st.pmIn+(Math.random()-.5)*1.2); st.pmOut=running&&!st.filterOut?0.2+Math.random()*.2:st.pmIn*0.9; drawDisplay(); if(!$("#p-app").hidden)renderApp()}
-  if(!reduce) imp.rotation.y+=st.rpm/60*2*Math.PI*dt*0.08;
-  if(Math.random()<dt*0.15) st.pmIn=Math.max(3,Math.min(40,st.pmIn+(Math.random()-.45)*8));
-  ring.material.color.setHex(st.door||st.filterOut?0xF2B33D:(running?0x4FA3FF:0x334455));
-  // particles
-  if(airPts.visible){const sp=st.rpm/2780;for(let i=0;i<PN;i++){const q=parts[i];q.t+=dt*0.14*sp*(.8+((i*37)%10)/25);if(q.t>=1){q.t=0;q.p=Math.floor(Math.random()*48)}
-    const pts=paths[q.p],k=Math.min(pts.length-1,Math.floor(q.t*(pts.length-1))),v=pts[k];pp3[i*3]=v.x;pp3[i*3+1]=v.y;pp3[i*3+2]=v.z;const c=q.t<.36?DIRTY:CLEAN;pc[i*3]=c.r;pc[i*3+1]=c.g;pc[i*3+2]=c.b}
-    pg.attributes.position.needsUpdate=true;pg.attributes.color.needsUpdate=true}
-  // camera anim
-  if(camAnim){camAnim.t=Math.min(1,camAnim.t+dt*1.6);const e=1-Math.pow(1-camAnim.t,3);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.ft,camAnim.tt,e);if(camAnim.t>=1)camAnim=null}
-  controls.update(); renderer.render(scene,camera); updatePins();
-}
-renderParts(); renderApp(); renderFilters(); drawDisplay();
-document.fonts&&document.fonts.ready.then(drawDisplay);
-select("hepa"); showTab("parts");
-requestAnimationFrame(loop);
-// Advance the scene by n frames without waiting for the browser (used when the tab is in the background).
-function frames(n=90){let t=last;for(let i=0;i<n;i++){t+=1000/60;tick(t)}}
-window.VIAN={setView,applyMode,select,st,frames,filterFocus,showTab,toggle:t=>$(`[data-t="${t}"]`).click(),act:a=>$(`[data-a="${a}"]`).click(),
-  shot:name=>fetch("/save/"+name,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text())};
+(function(){
+const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+function lab(k){const rows=LAB[k];
+  $("#labtab").innerHTML=`<tr><th>Area</th><th>Test</th><th>Result</th><th>Limit</th><th>Status</th><th>Notes</th></tr>`+rows.map(r=>`<tr><td>${esc(r.area)}</td><td><b>${esc(r.test)}</b></td><td>${esc(r.result)}</td><td>${esc(r.limit)}</td><td class="${r.pass===true?"pass":r.pass==="watch"?"watch":"fail"}">${r.pass===true?"PASS":r.pass==="watch"?"WATCH":"FAIL"}</td><td>${esc(r.note)}</td></tr>`).join("");
+  document.querySelectorAll("#labtabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k===k))}
+document.querySelectorAll("#labtabs button").forEach(b=>b.onclick=()=>lab(b.dataset.k));lab("home");
+const F=[["Auto mode from air sensors","All"],["Sleep / night mode, screen off","All"],["Turbo / boost","All"],["Eco: fan off after 10 min clean air","Coway"],["Light sensor auto-sleep","Coway"],["PM1, PM2.5, PM10 live","Coway, Xiaomi, Dyson"],["VOC / gas sensor","Dyson, Philips"],["NOx / NO₂","Dyson"],["Formaldehyde removal (catalyst)","Dyson"],["CO₂ sensor + ventilate alert","Dyson (Pro model)"],["Temperature + humidity","Xiaomi, Dyson"],["24 h / 7-day / monthly history","Dyson, Coway, Xiaomi Elite"],["Indoor vs outdoor AQI","Coway, Philips"],["Schedules and timers","VeSync, Coway, Philips"],["Filter life %","All smart brands"],["Washable pre-filter","Blueair, Levoit"],["H13 HEPA","Most"],["H14 option","Shark, Camfil"],["Long-life filter option","Shark, Dyson"],["Activated carbon odour layer","Most"],["Odour-focused mode","Blueair OdorFence"],["Allergen / virus modes","Philips"],["Child lock","Most"],["Voice: Alexa / Google","Most"],["Matter / HomeKit","Few"],["Furniture-friendly design / colours","Blueair, Samsung, Mila, Rabbit"],["Very low sleep noise (≤ 25 dB)","Dyson HushJet"],["Physical remote","Some (e.g. LG)"],["Colour light ring","Xiaomi, Philips"],["App transparency (shows why fan speed changed)","Mila"],
+  ["Clean before I arrive / Coming home (GPS)","VIAN only"],["Room-size check (measures if purifier is big enough)","VIAN only"],["Sensor health check + cleaning reminder","VIAN only"],["Bluetooth offline control when Wi-Fi drops","VIAN only"],["Last-update time on every value (no fake zeros)","VIAN only"],["Genuine-filter NFC + real dust-load life","VIAN only"],["Pre-filter wash counter, auto-detected","VIAN only"],["Sleep air report","VIAN only"],["Home-screen and lock-screen widgets","VIAN only"],["Festival / smog season mode (Diwali, stubble burning)","VIAN only"],["One app for home, hospital and future VIAN products","VIAN only"],["Hospital: BMS link, roles, theatre data, door interlock","VIAN Hospital"]];
+$("#ftab").innerHTML=`<tr><th>Feature</th><th>Who has it today</th><th>VIAN Home</th><th>VIAN Hospital</th></tr>`+F.map(([f,w])=>{const h=w==="VIAN Hospital"?'<span class="n">—</span>':'<span class="y">✓</span>';return `<tr><td>${esc(f)}</td><td>${w.startsWith("VIAN")?'<b style="color:var(--accent)">'+esc(w)+'</b>':esc(w)}</td><td>${h}</td><td><span class="y">✓</span></td></tr>`}).join("");
 })();
 </script>
 

@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head><body>
+<title>VIAN Home</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: 3D stage left, parts panel right (stacks on phones). Single dark technical look, matching VIAN Hospital 03. */
+:root{
+  color-scheme:dark;
+  --bg:#0A0F15; --panel:#0F1620; --card:#141D29; --line:#223042; --fg:#E7EEF5; --muted:#91A2B4; --faint:#5E6F82;
+  --accent:#3FD3C2; --amber:#F2B33D; --low:#F2B33D; --data:#4C9BFF; --sensor:#3FD3C2;
+  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:14px;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+a{color:var(--accent)}
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 380px;grid-template-rows:auto minmax(0,1fr)}
+header{grid-column:1/-1;display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--panel)}
+.logo{height:15px;width:auto}.logo path{fill:none;stroke:var(--fg);stroke-width:3.2;stroke-linecap:square;stroke-linejoin:miter}
+.ttl{display:flex;flex-direction:column;gap:2px;min-width:0}.ttl b{font-size:15px}.ttl span{font-size:12px;color:var(--muted)}
+.hdr-r{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);border:1px solid #4a3a17;background:#1d1708;padding:4px 8px;border-radius:99px}
+.navlink{font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:9px;border:1px solid var(--line);color:var(--fg);text-decoration:none}
+.stage{position:relative;min-height:0;overflow:hidden;background:radial-gradient(80% 70% at 50% 40%,#16222f,#0A0F15)}
+canvas#c{display:block;width:100%;height:100%;touch-action:none}
+.pins{position:absolute;inset:0;pointer-events:none}
+.pin{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:rgba(10,15,21,.85);border:1px solid var(--accent);color:var(--accent);font:600 10.5px var(--mono);display:grid;place-items:center}
+.pin.sel{background:var(--accent);color:#04201c}.pin.hide{display:none}
+.toolbar{position:absolute;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));display:flex;gap:8px;flex-wrap:wrap;justify-content:center;pointer-events:none}
+.tb{pointer-events:auto;display:flex;gap:2px;padding:3px;border-radius:12px;background:rgba(15,22,32,.92);border:1px solid var(--line)}
+.tb button{padding:7px 10px;border-radius:9px;font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap}
+.tb button[aria-pressed="true"]{background:var(--card);color:var(--fg);box-shadow:inset 0 0 0 1px var(--line)}
+.tb button.on{color:var(--accent)}
+.tb .play{background:var(--accent);color:#04201c}
+.sw{width:18px;height:18px;border-radius:50%;padding:0!important;margin:4px;border:2px solid transparent}.sw[aria-pressed="true"]{border-color:var(--fg)}
+.views{position:absolute;top:12px;right:12px;display:flex;flex-direction:column;gap:4px}
+.views button{font-size:11.5px;font-weight:700;padding:6px 9px;border-radius:9px;background:rgba(15,22,32,.9);border:1px solid var(--line);color:var(--muted)}
+.caption{position:absolute;left:50%;bottom:calc(110px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);max-width:min(640px,calc(100% - 32px));background:rgba(8,12,18,.88);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:15px;line-height:1.45;text-align:center}
+.caption small{display:block;color:var(--faint);font:600 11px var(--mono);margin-bottom:4px}
+.toast{position:absolute;top:12px;left:50%;transform:translate(-50%,-10px);opacity:0;transition:.25s;background:var(--fg);color:#0A0F15;font-weight:700;font-size:13px;padding:9px 14px;border-radius:12px;pointer-events:none;max-width:70%;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+aside{min-height:0;display:flex;flex-direction:column;border-left:1px solid var(--line);background:var(--panel)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:10px;border-bottom:1px solid var(--line)}
+.tabs button{padding:8px;border-radius:9px;font-weight:700;font-size:12.5px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--card);color:var(--fg)}
+.pane{flex:1;overflow-y:auto;padding:14px 16px 24px;display:grid;gap:14px;align-content:start;grid-auto-rows:max-content}
+.grp h4{margin:4px 0 6px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.plist{display:grid;gap:2px}
+.plist button{display:flex;gap:10px;align-items:center;text-align:left;padding:7px 8px;border-radius:9px;width:100%}
+.plist button:hover{background:var(--card)}.plist button.sel{background:var(--card);box-shadow:inset 2px 0 0 var(--accent)}
+.plist code{font:600 10.5px var(--mono);color:var(--faint);min-width:44px}.plist .sw2{width:8px;height:8px;border-radius:50%;flex:none}
+.det h2{margin:2px 0 4px;font-size:20px;font-weight:700;text-wrap:balance}.det .code{font:600 11px var(--mono);color:var(--accent)}
+.det p{margin:0;color:var(--muted);line-height:1.55}
+.kv{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.kv div{padding:8px 10px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.45;min-width:0}
+.kv div:nth-child(-n+2){border-top:0}.kv div:nth-child(odd){color:var(--faint);background:var(--card)}
+.links{display:flex;flex-wrap:wrap;gap:6px}
+.links button{font-size:12px;font-weight:600;padding:6px 10px;border-radius:99px;background:var(--card);border:1px solid var(--line)}
+.lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.place{display:flex;gap:8px;font-size:12.5px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px}.place b{color:var(--accent)}
+.note{font-size:12px;color:var(--muted);line-height:1.5;border-left:2px solid var(--amber);padding-left:10px;margin:0}
+pre{margin:0;font:12px/1.5 var(--mono);color:#cfe3ef;background:#081018;border:1px solid var(--line);border-radius:12px;padding:12px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}td,th{text-align:left;padding:6px;border-top:1px solid var(--line);vertical-align:top}
+th{color:var(--faint);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;border-top:0}
+.big{display:inline-flex;justify-content:center;padding:11px 14px;border-radius:12px;font-weight:700;font-size:13px;background:var(--accent);color:#04201c}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 62vh auto;height:auto;min-height:100%}aside{border-left:0;border-top:1px solid var(--line)}.pane{overflow:visible}.views{flex-direction:row;flex-wrap:wrap;justify-content:flex-end;max-width:60%}.caption{bottom:auto;top:56px}}
+</style>
+
+<div class="app">
+  <header>
+    <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
+    <div class="ttl"><b>VIAN Home · Interactive model</b><span>Ø 270 × 620 mm · 360° intake · tap any part</span></div>
+    <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">VIAN Hospital</a><span class="chip">Concept</span></div>
+  </header>
+  <section class="stage" id="stage">
+    <canvas id="c" aria-label="3D model of the VIAN Home air purifier"></canvas>
+    <div class="pins" id="pins"></div>
+    <div class="views" id="views"><button data-v="hero">3/4</button><button data-v="front">Front</button><button data-v="side">Side</button><button data-v="rear">Rear</button><button data-v="top">Top</button></div>
+    <div class="caption" id="cap" hidden></div>
+    <div class="toolbar">
+      <div class="tb"><button class="play" id="playBtn">▶ Play explainer</button></div>
+      <div class="tb" id="modes"><button data-m="solid" aria-pressed="true">Outside</button><button data-m="xray" aria-pressed="false">X-ray</button><button data-m="cut" aria-pressed="false">Cut-away</button><button data-m="explode" aria-pressed="false">Exploded</button></div>
+      <div class="tb" id="toggles"><button data-t="air" aria-pressed="false">Airflow</button><button data-t="wires" aria-pressed="false">Wiring</button><button data-t="pins" aria-pressed="true">Numbers</button></div>
+      <div class="tb" id="acts"><button data-a="filter">Change filter</button><button data-a="fan" class="on">Fan on</button></div>
+      <div class="tb" id="fin"><button class="sw" data-f="white" aria-pressed="true" style="background:#ECEEEF" aria-label="Cloud White"></button><button class="sw" data-f="sand" aria-pressed="false" style="background:#D9CDB8" aria-label="Sand"></button><button class="sw" data-f="graphite" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
+    </div>
+    <div class="toast" id="toast" role="status"></div>
+  </section>
+  <aside>
+    <div class="tabs" role="tablist"><button role="tab" aria-selected="true" data-p="parts">Parts</button><button role="tab" aria-selected="false" data-p="detail">Details</button><button role="tab" aria-selected="false" data-p="app">App + screen</button></div>
+    <div class="pane" id="p-parts"></div><div class="pane det" id="p-detail" hidden></div><div class="pane" id="p-app" hidden></div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+const DATA = {"groups": [["exterior", "Outside"], ["air", "Air path"], ["electronics", "Boards and power"], ["sensors", "Sensors"], ["wiring", "Cables"]], "parts": {"shell": {"name": "Body shell", "group": "exterior", "code": "HX-01", "what": "Round body, Ø 270 mm, 620 mm tall. One seamless moulding, matte finish, no metal. Lower part is a 360° air intake so the unit works anywhere in the room, even near a wall.", "spec": [["Size", "Ø 270 × 620 mm"], ["Weight", "≈ 6.5 kg"], ["Material", "PC/ABS, flame-retardant UL94 V-0, antimicrobial additive, injection-moulded"], ["Finish", "Matte; colours Cloud White, Sand, Graphite"], ["Option", "Swappable knit-fabric sleeve over the intake (like Samsung Bespoke panels)"], ["Branding", "Laser-engraved VIAN"]], "place": "Whole unit.", "links": ["intake", "crown", "base"]}, "intake": {"name": "360° intake", "group": "exterior", "code": "HX-02", "what": "Small holes all round the lower 400 mm. Air comes in from every side, so placement does not matter and the filter is used evenly.", "spec": [["Height", "Z 60–460 mm, all round"], ["Holes", "3 mm, ≈ 40% open area"], ["Why 360°", "Bigger filter area, lower noise, works near walls"]], "place": "Lower body, all round.", "links": ["filter"]}, "crown": {"name": "Display band", "group": "exterior", "code": "HX-03", "what": "Smooth band near the top holding the round touch screen and the aluminium control ring. It sits below the outlet, so clean air goes straight up and never blows on the screen.", "spec": [["Height", "Z 470–560 mm"], ["Material", "PC/ABS, graphite"], ["Air", "No air passes here: outlet is above"]], "place": "Upper front.", "links": ["display", "dial", "outlet"]}, "display": {"name": "Round touch screen", "group": "exterior", "code": "HX-04", "what": "2.1-inch round colour touch screen. Shows the air score, PM2.5, mode, filter life and alerts. Dims itself at night.", "spec": [["Panel", "2.1\" round IPS, 480 × 480, 450 nits"], ["Touch", "Capacitive, glove-friendly"], ["Interface", "QSPI from ESP32-S3 (6 pins only)"], ["Auto-dim", "Ambient light sensor; off in sleep mode"]], "place": "Front of the display band, Z ≈ 515 mm.", "links": ["dial", "main_board"]}, "dial": {"name": "Aluminium control ring", "group": "exterior", "code": "HX-05", "what": "Turn the ring to change speed, press the screen to select. Feels premium and works without looking or wet hands. Magnetic sensor, no parts that wear out.", "spec": [["Material", "Anodised aluminium"], ["Sensor", "Magnetic angle encoder (AS5600 class), no contacts"], ["Feel", "24 soft clicks per turn"]], "place": "Around the screen.", "links": ["display", "main_board"]}, "outlet": {"name": "Top outlet", "group": "exterior", "code": "HX-06", "what": "Clean air leaves straight up through curved vanes, mixing with the whole room. Vanes also act as a finger guard.", "spec": [["Direction", "Vertical, slight swirl"], ["Guard", "Finger-safe vanes"], ["Light", "Status light ring around the edge"]], "place": "Top of the unit.", "links": ["fan", "led_ring"]}, "led_ring": {"name": "Air-colour light ring", "group": "exterior", "code": "HX-07", "what": "Thin light ring at the outlet edge. Colour shows air quality across the room. Turns off in sleep mode.", "spec": [["Type", "Addressable RGB, 24 LEDs"], ["Colours", "Green good · yellow moderate · orange poor · red very poor"]], "place": "Top edge.", "links": ["main_board"]}, "base": {"name": "Twist-off base", "group": "exterior", "code": "HX-08", "what": "Turn the base a quarter-turn and the filter drops out. No tools, no doors, no clips to break. Silicone feet keep it quiet.", "spec": [["Material", "PP (polypropylene), glass-filled for stiffness"], ["Lock", "Quarter-turn bayonet with click"], ["Feet", "Silicone, anti-slip"]], "place": "Bottom.", "links": ["filter", "dc_jack"]}, "dc_jack": {"name": "Power socket", "group": "exterior", "code": "HX-09", "what": "Low-voltage socket on the back. A certified 24 V adapter powers the unit, so no mains voltage is inside the purifier.", "spec": [["Input", "24 V DC, 3.75 A"], ["Adapter", "BIS-certified 90 W (lab test: max load 62 W = 69%)"]], "place": "Rear, low.", "links": ["main_board", "w_power"]}, "filter": {"name": "3-in-1 cylinder filter", "group": "air", "code": "HF-01", "what": "One round filter with three layers. Outside: washable pre-filter mesh. Middle: H13 HEPA pleats. Inside: activated carbon granules. Air passes from outside to inside, then rises up the hollow centre.", "spec": [["Size", "Ø 220 outside × Ø 150 inside × 330 mm tall"], ["Weight", "≈ 1.1 kg"], ["Layer 1", "Washable PET mesh pre-filter (sleeve)"], ["Layer 2", "H13 HEPA, synthetic electret media, 2.8 m² pleated (≥ 99.95% at MPPS)"], ["Layer 3", "300 g coconut-shell activated carbon + MnO₂ formaldehyde catalyst"], ["Seal", "Silicone lips top and bottom, compressed 1.5 mm by the base (lab: leak ≤ 0.05%)"], ["Life", "6 months in Delhi-level air · 12 months in clean cities (app measures)"], ["Price", "₹ 1,999 · our cost ≈ ₹ 450–700"], ["Odour insert", "Clip-on 120 g carbon ring, ₹ 299 every 2 months (cost ≈ ₹ 60)"], ["ID", "NFC tag: genuine check + usage"]], "place": "Centre of the lower body.", "links": ["intake", "core", "filter_id"]}, "core": {"name": "Clean-air core", "group": "air", "code": "HF-02", "what": "The hollow centre of the filter. Only cleaned air is here. It rises straight to the fan with no corners, which keeps the unit quiet.", "spec": [["Diameter", "Ø 150 mm"], ["Path", "Straight up, no sharp turns"]], "place": "Inside the filter.", "links": ["filter", "seal_plate", "fan"]}, "fan": {"name": "Quiet DC fan", "group": "air", "code": "HF-03", "what": "Brushless DC motor with a backward-curved impeller. Pulls air through the filter and pushes it out of the top. Very efficient and quiet at low speed.", "spec": [["Motor", "24 V brushless DC (BLDC), outer rotor"], ["Impeller", "Backward-curved, 7 blades, Ø 200 mm"], ["Speed", "≈ 600–2,600 rpm"], ["Airflow", "≈ 120–520 m³/h"], ["Pressure", "≈ 445 Pa available vs 190 Pa needed (lab test)"], ["Noise (estimate)", "≈ 24 dB(A) sleep · ≈ 56 dB(A) max"], ["Power", "≈ 3 W sleep · ≈ 62 W max · ≈ 14 W Auto average"], ["Life", "50,000 h ball bearings, 5-year motor warranty"]], "place": "Upper body, under the outlet.", "links": ["main_board", "outlet", "w_motor"]}, "main_board": {"name": "Main board", "group": "electronics", "code": "HP-01", "what": "The brain and the motor driver on one board. The ESP32-S3 runs the screen, sensors and app link. A motor driver chip spins the fan smoothly and protects it from heat.", "spec": [["Processor", "ESP32-S3-WROOM-1 (Wi-Fi + Bluetooth LE)"], ["Motor driver", "TI MCF8316A class: sensorless FOC, built-in over-heat and lock protection"], ["Power", "24 V in, eFuse, buck to 5 V and 3.3 V"], ["Sensors", "I²C bus to sensor pod, NFC, light sensor"], ["Size", "≈ 90 × 70 mm, 4-layer"], ["Cost", "≈ ₹ 900–1,300 assembled"]], "place": "Behind the display band.", "links": ["display", "dial", "sensor_pod", "fan", "filter_id", "dc_jack", "led_ring"]}, "sensor_pod": {"name": "Air sensor pod", "group": "sensors", "code": "HS-01", "what": "Measures the room air before it is cleaned, through its own small side vent. Reads PM1, PM2.5, PM10, gases, temperature and humidity. A tiny fan inside keeps readings fresh.", "spec": [["Particles", "Laser sensor, Plantower PMS9003M class"], ["Gases", "Sensirion SGP41 (VOC + NOx index)"], ["Temp/RH", "Sensirion SHT40"], ["CO₂ (Pro model)", "Sensirion SCD40"], ["Self-check", "App shows sensor health; cleaning reminder"]], "place": "Rear side, Z ≈ 430 mm, own vent.", "links": ["main_board", "w_i2c"]}, "filter_id": {"name": "Filter ID reader", "group": "sensors", "code": "HS-02", "what": "Reads the NFC tag on the filter. Knows a genuine filter is fitted and how old it is. A magnet and Hall sensor confirm the base is locked.", "spec": [["NFC", "ST25R class reader + NTAG tag"], ["Lock check", "Hall sensor in the base"]], "place": "Above the filter top.", "links": ["filter", "main_board"]}, "w_power": {"name": "24 V cable", "group": "wiring", "code": "HW-01", "what": "From the power socket up to the main board.", "spec": [["Type", "2 × 0.75 mm²"], ["Connector", "Molex Micro-Fit 2-pin"]], "place": "Rear inside wall.", "links": ["dc_jack", "main_board"]}, "w_motor": {"name": "Motor cable", "group": "wiring", "code": "HW-02", "what": "Three motor phases from the driver to the fan.", "spec": [["Type", "3 × 0.5 mm², short"], ["Connector", "JST-XH 3-pin"]], "place": "Main board to fan.", "links": ["main_board", "fan"]}, "w_i2c": {"name": "Sensor cable", "group": "wiring", "code": "HW-03", "what": "Power and data to the sensor pod.", "spec": [["Signals", "5 V, 3.3 V, GND, SDA, SCL, PM UART"], ["Connector", "JST-GH 6-pin"]], "place": "Inside the display band.", "links": ["main_board", "sensor_pod"]}, "seal_plate": {"name": "Seal plate", "group": "air", "code": "HF-04", "what": "A solid ring plate with a silicone seal between the filter top and the fan. It separates dirty air from clean air, so the only way to the fan is through the filter. Lab check: a 0.2 mm gap would leak about 2% of air; the compressed seal leaks under 0.05%.", "spec": [["Material", "PP, glass-filled"], ["Seal", "Silicone lip, 1.5 mm compression"], ["Leak (lab)", "≤ 0.05%"]], "place": "Between filter top and fan inlet, Z ≈ 410 mm.", "links": ["filter", "fan", "core"]}}, "tour": [{"t": "VIAN Home. A round purifier that cleans air from every side.", "view": "hero", "sel": "shell", "mode": "solid"}, {"t": "Room air comes in through the 360° intake at the bottom.", "view": "low", "sel": "intake", "mode": "solid", "air": true}, {"t": "It passes three layers: washable pre-filter, H13 HEPA, activated carbon.", "view": "hero", "sel": "filter", "mode": "cut", "air": true}, {"t": "Clean air rises up the hollow centre with no corners, so it stays quiet.", "view": "side", "sel": "core", "mode": "cut", "air": true}, {"t": "The brushless fan pushes it straight out of the top, never onto the screen.", "view": "side", "sel": "fan", "mode": "cut", "air": true}, {"t": "Sensors read the room through their own vent. Auto mode sets the speed.", "view": "rear", "sel": "sensor_pod", "mode": "xray"}, {"t": "One small board runs the screen, the app link and the motor driver.", "view": "hero", "sel": "main_board", "mode": "xray", "wires": true}, {"t": "Turn the base: the filter drops out. One ₹1,999 filter a year.", "view": "hero", "sel": "base", "mode": "solid", "act": "filter"}, {"t": "The VIAN app shows everything and controls it from anywhere.", "view": "hero", "sel": "display", "mode": "solid", "tab": "app"}]};
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], P=DATA.parts;
+const GROUP_COL={exterior:"#D9DDE1",air:"#3FD3C2",electronics:"#4C9BFF",sensors:"#F2B33D",wiring:"#E2703A"};
+const canvas=$("#c"), stage=$("#stage");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setClearColor(0,0);
+renderer.outputEncoding=THREE.sRGBEncoding; renderer.toneMapping=THREE.ACESFilmicToneMapping; renderer.toneMappingExposure=.85; renderer.localClippingEnabled=true;
+const scene=new THREE.Scene();
+if(THREE.RoomEnvironment){const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture}
+scene.add(new THREE.HemisphereLight(0xdfe9f3,0x1a2028,.5));
+const key=new THREE.DirectionalLight(0xffffff,.8);key.position.set(-500,900,700);scene.add(key);
+const camera=new THREE.PerspectiveCamera(32,1,5,20000);
+const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.target.set(0,320,0);controls.minDistance=250;controls.maxDistance=4000;controls.maxPolarAngle=Math.PI*.62;
+const floor=new THREE.Mesh(new THREE.CircleGeometry(800,96),new THREE.MeshStandardMaterial({color:0x0b1118,roughness:1,envMapIntensity:.15}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+const grid=new THREE.PolarGridHelper(760,16,8,96,0x22303f,0x172230);grid.position.y=.5;scene.add(grid);
+
+const R=135, H=620, BAND0=470, BAND1=560;
+const FIN={white:0xF1F2F3,sand:0xDCCFB8,graphite:0x3A3F45};
+function M(c,o={}){return new THREE.MeshStandardMaterial(Object.assign({color:c,roughness:.5,metalness:.1},o))}
+const MAT={pp:M(0xC9CDD1,{roughness:.7}),alu:M(0xC3C8CE,{metalness:.85,roughness:.3}),dark:M(0x1a1e23,{roughness:.6}),rubber:M(0x101214,{roughness:.9}),
+  pcb:M(0x0E5A43,{roughness:.6}),chip:M(0x16181b,{roughness:.4}),can:M(0xBFC5CC,{metalness:.9,roughness:.25}),white:M(0xEDEFF1,{roughness:.7}),
+  mesh:M(0xA9B1B9,{transparent:true,opacity:.35,depthWrite:false,side:THREE.DoubleSide}),fan:M(0x1d3f63,{metalness:.5,roughness:.35}),
+  core:M(0x63E6FF,{transparent:true,opacity:.04,depthWrite:false,roughness:.2}),glow:new THREE.MeshBasicMaterial({color:0x43D18F})};
+
+/* registry */
+const REG={},pickables=[];
+function reg(id,obj,ex=[0,0,0]){const r=REG[id]||(REG[id]={id,roots:[],meshes:[]});r.roots.push(obj);obj.userData.home=obj.position.clone();obj.userData.ex=new THREE.Vector3(...ex);
+  obj.traverse(m=>{if(m.isMesh){m.userData.cid=id;if(!m.userData.shared)m.material=m.material.clone();r.meshes.push(m);pickables.push(m)}});return obj}
+function grp(p,parent){const g=new THREE.Group();g.position.set(...p);(parent||scene).add(g);return g}
+function box(w,h,d,m,p,parent){const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);o.position.set(...p);(parent||scene).add(o);return o}
+function cyl(r,h,m,p,parent,open=false,seg=96,rt){const o=new THREE.Mesh(new THREE.CylinderGeometry(rt??r,r,h,seg,1,open),m);o.position.set(...p);(parent||scene).add(o);return o}
+function tube(r1,r2,h,m,p,parent){const s=new THREE.Shape();s.moveTo(r2,0);s.lineTo(r1,0);s.lineTo(r1,h);s.lineTo(r2,h);s.closePath();
+  const g=new THREE.LatheGeometry(s.getPoints().map(v=>new THREE.Vector2(v.x,v.y)),128);const o=new THREE.Mesh(g,m);o.position.set(...p);(parent||scene).add(o);return o}
+
+/* textures */
+function shellTexture(){const W=4096,Hh=2048,c=document.createElement("canvas");c.width=W;c.height=Hh;const g=c.getContext("2d");
+  g.fillStyle="#fff";g.fillRect(0,0,W,Hh);const y=v=>(1-(v-50)/(H-50))*Hh, C=2*Math.PI*R;
+  g.fillStyle="#565c63";for(let z=66;z<=456;z+=9){for(let s=0;s<C;s+=9){const u=s/C;if(Math.abs(u-.5)<.035&&z>395)continue;g.beginPath();g.arc(u*W,y(z),2.6,0,7);g.fill()}}
+  g.fillStyle="#2a2f35";g.fillRect(0,y(BAND1),W,y(BAND0)-y(BAND1));
+  g.fillStyle="#3a3f45";for(let k=0;k<5;k++){g.fillRect((.5-.03)*W,y(400+k*11)-2,.06*W,4)}
+  g.strokeStyle="#8b9199";g.lineWidth=3;const LOGO=[[[0,1],[.35,0],[.7,1]],[[1,1],[1,0]],[[1.3,0],[1.65,1],[2,0]],[[2.3,0],[2.3,1],[2.95,0],[2.95,1]]],lh=9;
+  LOGO.forEach(st=>{g.beginPath();st.forEach(([x,z],i)=>{const px=((x-1.475)*lh/C)*W,py=y(590+(z-.5)*lh);const X=(px+W)%W;i?g.lineTo(X,py):g.moveTo(X,py)});g.stroke()});
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=8;return t}
+function grilleTexture(){const S=1024,c=document.createElement("canvas");c.width=c.height=S;const g=c.getContext("2d");g.fillStyle="#3b4148";g.fillRect(0,0,S,S);g.strokeStyle="#0d1013";g.lineWidth=8;
+  for(let i=0;i<60;i++){const a=i/60*Math.PI*2;g.beginPath();for(let r=90;r<500;r+=8){const aa=a+r*.0025;const x=S/2+Math.cos(aa)*r,y=S/2+Math.sin(aa)*r;r===90?g.moveTo(x,y):g.lineTo(x,y)}g.stroke()}
+  g.fillStyle="#2a2f35";g.beginPath();g.arc(S/2,S/2,95,0,7);g.fill();const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t}
+function pleatTexture(dark){const c=document.createElement("canvas");c.width=512;c.height=64;const g=c.getContext("2d");
+  for(let i=0;i<512;i+=12){const gr=g.createLinearGradient(i,0,i+12,0);if(dark){gr.addColorStop(0,"#15181b");gr.addColorStop(.5,"#2c3136");gr.addColorStop(1,"#121417")}else{gr.addColorStop(0,"#d9d4c6");gr.addColorStop(.5,"#fbf8f0");gr.addColorStop(1,"#cfc9ba")}g.fillStyle=gr;g.fillRect(i,0,12,64)}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(dark?10:14,1);t.encoding=THREE.sRGBEncoding;return t}
+
+/* exterior */
+const shellMat=new THREE.MeshStandardMaterial({color:FIN.white,map:shellTexture(),metalness:.1,roughness:.55,side:THREE.DoubleSide});
+const shell=cyl(R,H-50,shellMat,[0,50+(H-50)/2,0],null,true,160); shell.userData.shared=true; reg("shell",shell);
+const intakePick=new THREE.Mesh(new THREE.CylinderGeometry(R+1,R+1,390,64,1,true),new THREE.MeshBasicMaterial({visible:false,side:THREE.DoubleSide}));intakePick.position.y=261;scene.add(intakePick);reg("intake",intakePick);
+const bandPick=new THREE.Mesh(new THREE.CylinderGeometry(R+1.5,R+1.5,BAND1-BAND0,64,1,true,-0.6,1.2),new THREE.MeshBasicMaterial({visible:false,side:THREE.DoubleSide}));bandPick.position.y=(BAND0+BAND1)/2;scene.add(bandPick);reg("crown",bandPick);
+const topMat=new THREE.MeshStandardMaterial({color:0x2b3036,map:grilleTexture(),metalness:.3,roughness:.5,side:THREE.DoubleSide});
+const top=new THREE.Mesh(new THREE.CircleGeometry(R-3,96),topMat);top.rotation.x=-Math.PI/2;top.position.y=H-6;scene.add(top);reg("outlet",top,[0,180,0]);
+const led=new THREE.Mesh(new THREE.TorusGeometry(R-4,2.2,10,128),MAT.glow.clone());led.rotation.x=Math.PI/2;led.position.y=H-1;scene.add(led);reg("led_ring",led,[0,190,0]);
+const baseG=grp([0,0,0]);cyl(R-1,50,MAT.pp,[0,25,0],baseG,false,128);[[-70,-70],[70,-70],[-70,70],[70,70]].forEach(([x,z])=>cyl(16,4,MAT.rubber,[x,2,z],baseG,false,24));
+reg("base",baseG,[0,-120,0]);
+const jack=grp([0,30,-R+4]);cyl(7,10,MAT.dark,[0,0,0],jack,false,24).rotation.x=Math.PI/2;reg("dc_jack",jack,[0,-120,-60]);
+// display + ring
+const dispC=document.createElement("canvas");dispC.width=dispC.height=512;const dispT=new THREE.CanvasTexture(dispC);dispT.encoding=THREE.sRGBEncoding;
+const display=new THREE.Mesh(new THREE.CircleGeometry(27,64),new THREE.MeshBasicMaterial({map:dispT,toneMapped:false}));display.position.set(0,515,R+2.2);scene.add(display);reg("display",display,[0,40,220]);
+const dial=new THREE.Mesh(new THREE.TorusGeometry(32,3.4,16,96),MAT.alu);dial.position.set(0,515,R+2);scene.add(dial);reg("dial",dial,[0,40,240]);
+
+/* internals */
+const filterG=grp([0,0,0]);
+tube(110,108,330,MAT.mesh,[0,70,0],filterG);
+tube(107,86,330,new THREE.MeshStandardMaterial({color:0xF4F1E8,map:pleatTexture(false),roughness:.9}),[0,70,0],filterG);
+tube(85,75,330,new THREE.MeshStandardMaterial({color:0x2b2f33,map:pleatTexture(true),roughness:.95}),[0,70,0],filterG);
+tube(112,74,6,MAT.rubber,[0,64,0],filterG);tube(112,74,6,MAT.rubber,[0,400,0],filterG);
+reg("filter",filterG,[0,-40,0]);
+const core=cyl(74,330,MAT.core,[0,235,0]);reg("core",core);
+const seal=grp([0,410,0]);tube(128,76,5,M(0xBFC4C9,{roughness:.7}),[0,0,0],seal);tube(80,72,4,MAT.rubber,[0,-3,0],seal);reg("seal_plate",seal,[0,70,0]);
+const fanG=grp([0,452,0]);
+cyl(104,62,M(0x2b3138,{side:THREE.DoubleSide,metalness:.4,roughness:.5}),[0,0,0],fanG,true,96);
+const imp=new THREE.Group();fanG.add(imp);cyl(92,3,MAT.fan,[0,-24,0],imp,false,64);
+for(let i=0;i<7;i++){const b=box(46,44,2.5,MAT.fan,[0,0,0],imp);const a=i/7*Math.PI*2;b.position.set(Math.cos(a)*62,-2,Math.sin(a)*62);b.rotation.y=-a+.75}
+cyl(36,34,MAT.alu,[0,40,0],fanG,false,48);
+const inring=new THREE.Mesh(new THREE.TorusGeometry(74,6,12,64),MAT.alu);inring.rotation.x=Math.PI/2;inring.position.y=-38;fanG.add(inring);
+reg("fan",fanG,[0,120,0]);
+function pcb(w,h,p,chips){const g=grp(p);box(w,h,1.6,MAT.pcb,[0,0,0],g);(chips||[]).forEach(c=>box(c[2],c[3],c[4]||2.5,c[5]||MAT.chip,[c[0],c[1],(c[4]||2.5)/2+.8],g));return g}
+const mb=pcb(90,70,[0,515,116],[[-22,8,18,25,3.2,MAT.can],[18,10,10,10],[22,-18,7,7],[-30,-24,12,6,6,MAT.white]]);mb.rotation.y=Math.PI;reg("main_board",mb,[0,60,200]);
+const pod=grp([0,430,-112]);box(42,32,36,MAT.white,[0,0,0],pod);box(30,6,4,MAT.dark,[0,8,-19],pod);reg("sensor_pod",pod,[0,0,-180]);
+const fid=pcb(40,30,[100,418,0],[[0,0,24,18,1,M(0xC8A24A,{metalness:.8})]]);fid.rotation.x=-Math.PI/2;reg("filter_id",fid,[90,40,0]);
+
+/* wiring */
+const wiresG=new THREE.Group();scene.add(wiresG);wiresG.visible=false;
+function wire(id,col,pts,r=2.4){const c=new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p)));const m=new THREE.Mesh(new THREE.TubeGeometry(c,60,r,8,false),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.2}));wiresG.add(m);reg(id,m);return m}
+wire("w_power",0xF2B33D,[[0,30,-125],[0,60,-124],[-60,250,-110],[-90,470,-80],[-60,520,100],[-20,515,112]]);
+wire("w_motor",0x4C9BFF,[[20,505,112],[60,500,80],[80,470,40],[60,455,10]]);
+wire("w_i2c",0x3FD3C2,[[-30,525,112],[-100,520,60],[-115,480,-50],[-30,440,-100],[0,432,-94]],2);
+
+/* airflow */
+const PN=650,paths=[];
+for(let k=0;k<64;k++){const a=Math.random()*Math.PI*2,y0=90+Math.random()*340,ca=Math.cos(a),sa=Math.sin(a),a2=a+Math.random()*.6,ox=(Math.random()-.5)*120,oz=(Math.random()-.5)*120;
+  const pts=[[ca*260,y0,sa*260],[ca*150,y0,sa*150],[ca*108,y0,sa*108],[ca*80,y0,sa*80],[ca*40,y0+20,sa*40],[ca*20,(y0+420)/2,sa*20],[ca*30,425,sa*30],[Math.cos(a2)*80,470,Math.sin(a2)*80],[Math.cos(a2)*90,H+20,Math.sin(a2)*90],[ox,H+320,oz]];
+  paths.push(new THREE.CatmullRomCurve3(pts.map(p=>new THREE.Vector3(...p))).getSpacedPoints(300))}
+const pg=new THREE.BufferGeometry(),pp3=new Float32Array(PN*3),pc=new Float32Array(PN*3);pg.setAttribute("position",new THREE.BufferAttribute(pp3,3));pg.setAttribute("color",new THREE.BufferAttribute(pc,3));
+const parts=Array.from({length:PN},()=>({p:Math.floor(Math.random()*64),t:Math.random()}));
+const airPts=new THREE.Points(pg,new THREE.PointsMaterial({size:9,vertexColors:true,transparent:true,depthWrite:false}));scene.add(airPts);airPts.visible=false;
+const DIRTY=new THREE.Color(0xF2A34D),CLEAN=new THREE.Color(0x63E6FF);
+
+/* state + screen */
+const st={fan:true,filterOut:false,rpm:1200,pm:9,score:92};
+function drawScreen(){const g=dispC.getContext("2d"),S=512;g.fillStyle="#04070b";g.fillRect(0,0,S,S);
+  const col=st.pm<=12?"#43D18F":st.pm<=35?"#F0C040":"#F58D45";
+  g.lineWidth=20;g.strokeStyle="#1b2633";g.beginPath();g.arc(S/2,S/2,210,Math.PI*.75,Math.PI*2.25);g.stroke();
+  g.strokeStyle=col;g.beginPath();g.arc(S/2,S/2,210,Math.PI*.75,Math.PI*(.75+1.5*st.score/100));g.stroke();
+  g.fillStyle="#E7EEF5";g.textAlign="center";g.font="300 150px Manrope, sans-serif";g.fillText(st.score,S/2,S/2+40);
+  g.font="700 30px Manrope";g.fillStyle="#91A2B4";g.fillText("AIR SCORE",S/2,S/2-95);
+  g.font="600 30px JetBrains Mono, monospace";g.fillStyle=col;g.fillText("PM2.5 "+Math.round(st.pm),S/2,S/2+110);
+  g.font="600 26px Manrope";g.fillStyle="#5E6F82";g.fillText(st.fan?"AUTO · "+Math.round(st.rpm)+" rpm":"STANDBY",S/2,S/2+160);dispT.needsUpdate=true}
+
+/* modes */
+let mode="solid",exT=0,exTarget=0,fT=0,showPins=true;const clip=new THREE.Plane(new THREE.Vector3(-1,0,0),0);
+function applyMode(m){mode=m;exTarget=m==="explode"?1:0;const xr=m==="xray"||m==="explode",cut=m==="cut";
+  [shellMat,topMat].forEach(mt=>{mt.transparent=xr;mt.opacity=xr?(m==="explode"?.05:.13):1;mt.depthWrite=!xr;mt.clippingPlanes=cut?[clip]:[];mt.needsUpdate=true});
+  Object.values(REG).forEach(r=>{const g=P[r.id].group;if(g==="air"||g==="exterior")r.meshes.forEach(x=>{if(x.material!==shellMat&&x.material!==topMat){x.material.clippingPlanes=cut?[clip]:[];x.material.needsUpdate=true}})});
+  $$("#modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.m===m));if(cut&&!touring)setView("side");if(m==="explode"&&!touring)setView("far")}
+$$("#modes button").forEach(b=>b.onclick=()=>applyMode(b.dataset.m));
+function setToggle(t,on){const b=$(`[data-t="${t}"]`);b.setAttribute("aria-pressed",on);if(t==="air")airPts.visible=on;if(t==="wires")wiresG.visible=on;if(t==="pins")showPins=on}
+$$("#toggles button").forEach(b=>b.onclick=()=>{const on=b.getAttribute("aria-pressed")!=="true";setToggle(b.dataset.t,on);if(on&&b.dataset.t!=="pins"&&mode==="solid")applyMode("xray")});
+$$("#acts button").forEach(b=>b.onclick=()=>{if(b.dataset.a==="filter"){st.filterOut=!st.filterOut;b.textContent=st.filterOut?"Refit filter":"Change filter";toast(st.filterOut?"Base turned, filter dropped out: fan stops (Hall sensor)":"Filter fitted: NFC tag read, life reset to 100%")}
+  if(b.dataset.a==="fan"){st.fan=!st.fan;b.textContent=st.fan?"Fan on":"Fan off";b.classList.toggle("on",st.fan)}drawScreen()});
+$$("#fin button").forEach(b=>b.onclick=()=>{$$("#fin button").forEach(x=>x.setAttribute("aria-pressed",x===b));shellMat.color.setHex(FIN[b.dataset.f])});
+const VIEWS={hero:[1050,850,1400],front:[0,380,2000],side:[2000,420,0],rear:[-450,600,-1850],top:[0,2200,350],low:[950,260,1250],far:[1500,1100,1950]};
+let camAnim=null;function setView(v){camAnim={from:camera.position.clone(),to:new THREE.Vector3(...VIEWS[v]),ft:controls.target.clone(),tt:new THREE.Vector3(0,v==="far"?380:320,0),t:0}}
+$$("#views button").forEach(b=>b.onclick=()=>setView(b.dataset.v));camera.position.set(...VIEWS.hero);
+
+/* picking */
+const ray=new THREE.Raycaster(),mouse=new THREE.Vector2();let down=null;
+canvas.addEventListener("pointerdown",e=>down=[e.clientX,e.clientY]);
+canvas.addEventListener("pointerup",e=>{if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>6)return;const r=canvas.getBoundingClientRect();mouse.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(mouse,camera);
+  const xr=mode!=="solid";const list=pickables.filter(m=>{let o=m;while(o){if(!o.visible&&o!==intakePick&&o!==bandPick)return false;o=o.parent}return !(xr&&["shell","outlet","intake","crown"].includes(m.userData.cid))});
+  const hit=ray.intersectObjects(list,false).find(h=>mode!=="cut"||h.point.x<=0||!["shell","intake"].includes(h.object.userData.cid));if(hit)select(hit.object.userData.cid)});
+
+/* panels */
+let selected=null;
+function setHi(id,on){const r=REG[id];if(!r)return;r.meshes.forEach(m=>{const mt=m.material;if(mt.emissive){mt.emissive.setHex(on?0x3FD3C2:(m.parent===wiresG?mt.color.getHex():0));mt.emissiveIntensity=on?.55:(m.parent===wiresG?.2:1)}})}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+function select(id){if(selected)setHi(selected,false);selected=id;setHi(id,true);const p=P[id];
+  $("#p-detail").innerHTML=`<div><span class="code">${esc(p.code)}</span><h2>${esc(p.name)}</h2><p>${esc(p.what)}</p></div><div class="place"><b>Where</b><span>${esc(p.place)}</span></div>
+  <div><div class="lbl" style="margin-bottom:6px">Specification</div><div class="kv">${p.spec.map(([k,v])=>`<div>${esc(k)}</div><div>${esc(v)}</div>`).join("")}</div></div>
+  <div><div class="lbl" style="margin-bottom:6px">Connected to</div><div class="links">${p.links.filter(l=>P[l]).map(l=>`<button data-go="${l}">${esc(P[l].name)}</button>`).join("")}</div></div>`;
+  $$("#p-detail [data-go]").forEach(b=>b.onclick=()=>select(b.dataset.go));if(!touring)showTab("detail");
+  $$(".plist button").forEach(b=>b.classList.toggle("sel",b.dataset.id===id));$$(".pin").forEach(x=>x.classList.toggle("sel",x.dataset.id===id))}
+function renderParts(){let h=`<p class="note">Press ▶ Play explainer for a guided tour, or tap any part. X-ray, Cut-away and Exploded show the inside.</p>`;
+  DATA.groups.forEach(([g,n])=>{h+=`<div class="grp"><h4>${esc(n)}</h4><div class="plist">`;Object.entries(P).filter(([,p])=>p.group===g).forEach(([id,p])=>{h+=`<button data-id="${id}"><span class="sw2" style="background:${GROUP_COL[g]}"></span><code>${esc(p.code)}</code><span>${esc(p.name)}</span></button>`});h+=`</div></div>`});
+  $("#p-parts").innerHTML=h;$$(".plist button").forEach(b=>b.onclick=()=>select(b.dataset.id))}
+function renderApp(){const tele={device:"VH01-004512",mode:st.fan?"auto":"standby",pm25:+st.pm.toFixed(0),air_score:st.score,fan_rpm:Math.round(st.rpm),filter:st.filterOut?{present:false}:{present:true,type:"3-in-1 Ø220 H13",life_pct:86}};
+  $("#p-app").innerHTML=`<div><div class="lbl">Screen</div><h2 style="margin:4px 0 0;font-size:18px">Small, clear, out of the airflow</h2></div>
+  <p class="note">Research: leading purifiers use small screens (Xiaomi OLED touch, Dyson small LCD) plus a colour light ring. VIAN uses a 2.1-inch round touch screen and an aluminium turn ring. No big panel needed.</p>
+  <table><tr><th>Screen shows</th><th>How</th></tr><tr><td>Air score + PM2.5</td><td>Big number, colour arc</td></tr><tr><td>Mode, fan speed</td><td>Turn ring to change</td></tr><tr><td>Filter life, alerts</td><td>Icon + text</td></tr><tr><td>Night</td><td>Dims, then off; ring light off</td></tr><tr><td>Child lock</td><td>Hold 3 s</td></tr></table>
+  <div><div class="lbl">VIAN app (same app as all VIAN products)</div></div>
+  <table><tr><th>Feature</th><th>Competitors with it</th></tr>
+  <tr><td>Live PM1 / 2.5 / 10, VOC, NOx, temp, RH (CO₂ on Pro)</td><td>Dyson, Coway, Xiaomi</td></tr><tr><td>History: day, week, month</td><td>Coway (7 days), Dyson, Xiaomi Elite</td></tr>
+  <tr><td>Schedules, timers, auto / sleep / turbo / eco</td><td>VeSync, Coway, Philips</td></tr><tr><td>Indoor vs outdoor AQI</td><td>Coway, Philips</td></tr>
+  <tr><td>Filter life by real use + one-tap reorder</td><td>All (reorder: few)</td></tr><tr><td>Alexa, Google, Matter</td><td>Most</td></tr>
+  <tr><td><b>VIAN only:</b> Clean before I arrive, room-size check, sensor health, offline Bluetooth control, sleep report, widgets, genuine-filter check</td><td>None</td></tr></table>
+  <div><div class="lbl" style="margin-bottom:6px">Live data the app receives</div><pre>${esc(JSON.stringify(tele,null,2))}</pre></div>`}
+function showTab(t){$$(".tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.p===t));$$(".pane").forEach(p=>p.hidden=p.id!=="p-"+t)}
+$$(".tabs button").forEach(b=>b.onclick=()=>showTab(b.dataset.p));
+
+/* pins */
+const PIN_IDS=["display","dial","outlet","intake","filter","core","seal_plate","fan","main_board","sensor_pod","filter_id","base","dc_jack"];
+PIN_IDS.forEach((id,i)=>{const b=document.createElement("button");b.className="pin";b.dataset.id=id;b.textContent=i+1;b.title=P[id].name;b.onclick=()=>select(id);$("#pins").appendChild(b)});
+const tv=new THREE.Vector3(),tb=new THREE.Box3();
+function updatePins(){const r=canvas.getBoundingClientRect();$$(".pin").forEach(el=>{const id=el.dataset.id,root=REG[id].roots[0];const internal=!["display","dial","outlet","intake","base","dc_jack"].includes(id);
+  if(!showPins||(internal&&mode==="solid")||(id==="dc_jack"&&mode==="solid"&&camera.position.z>-100)){el.classList.add("hide");return}
+  if(id==="intake"){tv.set(0,260,R)}else{tb.setFromObject(root);tb.getCenter(tv)}tv.project(camera);if(tv.z>1){el.classList.add("hide");return}
+  el.classList.remove("hide");el.style.left=((tv.x+1)/2*r.width)+"px";el.style.top=((1-tv.y)/2*r.height)+"px"})}
+
+/* explainer tour */
+let touring=false,tourI=0,tourTimer=null;
+function tourStep(){const s=DATA.tour[tourI];if(!s){stopTour();return}
+  applyMode(s.mode);setToggle("air",!!s.air);setToggle("wires",!!s.wires);setView(s.view);select(s.sel);
+  if(s.act==="filter"&&!st.filterOut)$('[data-a="filter"]').click();if(!s.act&&st.filterOut)$('[data-a="filter"]').click();
+  if(s.tab)showTab(s.tab);
+  const c=$("#cap");c.hidden=false;c.innerHTML=`<small>${tourI+1} / ${DATA.tour.length}</small>${esc(s.t)}`;tourI++;tourTimer=setTimeout(tourStep,5200)}
+function stopTour(){touring=false;clearTimeout(tourTimer);$("#cap").hidden=true;$("#playBtn").textContent="▶ Play explainer";if(st.filterOut)$('[data-a="filter"]').click();applyMode("solid");setToggle("air",false);setToggle("wires",false);setView("hero")}
+$("#playBtn").onclick=()=>{if(touring){stopTour();return}touring=true;tourI=0;$("#playBtn").textContent="■ Stop";tourStep()};
+
+let tt;function toast(m){const e=$("#toast");e.textContent=m;e.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>e.classList.remove("show"),2600)}
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<1?50:32;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(stage);resize();
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;let last=performance.now(),acc=0;
+function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.max(last,now);
+  exT+=(exTarget-exT)*Math.min(1,dt*5);Object.values(REG).forEach(r=>r.roots.forEach(o=>{if(o.parent===wiresG)return;o.position.copy(o.userData.home).addScaledVector(o.userData.ex,exT)}));
+  fT+=((st.filterOut?1:0)-fT)*Math.min(1,dt*2.5);{const a=Math.min(1,fT*2),b=Math.max(0,fT*2-1);baseG.rotation.y=a*Math.PI/4;baseG.position.z+=380*b;filterG.position.y+=-14*a;filterG.position.z+=380*b;}
+  const run=st.fan&&!st.filterOut;const want=st.pm>35?2600:st.pm>12?1800:st.pm>5?1200:700;st.rpm+=((run?want:0)-st.rpm)*Math.min(1,dt*.8);
+  acc+=dt;if(acc>1){acc=0;st.pm=Math.max(2,Math.min(40,st.pm+(Math.random()-.5)*2));st.score=Math.round(Math.max(5,100-st.pm*1.6));drawScreen();if(!$("#p-app").hidden)renderApp()}
+  if(!reduce)imp.rotation.y+=st.rpm/60*2*Math.PI*dt*.08;led.material.color.setHex(st.filterOut?0xF2B33D:(st.pm<=12?0x43D18F:0xF0C040));
+  if(airPts.visible){const sp=Math.max(.2,st.rpm/1800);for(let i=0;i<PN;i++){const q=parts[i];q.t+=dt*.16*sp;if(q.t>=1){q.t=0;q.p=Math.floor(Math.random()*64)}
+    const v=paths[q.p][Math.min(300,Math.floor(q.t*300))];pp3[i*3]=v.x;pp3[i*3+1]=v.y;pp3[i*3+2]=v.z;const c=q.t<.28?DIRTY:CLEAN;pc[i*3]=c.r;pc[i*3+1]=c.g;pc[i*3+2]=c.b}
+    pg.attributes.position.needsUpdate=true;pg.attributes.color.needsUpdate=true}
+  if(camAnim){camAnim.t=Math.min(1,camAnim.t+dt*1.4);const e=1-Math.pow(1-camAnim.t,3);camera.position.lerpVectors(camAnim.from,camAnim.to,e);controls.target.lerpVectors(camAnim.ft,camAnim.tt,e);if(camAnim.t>=1)camAnim=null}
+  controls.update();renderer.render(scene,camera);updatePins()}
+function loop(n){tick(n);requestAnimationFrame(loop)}
+renderParts();renderApp();drawScreen();document.fonts&&document.fonts.ready.then(drawScreen);select("filter");showTab("parts");requestAnimationFrame(loop);
+function frames(n=90){let t=last;for(let i=0;i<n;i++){t+=1000/60;tick(t)}}
+window.VIAN={setView,applyMode,select,st,frames,showTab,setToggle,act:a=>$(`[data-a="${a}"]`).click(),
+  shot:name=>fetch("/save/"+name,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),
+  printParts:()=>({shell:shell,top:top,base:baseG})};
+})();
+</script>
+
+</body></html>
