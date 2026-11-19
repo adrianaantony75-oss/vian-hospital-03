@@ -57,7 +57,7 @@ td.best{color:var(--accent);font-weight:800}
 <div class="app">
   <header>
     <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
-    <div class="ttl"><b>VIAN Design Studio · 6 aerodynamic shapes</b><span>Shapes that do aerodynamic work · tested in a digital wind tunnel · illuminated VIAN logo</span></div>
+    <div class="ttl"><b>VIAN Design Studio · 6 familiar towers</b><span>The shape buyers trust, with small VIAN changes · bar screen · illuminated VIAN logo</span></div>
     <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">Hospital engineering model</a></div>
   </header>
   <div class="picker" id="picker"></div>
@@ -79,58 +79,40 @@ td.best{color:var(--accent);font-weight:800}
 (function(){
 "use strict";
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
-const TUN = {};
+const TUN = {"tower": {"reach": 72.85426629750819, "stagnant": 4.631261011829851, "bed_speed": 0.26086046538666413, "throw": 2.577295093698042, "short": 9.773921189321078e-05, "mean_occ": 0.6271812604100364}, "box": {"reach": 87.37925135842221, "stagnant": 3.5243509760515193, "bed_speed": 1.0093773390105303, "throw": 2.634027334710101, "short": 0.4952906856728599, "mean_occ": 0.7794809488559639}, "loop": {"reach": 28.95549138703575, "stagnant": 42.60181220750772, "bed_speed": 0.04247798126500508, "throw": 1.4773286702694157, "short": 7.667959465023052e-05, "mean_occ": 0.23061233166998732}, "wing": {"reach": 42.793702058942266, "stagnant": 32.029672991522, "bed_speed": 0.06814602621584008, "throw": 1.4761097520171051, "short": 2.8467463221732287e-06, "mean_occ": 0.2202466290755031}, "blade": {"reach": 56.6758933064922, "stagnant": 24.275289380976346, "bed_speed": 1.1464072701419072, "throw": 2.3564804263986576, "short": 0.0009058666304163357, "mean_occ": 0.627797381618401}, "ejector": {"reach": 76.08324117824469, "stagnant": 4.709962802855132, "bed_speed": 0.27282436951053884, "throw": 2.737448629654993, "short": 1.0705051847631896e-05, "mean_occ": 0.5577253053436999}, "manta": {"reach": 35.621670519650216, "stagnant": 30.76188561664489, "bed_speed": 0.09211001901364897, "throw": 1.538286384260096, "short": 5.039496110483785e-05, "mean_occ": 0.15088958586069143}, "crown": {"reach": 67.54359515553546, "stagnant": 6.608372280014072, "bed_speed": 0.20977726335880686, "throw": 2.294558781116753, "short": 0.0005296959991293223, "mean_occ": 0.5535446315814793}};
 const C=[
- {id:"loop",name:"Aero Λ",tag:"Coanda loop shaped like the A in VIAN",
-  idea:"The upper part is an open Λ, the same open A as the VIAN logo. Filtered air leaves thin 1.5 mm slots inside the Λ, hugs the curved inner surface (Coanda effect) and drags room air through the opening. The pedestal holds the filter pack and fan.",
-  how:"Coanda slots + entrainment: a thin fast sheet of air follows a curved lip and pulls surrounding air along, so a gentle, wide stream reaches across the room.",
-  dims:"420 W × 360 D × 1,650 H mm (pedestal 950 mm)",filter:"One 305 × 610 × 115 mm pack in the pedestal",
-  screen:"Bar touch screen on the pedestal front at 900 mm",logo:"The Λ frame itself glows along its inner edge; backlit VIAN on the pedestal",
-  pros:["The shape is the logo: instantly recognisable","Air leaves at head height across the room, not at the ceiling","No visible fan blades; easy to wipe"],
-  risks:["Tall: needs a weighted base (lab: 12° tip angle with 6 kg in the base)","Slot must be precise (±0.1 mm) in moulding"]},
- {id:"wing",name:"Wing Tower",tag:"Aircraft-wing body with a Coanda crest",
-  idea:"The body is an aircraft wing standing on end: round nose, long tapered tail. Clean air leaves a slot on the curved crest, follows it upward and back (Coanda), climbs to the ceiling and spreads across the whole room.",
-  how:"Low-drag wing section keeps intake air smooth and quiet; the crest bends the jet up the wall and across the ceiling (ceiling-jet mixing).",
-  dims:"300 W × 600 D (chord) × 1,150 H mm",filter:"One pack set along the chord",
-  screen:"Bar screen on the nose, at eye height",logo:"Backlit VIAN running down the nose",
-  pros:["Looks like aircraft engineering","Ceiling jet: whole-room mixing with low draft at the bed","Slim from the front: fits beside beds"],
-  risks:["Needs 30 cm behind it for the jet to turn","Long chord takes floor depth"]},
- {id:"blade",name:"Jet Fin",tag:"Shark-fin body with a 25° long-throw nozzle",
-  idea:"A tall fin with a sharp leading edge and a rounded back. A narrow, fast nozzle at the top fires clean air 25° upward across the room, like a jet. Angle can be set to 0°, 25° or 50°.",
-  how:"High-speed narrow jet with a long throw (like Dyson's projection angles), reaching the far side of a big ward.",
-  dims:"320 W × 520 D × 1,150 H mm",filter:"One pack in the lower fin",
-  screen:"Bar screen on the fin side",logo:"Backlit VIAN along the fin edge",
-  pros:["Longest throw: best for big wards and lobbies","Dynamic, sporty look","Adjustable direction"],
-  risks:["Faster jet: point it away from patients (app sets angle)","Slightly louder at boost"]},
- {id:"ejector",name:"Venturi Crown",tag:"Floating ring that pulls extra air",rec:true,
-  idea:"A floating crown ring sits above the body on slim posts. Clean air shoots up through the ring and pulls room air in through the gap underneath (like a jet engine's bypass). A lit halo inside the ring shows air quality.",
-  how:"Ejector / venturi: a primary jet inside a shroud lowers pressure and draws extra room air through the side gap, giving a wider, softer column.",
-  dims:"440 W × 440 D × 1,300 H mm",filter:"One pack in the body",
-  screen:"Bar screen on the body front",logo:"Halo ring + backlit VIAN on the front",
-  pros:["Visible 'air engine' that explains itself","Softer, wider column: quiet and comfortable","Halo readable across a ward"],
-  risks:["Ring needs cleaning on top","Extra moulded part"]},
- {id:"manta",name:"Manta",tag:"Low, wide body: gentle floor-level clean air",
-  idea:"A low, wide form like a manta ray. It sends slow clean air along the floor and takes room air in at the top. Clean air spreads under the bed area and rises gently with body heat, the same principle as operating-theatre displacement ventilation.",
-  how:"Displacement flow: slow, cool supply at floor level that rises with heat sources, with very low draft at patient height.",
-  dims:"900 W × 450 D × 520 H mm",filter:"One pack lying flat inside",
-  screen:"Bar screen on the top front slope",logo:"Backlit VIAN on the front lip",
-  pros:["Lowest draft at the patient","Fits under windows, beside beds, in waiting areas","Very stable, can double as a bench shelf"],
-  risks:["Takes more floor width","Works best with people or equipment warming the air"]},
- {id:"crown",name:"Vortex Crown",tag:"Fluted spiral body with a swirl outlet",
-  idea:"A column wrapped in spiral flutes like a drill bit. Swirl vanes at the top spin the clean air into a rotating column that holds together longer and mixes the room evenly.",
-  how:"Swirl jet: rotating air spreads in a cone and mixes faster; the spiral flutes guide intake air smoothly and look like motion even when off.",
-  dims:"460 W × 460 D × 1,100 H mm",filter:"One pack inside",
-  screen:"Bar screen set in a flat band at the top",logo:"Backlit VIAN in the flat band",
-  pros:["Spiral reads as 'air in motion'","Even mixing in all directions","No sharp corners"],
-  risks:["Flutes need a soft brush to clean","2D test cannot show swirl, so its score is a lower estimate"]}];
+ {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",rec:true,
+  idea:"The shape buyers already trust: a rounded tower with soft corners, clean air out of the top. VIAN touches: a graphite visor with a bar screen, and the VIAN logo lit from behind.",
+  change:["Large soft corners (no sharp box edges)","Graphite visor holds the bar screen","Backlit VIAN logo under the screen"],
+  dims:"450 W × 470 D × 1,080 H mm"},
+ {id:"slope",name:"VIAN Classic Slope",tag:"Familiar tower, top tilted 8°",
+  idea:"Same familiar tower, with the top tilted 8° up towards the back, as in your Hospital 03 design. Clean air leaves up and slightly backwards, away from the person in front.",
+  change:["Rear-high 8° top","Visor follows the slope","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,000–1,080 H mm"},
+ {id:"waist",name:"VIAN Soft Waist",tag:"Familiar tower, gently shaped",
+  idea:"A familiar tower that narrows very slightly at two-thirds height, like a well-cut jacket. Hardly noticeable at first, but it makes the unit look lighter and more premium.",
+  change:["4% narrower at the waist","Wider, steadier base","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,080 H mm (430 mm at the waist)"},
+ {id:"line",name:"VIAN Light Line",tag:"Familiar tower with a status light line",
+  idea:"Familiar tower with one thin light line running up the front from the base to the screen. The line shows air quality in colour and is visible across a ward.",
+  change:["Thin vertical light line, colour = air quality","Bar screen at the top of the line","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,080 H mm"},
+ {id:"twotone",name:"VIAN Two-Tone",tag:"Familiar tower, two colours",
+  idea:"Familiar tower in two tones: a coloured perforated lower section and a gloss white upper section, split by a fine groove. Easy to match hospital colour schemes.",
+  change:["Coloured lower intake section","Fine groove line between tones","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,080 H mm"},
+ {id:"wood",name:"VIAN Wood Touch",tag:"Familiar tower with oak trim",
+  idea:"Familiar tower with a real oak base and an oak top ring. Warmer for clinics, private rooms and homes, while staying wipe-clean (sealed lacquer).",
+  change:["Oak base and top ring (sealed)","Matte white body","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,080 H mm"}];
 /* renderer */
 const canvas=$("#c"),stage=$("#stage");
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.85;
 const scene=new THREE.Scene();if(THREE.RoomEnvironment){const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture}
 scene.add(new THREE.HemisphereLight(0xdfe9f3,0x1a2028,.45));const key=new THREE.DirectionalLight(0xffffff,.8);key.position.set(-900,1600,1300);scene.add(key);
-const camera=new THREE.PerspectiveCamera(32,1,5,30000);const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.target.set(0,760,0);controls.minDistance=600;controls.maxDistance=7000;controls.maxPolarAngle=Math.PI*.6;
-camera.position.set(3300,1500,2600);
+const camera=new THREE.PerspectiveCamera(32,1,5,30000);const controls=new THREE.OrbitControls(camera,canvas);controls.enableDamping=true;controls.target.set(0,560,0);controls.minDistance=600;controls.maxDistance=7000;controls.maxPolarAngle=Math.PI*.6;
+camera.position.set(2500,1250,1900);
 const floor=new THREE.Mesh(new THREE.CircleGeometry(1500,96),new THREE.MeshStandardMaterial({color:0x0b1118,roughness:1,envMapIntensity:.15}));floor.rotation.x=-Math.PI/2;scene.add(floor);
 const grid=new THREE.PolarGridHelper(1400,16,8,96,0x22303f,0x172230);grid.position.y=.5;scene.add(grid);
 
@@ -163,73 +145,38 @@ function roundTri(r,k){const s=new THREE.Shape();const pts=[0,1,2].map(i=>{const
 function perfTex(){const c=document.createElement("canvas");c.width=c.height=256;const g=c.getContext("2d");g.fillStyle="#fff";g.fillRect(0,0,256,256);g.fillStyle="#555b62";for(let y=6;y<256;y+=12)for(let x=6+((y/12)%2)*6;x<256;x+=12){g.beginPath();g.arc(x,y,2.6,0,7);g.fill()}const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(8,10);t.encoding=THREE.sRGBEncoding;return t}
 const perfMat=body.clone();perfMat.map=perfTex();
 
-/* concept builders: each returns {g, inP, outP} */
 const B={};
-function airfoil(chord,thick,n=48){const s=new THREE.Shape();const pts=[];for(let i=0;i<=n;i++){const x=i/n;const yt=5*thick*(0.2969*Math.sqrt(x)-0.126*x-0.3516*x*x+0.2843*x**3-0.1036*x**4);pts.push([x*chord,yt*chord])}
-  s.moveTo(pts[0][0],pts[0][1]);for(let i=1;i<pts.length;i++)s.lineTo(pts[i][0],pts[i][1]);for(let i=pts.length-1;i>=0;i--)s.lineTo(pts[i][0],-pts[i][1]);s.closePath();return s}
-function lathe(prof,seg=96){return new THREE.LatheGeometry(prof.map(p=>new THREE.Vector2(p[0],p[1])),seg)}
-B.loop=()=>{const g=new THREE.Group();
-  // pedestal: tapered rounded column
-  g.add(new THREE.Mesh(lathe([[0,70],[175,70],[178,200],[165,700],[150,950],[0,950]]),body)).scale.set(1,1,.8);
-  const peds=g.children[0];
-  // Λ frame: tube with airfoil-ish section
-  const path=new THREE.CatmullRomCurve3([[-200,980,0],[-150,1200,0],[-40,1560,0],[0,1620,0],[40,1560,0],[150,1200,0],[200,980,0]].map(p=>new THREE.Vector3(...p)),false,"catmullrom",.15);
-  const fr=new THREE.Mesh(new THREE.TubeGeometry(path,160,38,24,false),body);fr.scale.z=2.2;g.add(fr);
-  const inner=new THREE.Mesh(new THREE.TubeGeometry(path,160,6,8,false),halo);inner.position.z=55;g.add(inner);
-  const cap=new THREE.Mesh(new THREE.CylinderGeometry(150,150,30,48),graphite);cap.position.y=960;cap.scale.z=.8;g.add(cap);
-  const sc=screen(220,72,g);sc.position.set(0,880,135);sc.rotation.x=-.06;
-  const lg=litLogo(24,g);lg.position.set(0,790,138);
-  plinth(new THREE.Shape().absellipse(0,0,240,200,0,Math.PI*2),g,60);
-  return {g,inP:[[0,300,420],[300,300,300],[-300,300,300]],outP:[[0,1300,1600],[120,1250,1500],[-120,1350,1500]]}};
-B.wing=()=>{const g=new THREE.Group();const H=1080;
-  const ge=new THREE.ExtrudeGeometry(airfoil(600,.42),{depth:H-70,bevelEnabled:true,bevelThickness:20,bevelSize:18,bevelSegments:8,steps:1,curveSegments:24});ge.rotateX(-Math.PI/2);ge.translate(-300,70,0);ge.rotateY(Math.PI/2);
-  g.add(new THREE.Mesh(ge,body));
-  const crest=new THREE.Mesh(new THREE.SphereGeometry(1,48,24,0,Math.PI*2,0,Math.PI/2),body);crest.scale.set(126,110,300);crest.position.set(0,H,10);g.add(crest);
-  const slot=new THREE.Mesh(new THREE.BoxGeometry(200,6,40),graphite);slot.position.set(0,H+80,-170);slot.rotation.x=.9;g.add(slot);
-  const sc=screen(170,60,g);sc.position.set(0,930,312);sc.rotation.y=0;
-  const lg=litLogo(22,g,true);lg.position.set(0,700,318);
-  plinth(new THREE.Shape().absellipse(0,0,190,360,0,Math.PI*2),g,60);
-  return {g,inP:[[350,300,250],[-350,300,250],[0,300,600]],outP:[[0,1950,-600],[200,1950,0],[-200,1950,400]]}};
-B.blade=()=>{const g=new THREE.Group();
-  const s=new THREE.Shape();s.moveTo(260,70);s.lineTo(200,1000);s.quadraticCurveTo(150,1150,-40,1160);s.bezierCurveTo(-200,1150,-260,900,-260,600);s.lineTo(-250,70);s.lineTo(260,70);
-  const ge=new THREE.ExtrudeGeometry(s,{depth:220,bevelEnabled:true,bevelThickness:50,bevelSize:40,bevelSegments:10,curveSegments:48});ge.translate(0,0,-110);ge.rotateY(-Math.PI/2);
-  g.add(new THREE.Mesh(ge,body));
-  const noz=new THREE.Mesh(new THREE.BoxGeometry(150,14,90),graphite);noz.position.set(0,1100,180);noz.rotation.x=-Math.PI/7;g.add(noz);
-  const sc=screen(180,60,g);sc.position.set(161,860,0);sc.rotation.y=Math.PI/2;
-  const lg=litLogo(22,g,true);lg.position.set(161,600,0);lg.rotation.y=Math.PI/2;
-  plinth(new THREE.Shape().absellipse(0,0,190,300,0,Math.PI*2),g,60);
-  return {g,inP:[[400,300,0],[-400,300,0]],outP:[[0,1700,1900],[80,1650,1800],[-80,1750,1800]]}};
-B.ejector=()=>{const g=new THREE.Group();
-  g.add(new THREE.Mesh(lathe([[0,70],[205,70],[215,300],[200,800],[170,1000],[0,1000]]),body));
-  const ring=new THREE.Mesh(lathe([[150,1090],[205,1100],[215,1170],[200,1260],[165,1270],[150,1200]],96),body);g.add(ring);
-  const h=new THREE.Mesh(new THREE.TorusGeometry(152,5,12,96),halo);h.rotation.x=Math.PI/2;h.position.y=1150;g.add(h);
-  for(let i=0;i<3;i++){const a=i*Math.PI*2/3;const p=new THREE.Mesh(new THREE.CylinderGeometry(6,6,100,10),graphite);p.position.set(Math.cos(a)*180,1045,Math.sin(a)*180);g.add(p)}
-  const top=new THREE.Mesh(new THREE.CircleGeometry(168,64),graphite);top.rotation.x=-Math.PI/2;top.position.y=1001;g.add(top);
-  const sc=screen(220,70,g);sc.position.set(0,880,186);sc.rotation.x=.14;
-  const lg=litLogo(24,g);lg.position.set(0,780,195);lg.rotation.x=.08;
-  plinth(new THREE.Shape().absarc(0,0,230,0,Math.PI*2),g,60);
-  return {g,inP:[[0,300,450],[400,300,0],[-400,300,0]],outP:[[0,1950,0],[120,1950,60],[-120,1950,-60]]}};
-B.manta=()=>{const g=new THREE.Group();
-  const s=new THREE.Shape();s.moveTo(-450,0);s.bezierCurveTo(-450,260,-250,330,0,330);s.bezierCurveTo(250,330,450,260,450,0);s.lineTo(-450,0);
-  const ge=new THREE.ExtrudeGeometry(s,{depth:400,bevelEnabled:true,bevelThickness:40,bevelSize:40,bevelSegments:10,curveSegments:48});ge.translate(0,0,-200);
-  const m=new THREE.Mesh(ge,body);m.scale.y=1.45;m.position.y=50;g.add(m);
-  const lip=new THREE.Mesh(new THREE.BoxGeometry(760,16,30),graphite);lip.position.set(0,85,236);g.add(lip);
-  const grille=new THREE.Mesh(new THREE.PlaneGeometry(520,240),perfMat);grille.rotation.x=-Math.PI/2;grille.position.set(0,530,-40);g.add(grille);
-  const sc=screen(220,66,g);sc.position.set(0,420,205);sc.rotation.x=-.75;
-  const lg=litLogo(22,g);lg.position.set(0,150,242);
-  plinth(new THREE.Shape([new THREE.Vector2(-440,-190),new THREE.Vector2(440,-190),new THREE.Vector2(440,190),new THREE.Vector2(-440,190)]),g,50);
-  return {g,inP:[[0,1100,-200],[300,1100,0],[-300,1100,0]],outP:[[0,80,1800],[500,80,1500],[-500,80,1500]]}};
-B.crown=()=>{const g=new THREE.Group();const H=1000;
-  const ge=new THREE.CylinderGeometry(200,225,H-70,72,60);ge.translate(0,(H-70)/2+70,0);
-  const p=ge.attributes.position;for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i);const r=Math.hypot(x,z);if(r<5)continue;const a=Math.atan2(z,x);const tw=(y-70)/(H-70)*Math.PI*1.2;
-    const flute=1-.055*Math.max(0,Math.cos(8*(a-tw)));const nr=r*flute;const na=a;p.setX(i,nr*Math.cos(na));p.setZ(i,nr*Math.sin(na))}ge.computeVertexNormals();
-  g.add(new THREE.Mesh(ge,body));
-  const band=new THREE.Mesh(lathe([[0,1000],[202,1000],[204,1080],[185,1100],[0,1100]]),body);g.add(band);
-  const vanes=new THREE.Group();for(let i=0;i<12;i++){const v=new THREE.Mesh(new THREE.BoxGeometry(150,4,30),graphite);const a=i/12*Math.PI*2;v.position.set(Math.cos(a)*95,1101,Math.sin(a)*95);v.rotation.y=-a;v.rotation.x=.5;vanes.add(v)}g.add(vanes);
-  const sc=screen(210,62,g);sc.position.set(0,1050,205);
-  const lg=litLogo(16,g);lg.position.set(0,1015,206);
-  plinth(new THREE.Shape().absarc(0,0,240,0,Math.PI*2),g,60);
-  return {g,inP:[[0,300,450],[400,300,0],[-400,300,0],[0,300,-450]],outP:[[0,1950,0],[300,1900,200],[-300,1900,-200]]}};
+const oak=new THREE.MeshStandardMaterial({color:0x6E4A2C,roughness:.5,metalness:0});
+const accent=new THREE.MeshStandardMaterial({color:0xA9D3E8,roughness:.5,metalness:.1});
+const lineMat=new THREE.MeshBasicMaterial({color:0x43D18F,toneMapped:false});
+function rrect(w,d,r){const s=new THREE.Shape();const x=w/2,z=d/2;s.moveTo(-x+r,-z);s.lineTo(x-r,-z);s.quadraticCurveTo(x,-z,x,-z+r);s.lineTo(x,z-r);s.quadraticCurveTo(x,z,x-r,z);s.lineTo(-x+r,z);s.quadraticCurveTo(-x,z,-x,z-r);s.lineTo(-x,-z+r);s.quadraticCurveTo(-x,-z,-x+r,-z);return s}
+function tower(o={}){const W=450,D=470,H=o.H||1080,R=95,y0=70;
+  const ge=new THREE.ExtrudeGeometry(rrect(W,D,R),{depth:H-y0,bevelEnabled:true,bevelThickness:18,bevelSize:14,bevelSegments:6,steps:30,curveSegments:24});
+  ge.rotateX(-Math.PI/2);ge.translate(0,y0,0);
+  const p=ge.attributes.position;for(let i=0;i<p.count;i++){let x=p.getX(i),y=p.getY(i),z=p.getZ(i);
+    if(o.waist){const t=(y-y0)/(H-y0);const k=1-o.waist*Math.exp(-Math.pow((t-.66)/.22,2));x*=k;z*=k}
+    if(o.slope&&y>H-40){y+=Math.tan(o.slope)*(-z)-Math.tan(o.slope)*D/2}
+    p.setXYZ(i,x,y,z)}ge.computeVertexNormals();
+  return new THREE.Mesh(ge,o.mat||body)}
+function topGrille(g,H,slope=0){const m=new THREE.Mesh(new THREE.ShapeGeometry(rrect(390,410,80),16),graphite);m.rotation.x=-Math.PI/2+(slope||0);m.position.y=H+(slope?-Math.tan(slope)*235+18:18)+1;g.add(m);return m}
+function front(g,yScreen,zf,tilt=0){const v=new THREE.Mesh(new THREE.ShapeGeometry(rrect(250,140,34),12),graphite);v.position.set(0,yScreen,zf+1);v.rotation.x=tilt;g.add(v);
+  const sc=screen(196,62,g);sc.position.set(0,yScreen+10,zf+5);sc.rotation.x=tilt;const lg=litLogo(17,g);lg.position.set(0,yScreen-44,zf+5);lg.rotation.x=tilt;}
+function perfFront(g,y,h,zf,mat){const pl=new THREE.Mesh(new THREE.PlaneGeometry(250,h),mat||perfMat);pl.position.set(0,y,zf+1);g.add(pl)}
+const ZF=235+14;
+B.classic=()=>{const g=new THREE.Group();g.add(tower());topGrille(g,1080);front(g,930,ZF);perfFront(g,360,520,ZF);plinth(rrect(460,480,100),g,70);return {g,inP:[[0,300,600]],outP:[[0,1900,0],[100,1900,-100]]}};
+B.slope=()=>{const g=new THREE.Group();const s=THREE.MathUtils.degToRad(8);g.add(tower({slope:s}));topGrille(g,1080,s);front(g,900,ZF);perfFront(g,360,520,ZF);plinth(rrect(460,480,100),g,70);return {g,inP:[[0,300,600]],outP:[[0,1900,-500],[100,1900,-400]]}};
+B.waist=()=>{const g=new THREE.Group();g.add(tower({waist:.045}));topGrille(g,1080);front(g,930,ZF);perfFront(g,330,460,ZF);plinth(rrect(470,490,100),g,70);return {g,inP:[[0,300,600]],outP:[[0,1900,0]]}};
+B.line=()=>{const g=new THREE.Group();g.add(tower());topGrille(g,1080);front(g,930,ZF);
+  const l=new THREE.Mesh(new THREE.BoxGeometry(6,740,3),lineMat);l.position.set(0,470,ZF+1.5);g.add(l);
+  perfFront(g,360,520,ZF);plinth(rrect(460,480,100),g,70);return {g,inP:[[0,300,600]],outP:[[0,1900,0]]}};
+B.twotone=()=>{const g=new THREE.Group();const lower=tower({H:600,mat:accent});g.add(lower);const upper=tower();upper.material=body;g.add(upper);
+  upper.geometry=upper.geometry.clone();{const p=upper.geometry.attributes.position;for(let i=0;i<p.count;i++){if(p.getY(i)<612)p.setY(i,612)}upper.geometry.computeVertexNormals()}
+  const groove=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(462,482,100),{depth:6,bevelEnabled:false,curveSegments:24}),graphite);groove.rotation.x=-Math.PI/2;groove.position.y=608;groove.scale.set(.985,.985,1);g.add(groove);
+  topGrille(g,1080);front(g,930,ZF);const pm=perfMat.clone();pm.color.setHex(0xA9D3E8);perfFront(g,330,460,ZF,pm);plinth(rrect(460,480,100),g,70);return {g,inP:[[0,300,600]],outP:[[0,1900,0]]}};
+B.wood=()=>{const g=new THREE.Group();const m=tower();g.add(m);
+  const base=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(470,490,104),{depth:80,bevelEnabled:true,bevelThickness:6,bevelSize:6,bevelSegments:3,curveSegments:24}),oak);base.rotation.x=-Math.PI/2;base.position.y=0;g.add(base);
+  const ring=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(476,496,104),{depth:30,bevelEnabled:true,bevelThickness:4,bevelSize:4,bevelSegments:3,curveSegments:24}),oak);ring.rotation.x=-Math.PI/2;ring.position.y=1062;g.add(ring);
+  topGrille(g,1094);front(g,920,ZF);perfFront(g,370,500,ZF);return {g,inP:[[0,300,600]],outP:[[0,1900,0]]}};
 /* person for scale */
 const person=new THREE.Group();{const m=new THREE.MeshStandardMaterial({color:0x2a3542,roughness:.9});const b=new THREE.Mesh(new THREE.CapsuleGeometry(170,950,8,24),m);b.position.y=170+475;b.scale.z=.55;person.add(b);
   const h=new THREE.Mesh(new THREE.SphereGeometry(110,24,16),m);h.position.y=1640;person.add(h);person.position.set(-850,0,-200);person.visible=false;scene.add(person)}
@@ -247,19 +194,19 @@ let cur=null,curId=null;
 function show(id){if(cur)scene.remove(cur.g);lights.length=0;const c=C.find(x=>x.id===id);cur=B[id]();scene.add(cur.g);curId=id;makePaths(cur);
   $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();try{history.replaceState(null,"","#"+id)}catch(e){}}
 function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b></i><span>${v}</span></div>`}
-function metric(k,v){const base=TUN.tower,box=TUN.box;const fmt={reach:x=>x.toFixed(0)+"%",stagnant:x=>x.toFixed(1)+"%",bed_speed:x=>x.toFixed(2)+" m/s",throw:x=>x.toFixed(1)+" m",short:x=>x.toFixed(1)+"%"}[k];return fmt(v)}
-function renderSheet(c){const r=TUN[c.id]||{},b=TUN.tower||{},x=TUN.box||{};
-  const rows=[["Room reach (air moving > 0.1 m/s)","reach","higher"],["Stagnant air (< 0.03 m/s)","stagnant","lower"],["Speed at patient zone","bed_speed","0.05–0.25 comfortable"],["Throw (air > 0.5 m/s)","throw","longer"],["Clean air going straight back in","short","lower"]];
-  $("#sheet").innerHTML=`<div><div class="lbl">Concept ${C.indexOf(c)+1} of 6${c.rec?" · recommended":""}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
-  <div class="place" style="display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:12.5px"><b style="color:var(--accent)">Aerodynamics: </b>${esc(c.how)}</div>
-  <div><div class="lbl" style="margin-bottom:6px">Digital wind tunnel (2D CFD, hospital room 4.8 × 2.8 m)</div>
-  ${r.reach!==undefined?`<img src="img/tunnel_${c.id}.png" alt="CFD airflow for ${esc(c.name)}" style="width:100%;border-radius:10px;border:1px solid var(--line)">
-  <table><tr><th>Test</th><th>${esc(c.name)}</th><th>Common tower</th><th>Common box</th></tr>${rows.map(([l,k])=>`<tr><td>${l}</td><td class="best">${metric(k,r[k])}</td><td>${metric(k,b[k])}</td><td>${metric(k,x[k])}</td></tr>`).join("")}</table>`:"<p>Simulation running…</p>"}</div>
-  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>${esc(c.filter)}</div><div>Screen</div><div>${esc(c.screen)}</div><div>Logo</div><div>${esc(c.logo)}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, ₹ 3,999 pack, sensors, app</div></div>
-  <div><div class="lbl" style="margin-bottom:6px">Strengths</div><ul>${c.pros.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-  <div><div class="lbl" style="margin-bottom:6px">Risks and answers</div><ul>${c.risks.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-  <p class="note">Image: brighter = faster air; teal = clean-air outlet; amber = intake; box = patient zone. 2D lattice-Boltzmann CFD, a relative comparison only; air pulled along by jets is mixed, not filtered. A 3D CFD and a real smoke test come next for the chosen shape.</p>`}
-$("#picker").innerHTML=C.map((c,i)=>`<button class="pk" data-id="${c.id}" aria-pressed="false"><b>${i+1}. ${esc(c.name)}</b><span>${esc(c.tag)}</span>${c.rec?'<span class="rec">RECOMMENDED</span>':""}</button>`).join("");
+function renderSheet(c){const t=TUN.tower||{};
+  $("#sheet").innerHTML=`<div><div class="lbl">Design ${C.indexOf(c)+1} of 6${c.rec?" · recommended":""}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
+  <div><div class="lbl" style="margin-bottom:6px">What is different from a normal tower</div><ul>${c.change.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>One 305 × 610 × 115 mm pack (₹ 3,999), right-side door</div><div>Screen</div><div>Bar touch screen in the graphite visor, eye height</div><div>Logo</div><div>Backlit VIAN, dims at night</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
+  <div><div class="lbl" style="margin-bottom:6px">Airflow (digital wind tunnel)</div>
+  ${t.reach!==undefined?`<img src="img/tunnel_tower.png" alt="CFD airflow for the top-outlet tower layout" style="width:100%;border-radius:10px;border:1px solid var(--line)">
+  <table><tr><th>Test</th><th>This layout</th><th>Front-grille box</th></tr>
+  <tr><td>Room reach</td><td class="best">${t.reach.toFixed(0)}%</td><td>${TUN.box.reach.toFixed(0)}%</td></tr>
+  <tr><td>Stagnant air</td><td class="best">${t.stagnant.toFixed(1)}%</td><td>${TUN.box.stagnant.toFixed(1)}%</td></tr>
+  <tr><td>Speed at patient</td><td class="best">${t.bed_speed.toFixed(2)} m/s (comfortable)</td><td>${TUN.box.bed_speed.toFixed(2)} m/s (draughty)</td></tr>
+  <tr><td>Throw</td><td class="best">${t.throw.toFixed(1)} m</td><td>${TUN.box.throw.toFixed(1)} m</td></tr></table>`:""}
+  <p class="note">All 6 designs keep the proven top-outlet layout, so they share this airflow result. The top outlet cleans the room evenly without blowing on the patient; a front grille blows about 4× harder at the bed.</p></div>`}
+$("#picker").innerHTML=C.map((c,i)=>`<button class="pk" data-id="${c.id}" aria-pressed="false"><b>${i+1}. ${esc(c.name.replace('VIAN ',''))}</b><span>${esc(c.tag)}</span>${c.rec?'<span class="rec">RECOMMENDED</span>':""}</button>`).join("");
 $$(".pk").forEach(b=>b.onclick=()=>show(b.dataset.id));
 
 /* toggles */
@@ -280,7 +227,7 @@ function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.
   const pulse=.85+.15*Math.sin(now/600);lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
   controls.update();renderer.render(scene,camera)}
 function loop(n){tick(n);requestAnimationFrame(loop)}
-const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"ejector");requestAnimationFrame(loop);
+const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"classic");requestAnimationFrame(loop);
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(C.some(c=>c.id===h)&&h!==curId)show(h)});
 window.VIAN={show,frames:(n=60)=>{let t=last;for(let i=0;i<n;i++){t+=16.7;tick(t)}},shot:n=>fetch("/save/"+n,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),setSpin:v=>{spin=v}};
 })();
