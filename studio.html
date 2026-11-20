@@ -57,7 +57,7 @@ td.best{color:var(--accent);font-weight:800}
 <div class="app">
   <header>
     <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
-    <div class="ttl"><b>VIAN Design Studio · 6 familiar towers</b><span>The shape buyers trust, with small VIAN changes · bar screen · illuminated VIAN logo</span></div>
+    <div class="ttl"><b>VIAN Design Studio · final pick: Slope Glow</b><span>Classic Slope + Two-Tone + warm ambient light · plus the 6 familiar towers it came from</span></div>
     <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">Hospital engineering model</a></div>
   </header>
   <div class="picker" id="picker"></div>
@@ -66,6 +66,8 @@ td.best{color:var(--accent);font-weight:800}
     <div class="badge" id="badge">Drag to rotate · logo glows like the real backlit logo</div>
     <div class="toolbar">
       <div class="tb" id="tg"><button data-t="air" aria-pressed="true">Airflow</button><button data-t="light" aria-pressed="true">Logo light</button><button data-t="spin" aria-pressed="true">Turntable</button><button data-t="person" aria-pressed="false">Person for scale</button></div>
+      <div class="tb" id="amb" aria-label="Ambient light colour"><button data-a="0xFFB36B" aria-pressed="true">Warm</button><button data-a="0xFF7A45" aria-pressed="false">Sunset</button><button data-a="0xFFF0DA" aria-pressed="false">Soft white</button><button data-a="0x4FE3D0" aria-pressed="false">Calm teal</button><button data-a="0xFF7FB0" aria-pressed="false">Rose</button><button data-a="aq" aria-pressed="false">Air quality</button><button data-a="off" aria-pressed="false">Off</button></div>
+      <div class="tb" id="low" aria-label="Lower tone"><button class="sw" data-l="0x7FA79A" aria-pressed="true" style="background:#7FA79A" aria-label="Sage"></button><button class="sw" data-l="0xB89E7C" aria-pressed="false" style="background:#B89E7C" aria-label="Sand"></button><button class="sw" data-l="0x9FBFD6" aria-pressed="false" style="background:#9FBFD6" aria-label="Ice blue"></button><button class="sw" data-l="0x3A3F45" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
       <div class="tb" id="fin"><button class="sw" data-f="0xE3E7EB" aria-pressed="true" style="background:#E3E7EB" aria-label="Silver-white"></button><button class="sw" data-f="0xD3E5F0" aria-pressed="false" style="background:#D3E5F0" aria-label="Ice blue"></button><button class="sw" data-f="0xACD9CE" aria-pressed="false" style="background:#ACD9CE" aria-label="Sea-glass teal"></button><button class="sw" data-f="0x3A3F45" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
     </div>
   </section>
@@ -81,7 +83,11 @@ td.best{color:var(--accent);font-weight:800}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
 const TUN = {"tower": {"reach": 72.85426629750819, "stagnant": 4.631261011829851, "bed_speed": 0.26086046538666413, "throw": 2.577295093698042, "short": 9.773921189321078e-05, "mean_occ": 0.6271812604100364}, "box": {"reach": 87.37925135842221, "stagnant": 3.5243509760515193, "bed_speed": 1.0093773390105303, "throw": 2.634027334710101, "short": 0.4952906856728599, "mean_occ": 0.7794809488559639}, "loop": {"reach": 28.95549138703575, "stagnant": 42.60181220750772, "bed_speed": 0.04247798126500508, "throw": 1.4773286702694157, "short": 7.667959465023052e-05, "mean_occ": 0.23061233166998732}, "wing": {"reach": 42.793702058942266, "stagnant": 32.029672991522, "bed_speed": 0.06814602621584008, "throw": 1.4761097520171051, "short": 2.8467463221732287e-06, "mean_occ": 0.2202466290755031}, "blade": {"reach": 56.6758933064922, "stagnant": 24.275289380976346, "bed_speed": 1.1464072701419072, "throw": 2.3564804263986576, "short": 0.0009058666304163357, "mean_occ": 0.627797381618401}, "ejector": {"reach": 76.08324117824469, "stagnant": 4.709962802855132, "bed_speed": 0.27282436951053884, "throw": 2.737448629654993, "short": 1.0705051847631896e-05, "mean_occ": 0.5577253053436999}, "manta": {"reach": 35.621670519650216, "stagnant": 30.76188561664489, "bed_speed": 0.09211001901364897, "throw": 1.538286384260096, "short": 5.039496110483785e-05, "mean_occ": 0.15088958586069143}, "crown": {"reach": 67.54359515553546, "stagnant": 6.608372280014072, "bed_speed": 0.20977726335880686, "throw": 2.294558781116753, "short": 0.0005296959991293223, "mean_occ": 0.5535446315814793}};
 const C=[
- {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",rec:true,
+ {id:"final",name:"VIAN Slope Glow",tag:"Final: Slope + Two-Tone + warm light",rec:true,amb:true,
+  idea:"Your pick. The familiar Classic Slope tower (top tilted 8° up at the back), finished in two tones, with soft warm light built in. A glowing line wraps the body where the two colours meet, the outlet rim glows, and the base throws a gentle halo on the floor. Change the colour from the app or the screen: warm, sunset, soft white, teal, rose, or let it follow air quality.",
+  change:["Rear-high 8° top (Classic Slope)","Two tones: coloured lower intake, gloss white top","Warm LED light line in the groove between tones","Glowing outlet rim + floor halo under the base","Colour and brightness from app or screen; auto-dim at night","Backlit VIAN logo"],
+  dims:"450 W × 470 D × 1,000–1,080 H mm"},
+ {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",
   idea:"The shape buyers already trust: a rounded tower with soft corners, clean air out of the top. VIAN touches: a graphite visor with a bar screen, and the VIAN logo lit from behind.",
   change:["Large soft corners (no sharp box edges)","Graphite visor holds the bar screen","Backlit VIAN logo under the screen"],
   dims:"450 W × 470 D × 1,080 H mm"},
@@ -149,6 +155,10 @@ const B={};
 const oak=new THREE.MeshStandardMaterial({color:0x6E4A2C,roughness:.5,metalness:0});
 const accent=new THREE.MeshStandardMaterial({color:0xA9D3E8,roughness:.5,metalness:.1});
 const lineMat=new THREE.MeshBasicMaterial({color:0x43D18F,toneMapped:false});
+const ambMat=new THREE.MeshBasicMaterial({color:0xFFB36B,toneMapped:false,side:THREE.DoubleSide});
+const ambHalo=new THREE.MeshBasicMaterial({color:0xFFB36B,transparent:true,opacity:.85,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false});
+const ambLights=[];const lowMat=new THREE.MeshStandardMaterial({color:0x7FA79A,roughness:.55,metalness:.08});let lowPerf=null;
+function ringShape(w,d,r,t){const s=rrect(w,d,r);s.holes.push(rrect(w-2*t,d-2*t,Math.max(4,r-t)));return s}
 function rrect(w,d,r){const s=new THREE.Shape();const x=w/2,z=d/2;s.moveTo(-x+r,-z);s.lineTo(x-r,-z);s.quadraticCurveTo(x,-z,x,-z+r);s.lineTo(x,z-r);s.quadraticCurveTo(x,z,x-r,z);s.lineTo(-x+r,z);s.quadraticCurveTo(-x,z,-x,z-r);s.lineTo(-x,-z+r);s.quadraticCurveTo(-x,-z,-x+r,-z);return s}
 function tower(o={}){const W=450,D=470,H=o.H||1080,R=95,y0=70;
   const ge=new THREE.ExtrudeGeometry(rrect(W,D,R),{depth:H-y0,bevelEnabled:true,bevelThickness:18,bevelSize:14,bevelSegments:6,steps:30,curveSegments:24});
@@ -177,6 +187,20 @@ B.wood=()=>{const g=new THREE.Group();const m=tower();g.add(m);
   const base=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(470,490,104),{depth:80,bevelEnabled:true,bevelThickness:6,bevelSize:6,bevelSegments:3,curveSegments:24}),oak);base.rotation.x=-Math.PI/2;base.position.y=0;g.add(base);
   const ring=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(476,496,104),{depth:30,bevelEnabled:true,bevelThickness:4,bevelSize:4,bevelSegments:3,curveSegments:24}),oak);ring.rotation.x=-Math.PI/2;ring.position.y=1062;g.add(ring);
   topGrille(g,1094);front(g,920,ZF);perfFront(g,370,500,ZF);return {g,inP:[[0,300,600]],outP:[[0,1900,0]]}};
+B.final=()=>{const g=new THREE.Group();const s=THREE.MathUtils.degToRad(8);
+  g.add(tower({H:600,mat:lowMat}));
+  const up=tower({slope:s});{const p=up.geometry.attributes.position;for(let i=0;i<p.count;i++){if(p.getY(i)<614)p.setY(i,614)}up.geometry.computeVertexNormals()}g.add(up);
+  /* light line in the groove between the two tones (LED strip behind an opal diffuser) */
+  const band=new THREE.Mesh(new THREE.ExtrudeGeometry(ringShape(492,512,112,20),{depth:14,bevelEnabled:false,curveSegments:32}),ambMat);band.rotation.x=-Math.PI/2;band.position.y=600;g.add(band);
+  /* glowing outlet rim */
+  const gr=topGrille(g,1080,s);const rim=new THREE.Mesh(new THREE.ShapeGeometry(ringShape(408,428,88,9),16),ambMat);rim.rotation.copy(gr.rotation);rim.position.copy(gr.position);rim.position.y+=1.5;g.add(rim);
+  /* floor halo under the base */
+  const hb=new THREE.Mesh(new THREE.ExtrudeGeometry(ringShape(470,490,104,6),{depth:5,bevelEnabled:false,curveSegments:32}),ambMat);hb.rotation.x=-Math.PI/2;hb.position.y=3;g.add(hb);
+  ambHalo.map=glowTex();const fl=new THREE.Mesh(new THREE.PlaneGeometry(1300,1300),ambHalo);fl.rotation.x=-Math.PI/2;fl.position.y=2;g.add(fl);
+  const bandGlow=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex(),color:0xFFB36B,transparent:true,opacity:.6,depthWrite:false,blending:THREE.AdditiveBlending}));bandGlow.scale.set(1100,320,1);bandGlow.position.set(0,608,0);g.add(bandGlow);
+  const pl=new THREE.PointLight(0xFFB36B,1.1,1500,1.4);pl.position.set(0,640,420);g.add(pl);ambLights.push({pl,bandGlow});
+  front(g,900,ZF);const pm=perfMat.clone();pm.color.copy(lowMat.color);lowPerf=pm;perfFront(g,330,460,ZF,pm);plinth(rrect(460,480,100),g,70);
+  return {g,inP:[[0,300,600]],outP:[[0,1900,-500],[100,1900,-400]]}};
 /* person for scale */
 const person=new THREE.Group();{const m=new THREE.MeshStandardMaterial({color:0x2a3542,roughness:.9});const b=new THREE.Mesh(new THREE.CapsuleGeometry(170,950,8,24),m);b.position.y=170+475;b.scale.z=.55;person.add(b);
   const h=new THREE.Mesh(new THREE.SphereGeometry(110,24,16),m);h.position.y=1640;person.add(h);person.position.set(-850,0,-200);person.visible=false;scene.add(person)}
@@ -191,13 +215,21 @@ function makePaths(c){paths=[];for(let k=0;k<40;k++){const a=c.inP[k%c.inP.lengt
 
 /* scene switching */
 let cur=null,curId=null;
-function show(id){if(cur)scene.remove(cur.g);lights.length=0;const c=C.find(x=>x.id===id);cur=B[id]();scene.add(cur.g);curId=id;makePaths(cur);
-  $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();try{history.replaceState(null,"","#"+id)}catch(e){}}
+function show(id){if(cur)scene.remove(cur.g);lights.length=0;ambLights.length=0;const c=C.find(x=>x.id===id);cur=B[id]();scene.add(cur.g);curId=id;makePaths(cur);
+  $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();$("#amb").hidden=!c.amb;$("#low").hidden=!c.amb;applyAmb();try{history.replaceState(null,"","#"+id)}catch(e){}}
 function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b></i><span>${v}</span></div>`}
 function renderSheet(c){const t=TUN.tower||{};
-  $("#sheet").innerHTML=`<div><div class="lbl">Design ${C.indexOf(c)+1} of 6${c.rec?" · recommended":""}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
+  $("#sheet").innerHTML=`<div><div class="lbl">${c.amb?"Final design":"Option "+C.indexOf(c)+" of 6"}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
   <div><div class="lbl" style="margin-bottom:6px">What is different from a normal tower</div><ul>${c.change.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
   <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>One 305 × 610 × 115 mm pack (₹ 3,999), right-side door</div><div>Screen</div><div>Bar touch screen in the graphite visor, eye height</div><div>Logo</div><div>Backlit VIAN, dims at night</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
+  ${c.amb?`<div><div class="lbl" style="margin-bottom:6px">Ambient light: what it is and what it costs</div>
+  <table><tr><th>Part</th><th>Spec</th><th>Landed cost</th></tr>
+  <tr><td>Groove light line</td><td>Addressable RGB + warm-white LED strip (WS2812B-class, 60/m, ~1.5 m) behind an opal PC diffuser</td><td>₹ 140–200</td></tr>
+  <tr><td>Outlet rim + base halo</td><td>Two short LED strips, frosted PC rings</td><td>₹ 70–110</td></tr>
+  <tr><td>Driver</td><td>Runs on the existing ESP32 main board, 1 extra connector</td><td>₹ 15</td></tr>
+  <tr><th colspan="2">Total added per unit</th><th>₹ 225–325</th></tr></table>
+  <ul style="margin-top:8px"><li>Power: 1.5–3 W, auto-dims to 5% at night, off in sleep mode</li><li>Colours: warm 2,700 K, sunset, soft white, teal, rose, or <b>Air quality</b> (green, amber, red)</li><li>Control: app slider, screen button, and schedule ("warm light at 7 pm")</li><li>Hospital mode: fixed calm white or off, so it never distracts staff</li></ul>
+  <p class="note" style="margin-top:8px">Wood check: real oak trim adds about ₹ 650–900 per unit (two machined parts, sealing, extra QC) and can crack or stain in humid wards. Wood-grain film on PC (in-mould decoration) looks similar for ₹ 90–150. The light line gives more premium feel per rupee than wood, so the final uses light, not wood.</p></div>`:""}
   <div><div class="lbl" style="margin-bottom:6px">Airflow (digital wind tunnel)</div>
   ${t.reach!==undefined?`<img src="img/tunnel_tower.png" alt="CFD airflow for the top-outlet tower layout" style="width:100%;border-radius:10px;border:1px solid var(--line)">
   <table><tr><th>Test</th><th>This layout</th><th>Front-grille box</th></tr>
@@ -205,7 +237,7 @@ function renderSheet(c){const t=TUN.tower||{};
   <tr><td>Stagnant air</td><td class="best">${t.stagnant.toFixed(1)}%</td><td>${TUN.box.stagnant.toFixed(1)}%</td></tr>
   <tr><td>Speed at patient</td><td class="best">${t.bed_speed.toFixed(2)} m/s (comfortable)</td><td>${TUN.box.bed_speed.toFixed(2)} m/s (draughty)</td></tr>
   <tr><td>Throw</td><td class="best">${t.throw.toFixed(1)} m</td><td>${TUN.box.throw.toFixed(1)} m</td></tr></table>`:""}
-  <p class="note">All 6 designs keep the proven top-outlet layout, so they share this airflow result. The top outlet cleans the room evenly without blowing on the patient; a front grille blows about 4× harder at the bed.</p></div>`}
+  <p class="note">All designs keep the proven top-outlet layout, so they share this airflow result. The top outlet cleans the room evenly without blowing on the patient; a front grille blows about 4× harder at the bed.</p></div>`}
 $("#picker").innerHTML=C.map((c,i)=>`<button class="pk" data-id="${c.id}" aria-pressed="false"><b>${i+1}. ${esc(c.name.replace('VIAN ',''))}</b><span>${esc(c.tag)}</span>${c.rec?'<span class="rec">RECOMMENDED</span>':""}</button>`).join("");
 $$(".pk").forEach(b=>b.onclick=()=>show(b.dataset.id));
 
@@ -214,6 +246,11 @@ let spin=true,lightOn=true;
 function applyLight(){lights.forEach(l=>l.visible=lightOn)}
 $$("#tg button").forEach(b=>b.onclick=()=>{const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);const t=b.dataset.t;
   if(t==="air")pts.visible=on;if(t==="light"){lightOn=on;applyLight()}if(t==="spin")spin=on;if(t==="person")person.visible=on});
+let ambSel="0xFFB36B";const AQ=[0x43D18F,0xF2B33D,0xFF5A4F];
+function applyAmb(){const off=ambSel==="off";const col=ambSel==="aq"?AQ[0]:(off?0:+ambSel);if(!off){ambMat.color.setHex(col);ambHalo.color.setHex(col)}
+  ambMat.visible=!off;ambHalo.visible=!off;ambLights.forEach(a=>{a.pl.visible=!off;a.bandGlow.visible=!off;if(!off){a.pl.color.setHex(col);a.bandGlow.material.color.setHex(col)}})}
+$$("#low button").forEach(b=>b.onclick=()=>{$$("#low button").forEach(x=>x.setAttribute("aria-pressed",x===b));lowMat.color.setHex(+b.dataset.l);if(lowPerf)lowPerf.color.setHex(+b.dataset.l)});
+$$("#amb button").forEach(b=>b.onclick=()=>{$$("#amb button").forEach(x=>x.setAttribute("aria-pressed",x===b));ambSel=b.dataset.a;applyAmb()});
 $$("#fin button").forEach(b=>b.onclick=()=>{$$("#fin button").forEach(x=>x.setAttribute("aria-pressed",x===b));body.color.setHex(+b.dataset.f);perfMat.color.setHex(+b.dataset.f)});
 
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<1?50:32;camera.updateProjectionMatrix()}
@@ -224,10 +261,10 @@ function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.
   if(pts.visible){for(let i=0;i<PN;i++){const q=parts[i];q.t+=dt*.18;if(q.t>=1){q.t=0;q.p=Math.floor(Math.random()*40)}const v=paths[q.p][Math.min(200,Math.floor(q.t*200))];
     const ang=cur?cur.g.rotation.y:0,ca=Math.cos(ang),sa=Math.sin(ang);pa[i*3]=v.x*ca+v.z*sa;pa[i*3+1]=v.y;pa[i*3+2]=-v.x*sa+v.z*ca;const c=q.t<.45?D:K;pc[i*3]=c.r;pc[i*3+1]=c.g;pc[i*3+2]=c.b}
     pg.attributes.position.needsUpdate=true;pg.attributes.color.needsUpdate=true}
-  const pulse=.85+.15*Math.sin(now/600);lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
+  const pulse=.85+.15*Math.sin(now/600);if(ambSel==="aq"&&ambMat.visible){const k=Math.floor(now/2500)%3;ambMat.color.setHex(AQ[k]);ambHalo.color.setHex(AQ[k]);ambLights.forEach(a=>{a.pl.color.setHex(AQ[k]);a.bandGlow.material.color.setHex(AQ[k])})}lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
   controls.update();renderer.render(scene,camera)}
 function loop(n){tick(n);requestAnimationFrame(loop)}
-const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"classic");requestAnimationFrame(loop);
+const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"final");requestAnimationFrame(loop);
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(C.some(c=>c.id===h)&&h!==curId)show(h)});
 window.VIAN={show,frames:(n=60)=>{let t=last;for(let i=0;i<n;i++){t+=16.7;tick(t)}},shot:n=>fetch("/save/"+n,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),setSpin:v=>{spin=v}};
 })();
