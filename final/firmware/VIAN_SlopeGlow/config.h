@@ -34,13 +34,14 @@
 #define PIN_LED_GROOVE 38   // CH1 groove light line, 96 LEDs
 #define PIN_LED_RING   39   // CH2 pop-up running ring, 84 LEDs
 #define PIN_LED_BASE   40   // CH3 base halo, 36 LEDs
-#define PIN_LED_FRONT  41   // CH4 display backlight (8) then VIAN logo (12) = 20 LEDs
-// HT1622 segment LCD driver on display board (3-wire)
-#define PIN_HT_CS      42
-#define PIN_HT_WR      47
-#define PIN_HT_DATA    48
-// Touch controller AT42QT1070 change line (open drain, low = key change)
-#define PIN_QT_CHANGE  6
+#define PIN_LED_FRONT  41   // CH4 VIAN logo, 12 LEDs (through the display board)
+// Outside display: 4.0" IPS ST7796S on SPI2 + FT6336U touch on I2C0 (0x38). LCD/touch reset = ESP_EN.
+#define PIN_LCD_CS     42
+#define PIN_LCD_SCK    47
+#define PIN_LCD_MOSI   48
+#define PIN_LCD_DC     45   // strapping pin, 10 k pull-down on the main board
+#define PIN_LCD_BL     43   // backlight PWM
+#define PIN_TP_INT     6    // touch interrupt, low = touch
 // Safety inputs
 #define PIN_DOOR       35   // reed switch on front intake panel, low = panel closed
 #define PIN_FILTER     36   // DRV5032 hall sensor, low = magnet in filter frame present
@@ -53,9 +54,8 @@
 #define N_GROOVE 96
 #define N_RING   84
 #define N_BASE   36
-#define N_DISP_BL 8
 #define N_LOGO   12
-#define N_FRONT  (N_DISP_BL + N_LOGO)
+#define N_FRONT  N_LOGO
 // Global LED current cap: 5 V LED rail is 3 A. Firmware limits average brightness.
 #define LED_MAX_BRIGHT 64   // of 255, about 25 % -> worst case ~2.5 A all channels white
 
@@ -81,9 +81,13 @@
 // ---------- Safety ----------
 #define TILT_LIMIT_DEG 35.0f
 
-// ---------- Filter life ----------
-#define FILTER_CAPACITY_G 60.0f   // HC-360 dust holding to end of life (lab value to confirm)
-#define FILTER_POWER_RISE 0.25f   // +25 % fan power at same speed -> change filter
+// ---------- Filters (3 stages) ----------
+#define HEPA_CAPACITY_G   920.0f   // LifeHEPA LF-5: 23 m2 x 40 g/m2 (confirm with lab dust-loading test)
+#define HEPA_MAX_HOURS    21900.0f // 5 years x 12 h/day hygiene limit
+#define FILTER_POWER_RISE 0.25f    // +25 % fan power at Turbo -> HEPA end of life
+#define ODOUR_MAX_HOURS   4380.0f  // OdourCore OC-12: 12 months x 12 h/day
+#define ODOUR_VOC_DOSE    2.0e6f   // VOC-index-above-100 x seconds that saturates the carbon (lab value)
+#define DEBRIS_WASH_DAYS  21       // DebrisGuard rinse reminder
 
 // ---------- Wi-Fi ----------
 #define AP_PREFIX "VIAN-"

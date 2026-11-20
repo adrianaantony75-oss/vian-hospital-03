@@ -5,9 +5,10 @@ Sensors,"SHT40, SGP41, LIS2DH12, INA226, VEML7700, QT1070 answer on I2C; PMS5003
 Fan,Sleep / Auto / Turbo: RPM within +/- 8 % of the golden unit; Turbo power <= 55 W,Within limits
 Lift,Homes in < 15 s; reaches 15 / 30 / 46 mm; stall test with 2 kg block reverses 5 mm,"Moves, anti-pinch works"
 Lights,Each channel white / red / green / blue / warm; LED count check by camera,No dead LEDs
-Display,"All 160 segments on (test pattern), then off: window looks plain white",No missing segments
-Touch,"Power, Mode, Light respond through the plastic; 5 s Mode = filter reset beep",All 3 keys
+Display,"Colour bars + white + black test screens; check dead pixels, backlight 0-100 %","No dead pixels, even backlight"
+Touch,Tap the 4 corners and the 4 on-screen buttons; hold Filter 5 s = filter reset beep,All points respond
 Safety,Remove front panel: fan stops < 1 s; remove filter: fan stays off; tilt 40 deg: off + beep,All 3 interlocks
-Air leak,Smoke pen around filter seal at Turbo: no bypass,No leak
+Air leak,Smoke pen around LifeHEPA top gasket at Turbo: no bypass,No leak
+Filter pressure,dP across LifeHEPA + OdourCore at 700 m3/h <= 150 Pa (golden filter),Within limit
 Noise,"Sleep <= 28 dB(A), Turbo <= 55 dB(A) at 1 m (sample 1 in 50)",Within limits
 Hi-pot / earth,Adapter is certified; check earth continuity lift plate to GND < 0.5 ohm,Pass

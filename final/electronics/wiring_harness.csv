@@ -3,8 +3,8 @@ W1,DC jack (rear base),MB J1,"2: VIN_RAW, GND",18 AWG,650,Panel jack solder lugs
 W2,MB J2,EC fan,"4: 24V, GND, PWM, FG",20 AWG power / 26 AWG signal,350,JST XHP-4 + SXH-001T-P0.6,Fan maker connector,Keep away from LED data wires
 W3,MB J3,Lift stepper,"4: A1, A2, B1, B2",26 AWG,450,JST PHR-4 + SPH-002T-P0.5S,Motor pigtail,"Fixed run, no flex"
 W4,MB J4,Home switch,"2: HOME, GND",26 AWG,450,JST PHR-2,Faston 2.8 / solder,
-W5,MB J5,DB J1,12: see pinout,28 AWG,300,JST PHR-12,JST PHR-12,Twist I2C pair with GND
-W6,DB J2,LB J1,"3: 5V, DATA, GND",26 AWG,160,JST PHR-3,JST PHR-3,
+W5,MB J5,DB J1,"14: see pinout (SPI display, touch, backlight, logo data)",28 AWG,300,JST PHR-14,JST PHR-14,Keep SPI lines < 300 mm; twist I2C pair with GND
+W6,DB J3,LB J1,"3: 5V, DATA, GND",26 AWG,160,JST PHR-3,JST PHR-3,
 W7,MB J6,Groove strip (96 LEDs),"3: 5V, DATA, GND",22 AWG,300,JST XHP-3,JST SM 3-pin (strip pigtail),"Inject 5 V also at strip end (W7b, 22 AWG, 1.6 m loop)"
 W8,MB J7,Pop-up ring RB J1,"4: 5V, DATA, GND, GND","22 AWG silicone, high-flex",700,JST XHP-4,JST XHP-4,"150 mm coiled service loop for 46 mm lift; rated 100,000 cycles"
 W9,MB J8,Base halo strip (36 LEDs),"3: 5V, DATA, GND",22 AWG,900,JST XHP-3,JST SM 3-pin,Down the rear cable channel

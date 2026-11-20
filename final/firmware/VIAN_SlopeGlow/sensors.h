@@ -1,4 +1,4 @@
-// Sensor drivers for VIAN Slope Glow: PMS5003, SHT40, SGP41, LIS2DH12, INA226, VEML7700, AT42QT1070
+// Sensor drivers for VIAN Slope Glow: PMS5003, SHT40, SGP41, LIS2DH12, INA226, VEML7700 (touch is in display.h)
 #pragma once
 #include <Arduino.h>
 #include <Wire.h>
@@ -91,6 +91,3 @@ static float inaWatts() { uint8_t b[2]; if (!i2cRead(busMain, 0x40, 0x03, b, 2))
 static bool vemlBegin() { busMain.beginTransmission(0x10); busMain.write(0x00); busMain.write(0x00); busMain.write(0x00); return busMain.endTransmission() == 0; }
 static float vemlLux() { uint8_t b[2]; busMain.beginTransmission(0x10); busMain.write(0x04); if (busMain.endTransmission(false)) return -1;
   if (busMain.requestFrom((uint8_t)0x10, (uint8_t)2) != 2) return -1; b[0] = busMain.read(); b[1] = busMain.read(); return (b[0] | b[1] << 8) * 0.0576f; }
-
-// ---------- AT42QT1070 touch (I2C0, 0x1B): key0 Power, key1 Mode, key2 Light ----------
-static uint8_t qtKeys() { uint8_t s[2]; if (!i2cRead(busMain, 0x1B, 2, s, 2)) return 0; return s[1]; }  // reg2 detection status, reg3 key status

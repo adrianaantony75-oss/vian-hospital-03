@@ -1,0 +1,13 @@
+﻿Item,Specification
+System,"3 stages, like the best long-life purifiers: DebrisGuard (washable debris catcher) -> LifeHEPA 5-year H13 -> OdourCore carbon"
+Stage 1 DebrisGuard DG-360,"4 magnetic washable panels of 60-mesh (250 um) PET mesh around the filter. Catches hair, lint, pet fur, coarse dust so they never reach the HEPA. Rinse under a tap every 2-4 weeks, dry 2 h. Lifetime part; spare set INR 499"
+Stage 2 LifeHEPA LF-5,"H13 (99.95 % at MPPS, EN 1822) glass-fibre mini-pleat, 60 mm deep, 4 mm pitch, 400 x 400 x 480 mm square tube. Media area 23 m2 (about 20 x a normal flat HEPA). Retail INR 5,999, about every 5 years"
+Stage 3 OdourCore OC-12,"1.4 kg coconut-shell activated carbon + MnO2 catalyst (formaldehyde) in a sleeve inside the HEPA. Retail INR 799, about every 12 months (gas load decides)"
+Air speed through HEPA media,"700 m3/h / 23 m2 = 0.85 cm/s (normal HEPA: 3-5 cm/s), so pressure drop is low (~80 Pa new) and the fan stays quiet"
+Initial pressure drop,DebrisGuard ~5 Pa + LifeHEPA ~80 Pa + OdourCore ~50 Pa = ~135 Pa at 700 m3/h
+End of life,When fan power at Turbo rises 25 % (EC fan holds airflow) or CADR would fall below 80 % - stricter than the common 50 % CADR rule
+Dust capacity,23 m2 x 40 g/m2 (conservative H13 holding to end of life) = about 920 g
+Rating condition (like Shark's 5-year claim),"28 m2 room, 12 h/day, 3 air changes/h leakage (typical Indian home), city annual PM10 up to 180 ug/m3"
+Life tracking,Firmware counts real dust (PM sensor x airflow) and fan-power rise; app shows % left and the date it expects to need a change
+5-year cost,"LifeHEPA 1 x 5,999 + OdourCore 4 x 799 = INR 9,195 (vs INR 3,999 x 5 = 19,995 for a yearly filter)"
+Landed cost estimate,"DebrisGuard set INR 180-260; LifeHEPA INR 2,600-4,200; OdourCore INR 320-450"

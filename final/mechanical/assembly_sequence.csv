@@ -3,11 +3,11 @@
 2,Fan deck P10: fit fan M01 with 4 rubber grommets and M4 screws; fit grommet G1; stick PU foam gasket on the filter seal ring.
 3,Lower sleeve P01: screw rear U-part to base (K30 x 8); fit sensor board SB + PMS5003 on the intake side; fit filter hall sensor at the tray corner; fit filter tray rails P17.
 4,"Fit fan deck P10 on top of P01; route W9, W10, W13 up through the rear channel and G1."
-5,Upper shell P03: fit display board DB + light guide P14 (reflector behind) behind the display window; fit logo board LB + P15 behind the logo window; fit main board MB at rear with USB-C aligned to the service window.
+5,"Upper shell P03: fit display module + cover glass P14 into bezel P18, clip into the display opening, plug display board DB onto the module; fit logo board LB + P15 behind the logo window; fit main board MB at rear with USB-C aligned to the service window."
 6,"Fit fan scroll P11; fit lift actuator M02, guide rods P09 with bushings, home switch M03; fit lift plate P08 and earth wire G."
 7,Fit flex ring RB inside skirt P07; slide P07 into the top of P03; connect W8 with the coiled service loop.
 8,Fit groove diffuser P04 with strip M06 between P01 and P03; lower P03 onto P01 and screw (K30 x 8 from inside the filter bay).
 9,Connect all harness wires (W1-W13) to MB; cable-tie every 100 mm; keep LED data away from fan wires.
 10,Fit pop-up cap P05 + grille P06 to the lift plate (M3 x 6 into inserts).
-11,Insert filter F01 with pre-filter F02 on the tray; fit front intake panel P02 (magnets).
+11,"Slide OdourCore F03 into LifeHEPA F02, put F02 on the tray, clip the 4 DebrisGuard F01 panels around it; fit front intake panel P02 (magnets)."
 12,Flash firmware over USB-C; run end-of-line test; fit P16 cover and rating label.
