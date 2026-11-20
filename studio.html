@@ -67,7 +67,8 @@ td.best{color:var(--accent);font-weight:800}
     <div class="toolbar">
       <div class="tb" id="tg"><button data-t="air" aria-pressed="true">Airflow</button><button data-t="light" aria-pressed="true">Logo light</button><button data-t="spin" aria-pressed="true">Turntable</button><button data-t="person" aria-pressed="false">Person for scale</button></div>
       <div class="tb" id="amb" aria-label="Ambient light colour"><button data-a="0xFFB36B" aria-pressed="true">Warm</button><button data-a="0xFF7A45" aria-pressed="false">Sunset</button><button data-a="0xFFF0DA" aria-pressed="false">Soft white</button><button data-a="0x4FE3D0" aria-pressed="false">Calm teal</button><button data-a="0xFF7FB0" aria-pressed="false">Rose</button><button data-a="aq" aria-pressed="false">Air quality</button><button data-a="off" aria-pressed="false">Off</button></div>
-      <div class="tb" id="fx" aria-label="Light effect and pop-up top"><button data-x="pop" aria-pressed="true">Pop-up top</button><button data-x="run" aria-pressed="true">Running</button><button data-x="steady" aria-pressed="false">Steady</button><button data-x="breathe" aria-pressed="false">Breathing</button></div>
+      <div class="tb" id="fx" aria-label="Light effect and pop-up top"><button data-m="0" aria-pressed="false">Off</button><button data-m="15" aria-pressed="false">Sleep</button><button data-m="30" aria-pressed="true">Auto</button><button data-m="46" aria-pressed="false">Turbo</button></div>
+      <div class="tb" id="fx2" aria-label="Light effect"><button data-x="run" aria-pressed="true">Running</button><button data-x="steady" aria-pressed="false">Steady</button><button data-x="breathe" aria-pressed="false">Breathing</button></div>
       <div class="tb" id="low" aria-label="Lower tone"><button class="sw" data-l="0x7FA79A" aria-pressed="true" style="background:#7FA79A" aria-label="Sage"></button><button class="sw" data-l="0xB89E7C" aria-pressed="false" style="background:#B89E7C" aria-label="Sand"></button><button class="sw" data-l="0x9FBFD6" aria-pressed="false" style="background:#9FBFD6" aria-label="Ice blue"></button><button class="sw" data-l="0x3A3F45" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
       <div class="tb" id="fin"><button class="sw" data-f="0xE3E7EB" aria-pressed="true" style="background:#E3E7EB" aria-label="Silver-white"></button><button class="sw" data-f="0xD3E5F0" aria-pressed="false" style="background:#D3E5F0" aria-label="Ice blue"></button><button class="sw" data-f="0xACD9CE" aria-pressed="false" style="background:#ACD9CE" aria-label="Sea-glass teal"></button><button class="sw" data-f="0x3A3F45" aria-pressed="false" style="background:#3A3F45" aria-label="Graphite"></button></div>
     </div>
@@ -86,7 +87,7 @@ const TUN = {"tower": {"reach": 72.85426629750819, "stagnant": 4.631261011829851
 const C=[
  {id:"final",name:"VIAN Slope Glow",tag:"Final: 360° intake · pop-up glowing top",rec:true,amb:true,
   idea:"Your pick, now with air drawn in from all sides. The whole lower section is perforated all round, so it cleans from every direction (360°) and can stand anywhere, even against a wall. When you switch it on, the top pops up 45 mm. Clean air leaves through that 360° gap and the top grille, and inside the gap a ring of light runs round, breathes, or stays steady. When you switch it off, the top closes so no dust gets into the fan.",
-  change:["360° perforated intake all round the lower section","Pop-up top: lifts 45 mm when on, closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","Hidden display behind the white body: plain surface when off, only the glowing text shows when on","Front VIAN logo below the display, lit in the same colour as the light strip","Rear-high 8° top (Classic Slope)"],
+  change:["360° perforated intake all round the lower section","Pop-up top follows fan speed: Sleep 15 mm, Auto 30 mm, Turbo 46 mm; closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","Hidden display behind the white body: plain surface when off, only the glowing text shows when on","Front VIAN logo below the display, lit in the same colour as the light strip","Rear-high 8° top (Classic Slope)"],
   dims:"450 W × 470 D × 1,000–1,080 H mm"},
  {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",
   idea:"The shape buyers already trust: a rounded tower with soft corners, clean air out of the top. VIAN touches: a graphite visor with a bar screen, and the VIAN logo lit from behind.",
@@ -213,9 +214,9 @@ B.final=()=>{const g=new THREE.Group();const s=THREE.MathUtils.degToRad(8);
   const pl=new THREE.PointLight(0xFFB36B,1.1,1500,1.4);pl.position.set(0,640,420);g.add(pl);ambLights.push({pl,bandGlow:capGlow},{pl:new THREE.PointLight(0,0),bandGlow});
   frontFinal(g);plinth(rrect(460,480,100),g,70);
   return {g,inP:[[620,300,0],[-620,300,0],[0,300,620],[0,300,-620]],outP:[[0,1900,-300],[620,1250,0],[-620,1250,0],[0,1250,-620],[0,1900,0]]}};
-let capRef=null,popOn=true,popCur=0,fxMode="run";
+let capRef=null,popT=30,popCur=0,fxMode="run";
 function updCap(dt,now){if(!capRef||curId!=="final"){return}
-  popCur+=((popOn?46:0)-popCur)*Math.min(1,dt*3);const h=Math.max(.01,popCur);
+  popCur+=(popT-popCur)*Math.min(1,dt*1.2);const h=Math.max(.01,popCur);
   capRef.core.scale.z=h;capRef.slab.position.z=popCur;capRef.gril.position.z=popCur+28+1;
   const off=!ambMat.visible,show=!off&&popCur>3;const base=ambMat.color,N=capRef.segs.length,t=now/1000;
   capRef.segs.forEach((m,i)=>{m.visible=show;if(!show)return;m.scale.z=Math.max(1,popCur-8);m.position.z=popCur/2;
@@ -262,7 +263,7 @@ function makePaths(c){paths=[];for(let k=0;k<40;k++){const a=c.inP[k%c.inP.lengt
 /* scene switching */
 let cur=null,curId=null;
 function show(id){if(cur)scene.remove(cur.g);lights.length=0;ambLights.length=0;const c=C.find(x=>x.id===id);cur=B[id]();scene.add(cur.g);curId=id;makePaths(cur);
-  $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();$("#amb").hidden=!c.amb;$("#low").hidden=!c.amb;$("#fx").hidden=!c.amb;if(id==="final")popCur=0;applyAmb();try{history.replaceState(null,"","#"+id)}catch(e){}}
+  $$(".pk").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));renderSheet(c);applyLight();$("#amb").hidden=!c.amb;$("#low").hidden=!c.amb;$("#fx").hidden=!c.amb;$("#fx2").hidden=!c.amb;if(id==="final")popCur=0;applyAmb();try{history.replaceState(null,"","#"+id)}catch(e){}}
 function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b></i><span>${v}</span></div>`}
 function renderSheet(c){const t=TUN.tower||{};
   $("#sheet").innerHTML=`<div><div class="lbl">${c.amb?"Final design":"Option "+C.indexOf(c)+" of 6"}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
@@ -272,7 +273,7 @@ function renderSheet(c){const t=TUN.tower||{};
   <table><tr><th>Part</th><th>Spec</th><th>Landed cost</th></tr>
   <tr><td>Groove light line</td><td>Addressable RGB + warm-white LED strip (WS2812B-class, 60/m, ~1.5 m) behind an opal PC diffuser</td><td>₹ 140–200</td></tr>
   <tr><td>Pop-up running ring</td><td>Addressable LED ring (84 LEDs) behind a frosted PC skirt, chase / breathe effects</td><td>₹ 90–140</td></tr>
-  <tr><td>Pop-up lift</td><td>Small geared DC motor + lead screw, 2 end switches, closes on power-off and on tip-over</td><td>₹ 260–420</td></tr>
+  <tr><td>Pop-up lift</td><td>Small stepper motor + lead screw, 3 fixed heights tied to fan mode, slow quiet move, anti-pinch stall reverse, closes on power-off and tip-over</td><td>₹ 260–420</td></tr>
   <tr><td>Base halo</td><td>Short LED strip, frosted ring</td><td>₹ 40–60</td></tr>
   <tr><td>360° intake</td><td>Perforated lower shell all round (same mould, more holes)</td><td>₹ 60–120</td></tr>
   <tr><td>Driver</td><td>Runs on the existing ESP32 main board, 1 extra connector</td><td>₹ 15</td></tr>
@@ -319,8 +320,8 @@ $$("#tg button").forEach(b=>b.onclick=()=>{const on=b.getAttribute("aria-pressed
 let ambSel="0xFFB36B";const AQ=[0x43D18F,0xF2B33D,0xFF5A4F];
 function applyAmb(){const off=ambSel==="off";const col=ambSel==="aq"?AQ[0]:(off?0:+ambSel);tint(off?0x9AA7B4:(col===0xFFF0DA?0xE3A55A:col));if(!off){ambMat.color.setHex(col);ambHalo.color.setHex(col)}
   ambMat.visible=!off;ambHalo.visible=!off;ambLights.forEach(a=>{a.pl.visible=!off;a.bandGlow.visible=!off;if(!off){a.pl.color.setHex(col);a.bandGlow.material.color.setHex(col)}})}
-$$("#fx button").forEach(b=>b.onclick=()=>{const x=b.dataset.x;if(x==="pop"){popOn=!popOn;b.setAttribute("aria-pressed",popOn);return}
-  fxMode=x;$$("#fx button").forEach(y=>{if(y.dataset.x!=="pop")y.setAttribute("aria-pressed",y.dataset.x===x)})});
+$$("#fx button").forEach(b=>b.onclick=()=>{popT=+b.dataset.m;$$("#fx button").forEach(y=>y.setAttribute("aria-pressed",y===b))});
+$$("#fx2 button").forEach(b=>b.onclick=()=>{fxMode=b.dataset.x;$$("#fx2 button").forEach(y=>y.setAttribute("aria-pressed",y===b))});
 $$("#low button").forEach(b=>b.onclick=()=>{$$("#low button").forEach(x=>x.setAttribute("aria-pressed",x===b));lowMat.color.setHex(+b.dataset.l);lowMat.needsUpdate=true});
 $$("#amb button").forEach(b=>b.onclick=()=>{$$("#amb button").forEach(x=>x.setAttribute("aria-pressed",x===b));ambSel=b.dataset.a;applyAmb()});
 $$("#fin button").forEach(b=>b.onclick=()=>{$$("#fin button").forEach(x=>x.setAttribute("aria-pressed",x===b));body.color.setHex(+b.dataset.f);perfMat.color.setHex(+b.dataset.f)});
@@ -338,7 +339,7 @@ function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.
 function loop(n){tick(n);requestAnimationFrame(loop)}
 const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"final");requestAnimationFrame(loop);
 window.addEventListener("hashchange",()=>{const h=location.hash.slice(1);if(C.some(c=>c.id===h)&&h!==curId)show(h)});
-window.VIAN={cam:(x,y,z,ty)=>{camera.position.set(x,y,z);controls.target.set(0,ty,0)},show,pop:v=>{popOn=v},fx:v=>{fxMode=v},frames:(n=60)=>{let t=last;for(let i=0;i<n;i++){t+=16.7;tick(t)}},shot:n=>fetch("/save/"+n,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),setSpin:v=>{spin=v}};
+window.VIAN={cam:(x,y,z,ty)=>{camera.position.set(x,y,z);controls.target.set(0,ty,0)},show,pop:v=>{popT=v},fx:v=>{fxMode=v},frames:(n=60)=>{let t=last;for(let i=0;i<n;i++){t+=16.7;tick(t)}},shot:n=>fetch("/save/"+n,{method:"POST",body:canvas.toDataURL("image/png")}).then(r=>r.text()),setSpin:v=>{spin=v}};
 })();
 </script>
 
