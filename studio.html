@@ -57,7 +57,7 @@ td.best{color:var(--accent);font-weight:800}
 <div class="app">
   <header>
     <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
-    <div class="ttl"><b>VIAN Design Studio · final pick: Slope Glow</b><span>360° intake · pop-up light top · dead-front display · VIAN logo lit on all 4 sides</span></div>
+    <div class="ttl"><b>VIAN Design Studio · final pick: Slope Glow</b><span>360° intake · pop-up light top · hidden display · front VIAN logo in your light colour</span></div>
     <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">Hospital engineering model</a></div>
   </header>
   <div class="picker" id="picker"></div>
@@ -86,7 +86,7 @@ const TUN = {"tower": {"reach": 72.85426629750819, "stagnant": 4.631261011829851
 const C=[
  {id:"final",name:"VIAN Slope Glow",tag:"Final: 360° intake · pop-up glowing top",rec:true,amb:true,
   idea:"Your pick, now with air drawn in from all sides. The whole lower section is perforated all round, so it cleans from every direction (360°) and can stand anywhere, even against a wall. When you switch it on, the top pops up 45 mm. Clean air leaves through that 360° gap and the top grille, and inside the gap a ring of light runs round, breathes, or stays steady. When you switch it off, the top closes so no dust gets into the fan.",
-  change:["360° perforated intake all round the lower section","Pop-up top: lifts 45 mm when on, closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","Dead-front smoked-glass display: invisible when off, glowing numbers when on","VIAN logo separate from the screen, lit on all 4 sides so it glows from anywhere","Rear-high 8° top (Classic Slope)"],
+  change:["360° perforated intake all round the lower section","Pop-up top: lifts 45 mm when on, closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","Hidden display behind the white body: plain surface when off, only the glowing text shows when on","Front VIAN logo below the display, lit in the same colour as the light strip","Rear-high 8° top (Classic Slope)"],
   dims:"450 W × 470 D × 1,000–1,080 H mm"},
  {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",
   idea:"The shape buyers already trust: a rounded tower with soft corners, clean air out of the top. VIAN touches: a graphite visor with a bar screen, and the VIAN logo lit from behind.",
@@ -224,25 +224,27 @@ function updCap(dt,now){if(!capRef||curId!=="final"){return}
     m.material.color.copy(base).multiplyScalar(b)});
   capRef.capGlow.visible=show;capRef.capGlow.material.opacity=.5*Math.min(1,popCur/46)*(fxMode==="breathe"?.5+.5*Math.sin(t*1.6):1)}
 /* final display: dead-front smoked glass, invisible when off; bar IPS screen behind it */
-function screenHome(w,h,parent){const c=document.createElement("canvas");c.width=1024;c.height=Math.round(1024*h/w);const g=c.getContext("2d");g.fillStyle="#040608";g.fillRect(0,0,c.width,c.height);
-  const s=c.height/320,cy=c.height/2;
-  g.strokeStyle="#43D18F";g.lineWidth=10*s;g.beginPath();g.arc(150*s,cy,95*s,Math.PI*.75,Math.PI*2.25*0.92+Math.PI*.08);g.stroke();
-  g.fillStyle="#E9F2F8";g.font=`300 ${96*s}px Manrope, sans-serif`;g.textAlign="center";g.fillText("24",150*s,cy+30*s);g.font=`700 ${22*s}px Manrope`;g.fillStyle="#43D18F";g.fillText("AQI GOOD",150*s,cy+80*s);
-  g.textAlign="left";const cell=(x,v,u,l)=>{g.fillStyle="#E9F2F8";g.font=`300 ${70*s}px Manrope, sans-serif`;g.fillText(v,x*s,cy+14*s);const ww=g.measureText(v).width;g.font=`500 ${24*s}px Manrope`;g.fillStyle="#91A2B4";g.fillText(u,x*s+ww+8,cy+14*s);g.font=`700 ${19*s}px Manrope`;g.fillStyle="#5E6F82";g.fillText(l,x*s,cy+56*s)};
-  cell(300,"8","µg/m³","PM2.5");cell(560,"46","%","HUMIDITY");cell(790,"AUTO","","MODE · 28 dB");
-  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,toneMapped:false}));parent.add(m);return m}
-const logoMat=new THREE.MeshBasicMaterial({color:0x22C7DD,toneMapped:false});
-const smoked=new THREE.MeshStandardMaterial({color:0x07090c,metalness:.6,roughness:.08,envMapIntensity:1.2});
+/* hidden-till-lit display: LEDs/LCD sit behind a thinned, translucent window in the white body.
+   Off = plain white surface. On = only the text glows through, in the light-strip colour. */
+function screenHome(w,h,parent,mat){const c=document.createElement("canvas");c.width=1024;c.height=Math.round(1024*h/w);const g=c.getContext("2d");g.clearRect(0,0,c.width,c.height);
+  const s=c.height/320,cy=c.height/2;g.fillStyle="#fff";g.strokeStyle="#fff";
+  g.lineWidth=9*s;g.beginPath();g.arc(150*s,cy,100*s,Math.PI*.7,Math.PI*2.3);g.stroke();
+  g.font=`500 ${100*s}px Manrope, sans-serif`;g.textAlign="center";g.fillText("24",150*s,cy+34*s);g.font=`800 ${21*s}px Manrope`;g.fillText("AQI GOOD",150*s,cy+82*s);
+  g.textAlign="left";const cell=(x,v,u,l)=>{g.font=`500 ${74*s}px Manrope, sans-serif`;g.fillText(v,x*s,cy+16*s);const ww=g.measureText(v).width;g.font=`600 ${26*s}px Manrope`;g.fillText(u,x*s+ww+8,cy+16*s);g.font=`800 ${20*s}px Manrope`;g.fillText(l,x*s,cy+60*s)};
+  cell(300,"8","µg/m³","PM2.5");cell(540,"46","%","HUMIDITY");cell(755,"AUTO","","28 dB");
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;mat.map=t;mat.needsUpdate=true;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),mat);parent.add(m);return m}
+const logoMat=new THREE.MeshBasicMaterial({color:0xFFB36B,toneMapped:false});
+const dispMat=new THREE.MeshBasicMaterial({color:0xFFB36B,transparent:true,depthWrite:false,toneMapped:false});
+const logoHalo=new THREE.MeshBasicMaterial({color:0xFFB36B,transparent:true,opacity:.22,depthWrite:false,blending:THREE.AdditiveBlending});
+function tint(col){[logoMat,dispMat,logoHalo].forEach(m=>m.color.setHex(col))}
 function frontFinal(g){
-  /* one piece of smoked glass, rounded, flush with the front; the screen shines through it */
-  const gl=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(250,96,30),{depth:3,bevelEnabled:true,bevelThickness:1.5,bevelSize:1.5,bevelSegments:2,curveSegments:12}),smoked);gl.position.set(0,925,ZF-1);g.add(gl);
-  const sc=screenHome(214,72,g);sc.position.set(0,925,ZF+5);
-  /* VIAN logo: separate from the screen, below it, lit on all four sides so it reads from anywhere in the room */
-  const y=790,faces=[[0,ZF+1,0],[239+1,0,Math.PI/2],[0,-(ZF+1),Math.PI],[-(239+1),0,-Math.PI/2]];
+  const sc=screenHome(230,78,g,dispMat);sc.position.set(0,925,ZF+1.2);
+  /* VIAN logo: front only, below the screen, lit in the same colour as the light strip */
+  const y=800,faces=[[0,ZF+1,0]];
   faces.forEach(([x,z,ry])=>{const lg=new THREE.Group();const h=34,r=h*.11;
     LOGO.forEach(st=>{for(let i=0;i<st.length-1;i++){const a=new THREE.Vector3((st[i][0]-1.475)*h,(st[i][1]-.5)*h,0),b=new THREE.Vector3((st[i+1][0]-1.475)*h,(st[i+1][1]-.5)*h,0);
       const len=a.distanceTo(b);const m=new THREE.Mesh(new THREE.BoxGeometry(len+r,r,1.5),logoMat);m.position.copy(a).add(b).multiplyScalar(.5);m.rotation.z=Math.atan2(b.y-a.y,b.x-a.x);lg.add(m)}});
-    const hal=new THREE.Mesh(new THREE.PlaneGeometry(h*4.2,h*2),new THREE.MeshBasicMaterial({map:glowTex(),color:0x3FD3E6,transparent:true,opacity:.22,depthWrite:false,blending:THREE.AdditiveBlending}));hal.position.z=-.5;lg.add(hal);
+    if(!logoHalo.map)logoHalo.map=glowTex();const hal=new THREE.Mesh(new THREE.PlaneGeometry(h*4.2,h*2),logoHalo);hal.position.z=-.5;lg.add(hal);
     lg.position.set(x,y,z);lg.rotation.y=ry;g.add(lg);lights.push(lg)});
 }
 /* person for scale */
@@ -265,7 +267,7 @@ function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b
 function renderSheet(c){const t=TUN.tower||{};
   $("#sheet").innerHTML=`<div><div class="lbl">${c.amb?"Final design":"Option "+C.indexOf(c)+" of 6"}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
   <div><div class="lbl" style="margin-bottom:6px">What is different from a normal tower</div><ul>${c.change.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>One 305 × 610 × 115 mm pack (₹ 3,999), right-side door</div><div>Screen</div><div>${c.amb?"3.5-inch bar IPS touch screen behind smoked dead-front glass, front, eye height":"Bar touch screen in the graphite visor, eye height"}</div><div>Logo</div><div>${c.amb?"Lit VIAN on all 4 sides, below the screen, dims at night":"Backlit VIAN, dims at night"}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
+  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>One 305 × 610 × 115 mm pack (₹ 3,999), right-side door</div><div>Screen</div><div>${c.amb?"Hidden-till-lit display behind the white body, front, eye height, touch through the plastic":"Bar touch screen in the graphite visor, eye height"}</div><div>Logo</div><div>${c.amb?"Front only, below the display, same colour as the light strip, dims at night":"Backlit VIAN, dims at night"}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
   ${c.amb?`<div><div class="lbl" style="margin-bottom:6px">360° intake, pop-up top and light: what they cost</div>
   <table><tr><th>Part</th><th>Spec</th><th>Landed cost</th></tr>
   <tr><td>Groove light line</td><td>Addressable RGB + warm-white LED strip (WS2812B-class, 60/m, ~1.5 m) behind an opal PC diffuser</td><td>₹ 140–200</td></tr>
@@ -284,8 +286,20 @@ function renderSheet(c){const t=TUN.tower||{};
   <tr><td>Philips 2000–3000i</td><td>Number display + colour ring, touch buttons on top</td></tr>
   <tr><td>Coway, Levoit, LG, Samsung</td><td>Top panel: LED digits, colour light ring or dots</td></tr>
   <tr><td>Blueair</td><td>Minimal: light ring / dots, little or no numbers</td></tr>
-  <tr><td class="best">VIAN Slope Glow</td><td class="best">3.5-inch bar touch screen on the front at eye height, behind smoked glass that hides it when off; AQI dial, PM2.5, humidity, mode</td></tr></table>
-  <ul style="margin-top:8px"><li><b>Competitive:</b> most brands put small digits on top, so you must stand over the unit to read them. VIAN is readable from a sofa or a bed.</li><li><b>Attractive:</b> when off it is one clean black glass strip (no visible screen edge). When on, only the numbers glow.</li><li>Auto-brightness from a light sensor; screen off at night, only the logo and ambient light stay on (dimmed).</li><li>Cost: screen + touch + cover glass ₹ 450–750 landed.</li></ul></div>`:""}
+  <tr><td class="best">VIAN Slope Glow</td><td class="best">Hidden display on the front at eye height, behind the white body itself: invisible when off, only the text glows when on; AQI dial, PM2.5, humidity, mode</td></tr></table>
+  <ul style="margin-top:8px"><li><b>Competitive:</b> most brands put small digits on top, so you must stand over the unit to read them. VIAN is readable from a sofa or a bed.</li><li><b>Attractive:</b> no black screen at all. When off you see only the white body, like furniture. When on, the text glows through the plastic in your light colour.</li><li><b>How it is made:</b> the wall is thinned to about 0.8 mm translucent PC in that area (in-mould film), with a dot-matrix LED or mono LCD behind it. Touch works through the plastic.</li><li><b>Trade-off:</b> one colour only (no photos or graphs) and less contrast in direct sunlight, so auto-brightness turns it up by day.</li><li>Auto-brightness from a light sensor; screen off at night, only the logo and ambient light stay on (dimmed).</li><li>Cost: display + touch + translucent window ₹ 300–550 landed (cheaper than a glass-covered colour screen).</li></ul></div>`:""}
+  ${c.amb?`<div><div class="lbl" style="margin-bottom:6px">Why a customer should buy VIAN</div>
+  <table><tr><th>VIAN</th><th>Most other purifiers</th></tr>
+  <tr><td>Cleans from all 4 sides (360° intake) + 360° pop-up outlet</td><td>Many take air from one or two sides only</td></tr>
+  <tr><td>Clean air goes up, not at you (0.26 m/s at the bed in our CFD test)</td><td>Front grilles blow about 1 m/s at people</td></tr>
+  <tr><td>Hidden display at eye height, readable from sofa or bed</td><td>Small digits on top; you must stand over it</td></tr>
+  <tr><td>Doubles as a mood lamp: colour strip, running ring, floor halo, logo in the same colour</td><td>At most a coloured air-quality ring</td></tr>
+  <tr><td>Top closes when off: no dust in the fan</td><td>Open outlet all the time</td></tr>
+  <tr><td>One ₹ 3,999 filter pack (carbon + H13), washable pre-filter with wash tracker</td><td>Premium brands often cost more per filter; few track pre-filter washes</td></tr>
+  <tr><td>Filter-presence sensor, filter-dry mode for monsoon, humidity on screen</td><td>Many run even with no filter fitted</td></tr>
+  <tr><td>App: schedule from office, sleep score, energy use, home widget</td><td>App on top models only</td></tr>
+  <tr><td>Same engineering as VIAN Hospital (H14 option, UV-C on filter planned)</td><td>Home-only design</td></tr></table>
+  <p class="note" style="margin-top:8px">Before advertising: get CADR, noise (dB) and filter-efficiency tested by a lab, so every claim has a report behind it.</p></div>`:""}
   <div><div class="lbl" style="margin-bottom:6px">Airflow (digital wind tunnel)</div>
   ${t.reach!==undefined?`<img src="img/tunnel_tower.png" alt="CFD airflow for the top-outlet tower layout" style="width:100%;border-radius:10px;border:1px solid var(--line)">
   <table><tr><th>Test</th><th>This layout</th><th>Front-grille box</th></tr>
@@ -303,7 +317,7 @@ function applyLight(){lights.forEach(l=>l.visible=lightOn)}
 $$("#tg button").forEach(b=>b.onclick=()=>{const on=b.getAttribute("aria-pressed")!=="true";b.setAttribute("aria-pressed",on);const t=b.dataset.t;
   if(t==="air")pts.visible=on;if(t==="light"){lightOn=on;applyLight()}if(t==="spin")spin=on;if(t==="person")person.visible=on});
 let ambSel="0xFFB36B";const AQ=[0x43D18F,0xF2B33D,0xFF5A4F];
-function applyAmb(){const off=ambSel==="off";const col=ambSel==="aq"?AQ[0]:(off?0:+ambSel);if(!off){ambMat.color.setHex(col);ambHalo.color.setHex(col)}
+function applyAmb(){const off=ambSel==="off";const col=ambSel==="aq"?AQ[0]:(off?0:+ambSel);tint(off?0x9AA7B4:(col===0xFFF0DA?0xE3A55A:col));if(!off){ambMat.color.setHex(col);ambHalo.color.setHex(col)}
   ambMat.visible=!off;ambHalo.visible=!off;ambLights.forEach(a=>{a.pl.visible=!off;a.bandGlow.visible=!off;if(!off){a.pl.color.setHex(col);a.bandGlow.material.color.setHex(col)}})}
 $$("#fx button").forEach(b=>b.onclick=()=>{const x=b.dataset.x;if(x==="pop"){popOn=!popOn;b.setAttribute("aria-pressed",popOn);return}
   fxMode=x;$$("#fx button").forEach(y=>{if(y.dataset.x!=="pop")y.setAttribute("aria-pressed",y.dataset.x===x)})});
@@ -319,7 +333,7 @@ function tick(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=Math.
   if(pts.visible){for(let i=0;i<PN;i++){const q=parts[i];q.t+=dt*.18;if(q.t>=1){q.t=0;q.p=Math.floor(Math.random()*40)}const v=paths[q.p][Math.min(200,Math.floor(q.t*200))];
     const ang=cur?cur.g.rotation.y:0,ca=Math.cos(ang),sa=Math.sin(ang);pa[i*3]=v.x*ca+v.z*sa;pa[i*3+1]=v.y;pa[i*3+2]=-v.x*sa+v.z*ca;const c=q.t<.45?D:K;pc[i*3]=c.r;pc[i*3+1]=c.g;pc[i*3+2]=c.b}
     pg.attributes.position.needsUpdate=true;pg.attributes.color.needsUpdate=true}
-  const pulse=.85+.15*Math.sin(now/600);if(ambSel==="aq"&&ambMat.visible){const k=Math.floor(now/2500)%3;ambMat.color.setHex(AQ[k]);ambHalo.color.setHex(AQ[k]);ambLights.forEach(a=>{a.pl.color.setHex(AQ[k]);a.bandGlow.material.color.setHex(AQ[k])})}lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
+  const pulse=.85+.15*Math.sin(now/600);if(ambSel==="aq"&&ambMat.visible){const k=Math.floor(now/2500)%3;ambMat.color.setHex(AQ[k]);ambHalo.color.setHex(AQ[k]);ambLights.forEach(a=>{a.pl.color.setHex(AQ[k]);a.bandGlow.material.color.setHex(AQ[k])});tint(AQ[k])}lights.forEach(l=>l.children.forEach(ch=>{if(ch.isSprite)ch.material.opacity=.45*pulse}));
   updCap(dt,now);controls.update();renderer.render(scene,camera)}
 function loop(n){tick(n);requestAnimationFrame(loop)}
 const start=(location.hash||"").slice(1);show(C.some(c=>c.id===start)?start:"final");requestAnimationFrame(loop);
