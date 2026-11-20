@@ -137,7 +137,7 @@ void displayFrame(uint32_t now) {
 }
 
 // ---------------- control ----------------
-void beep(int ms) { tone(PIN_BUZZER, 2700, ms); }
+void beep(int ms) { if (!st.night) tone(PIN_BUZZER, 2700, ms); }   // silent at night
 void setMode(Mode m) { if (m != st.mode) { st.mode = m; st.modeChangedAt = millis(); liftStall = false; prefs.putUChar("mode", m); beep(40); } }
 void control(uint32_t now) {
   bool blocked = st.tilted || st.doorOpen || st.filterMissing;
@@ -146,7 +146,12 @@ void control(uint32_t now) {
     case M_OFF: pct = 0; break; case M_SLEEP: pct = FAN_SLEEP_PCT; break;
     case M_AUTO: pct = autoFanPct(st.pm25); break; case M_TURBO: pct = FAN_TURBO_PCT; break;
   }
-  fanSet(pct);
+  // quiet: cap Auto at night, skip resonance bands, ramp slowly
+  if (st.mode == M_AUTO && st.night) pct = min<uint8_t>(pct, FAN_NIGHT_MAX_PCT);
+  for (auto &bnd : FAN_SKIP_BANDS) if (bnd[1] > bnd[0] && pct > bnd[0] && pct < bnd[1]) pct = bnd[1];
+  static float cmd = 0; const float step = FAN_RAMP_PCT_PER_S * 0.1f;   // control() runs at 10 Hz
+  if (blocked || pct == 0) cmd = pct; else cmd += constrain((float)pct - cmd, -step, step);
+  fanSet((uint8_t)(cmd + 0.5f));
   // lift height follows fan mode; Auto waits until the mode is stable so the cap does not hunt
   float h = 0;
   if (!blocked) h = st.mode == M_SLEEP ? LIFT_H_SLEEP : st.mode == M_AUTO ? LIFT_H_AUTO : st.mode == M_TURBO ? LIFT_H_TURBO : 0;

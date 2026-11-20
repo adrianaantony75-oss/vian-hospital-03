@@ -1,0 +1,13 @@
+﻿Technology,What it does,Saving dB(A),Added cost INR
+"Bigger, slower fan","250 mm wheel instead of 225 mm turns 27 % slower for the same air (1,200 vs 1,650 rpm at Turbo)",-3.5,120
+Serrated trailing edges (owl-wing idea),Small saw-tooth edges on each blade break up the swirl that makes the 'whoosh',-2,0 (in the mould)
+Uneven blade spacing,"9 blades at slightly different angles spread the humming tone over many frequencies, so there is no single whine",-1 (tone -6),0 (in the mould)
+Sine-wave (FOC) motor drive,"Smooth current to the motor: no electrical buzz, PWM at 25 kHz is above human hearing",-1,included in EC fan
+Huge low-resistance filter,"23 m2 LifeHEPA: air passes at 0.85 cm/s, only 130 Pa total, so the fan works gently",-3 (vs a normal filter),already in
+Smooth inlet bell-mouth,"Rounded 180 mm inlet ring, no sharp edge for air to tear on",-1,35
+Acoustic foam lining,10 mm melamine foam (V-0) in the fan scroll and outlet absorbs fan noise before it leaves,-3,90
+"Wide, slow 360 deg outlet","Pop-up gap all round: air leaves at about 1.4 m/s, so no rushing sound",-1.5,already in
+Floating fan deck + silicone isolators,"Fan vibration does not reach the shell, so the body does not hum",-1 (stops buzz),40
+Ribbed shell walls,Stiff ribs stop the panels drumming,-0.5,0 (in the mould)
+Smart quiet firmware,"Fan speed changes slowly (no sudden roar), skips any speed where the unit resonates, Auto is capped at night, beeps off at night","felt, not measured",0
+Silent lift + no relay click,Pop-up uses StealthChop silent stepper drive; Home model has no relays,-,already in

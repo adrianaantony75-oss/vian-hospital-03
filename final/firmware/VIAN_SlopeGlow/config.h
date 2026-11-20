@@ -77,6 +77,10 @@
 #define FAN_MIN_PCT   18     // below this the EC fan stops
 #define FAN_SLEEP_PCT 35     // 578 rpm, 262 m3/h, ~29 dB(A)
 #define FAN_TURBO_PCT 100
+// Quiet behaviour
+#define FAN_RAMP_PCT_PER_S 4      // speed changes slowly: no sudden roar
+#define FAN_NIGHT_MAX_PCT  45     // Auto is capped at night (Turbo by hand still allowed)
+static const uint8_t FAN_SKIP_BANDS[][2] = {{0, 0}};  // resonance bands to skip, e.g. {{52, 56}}; set from the end-of-line sweep
 
 // ---------- Safety ----------
 #define TILT_LIMIT_DEG 35.0f

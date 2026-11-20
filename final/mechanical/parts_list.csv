@@ -9,7 +9,7 @@ P07,Pop-up ring skirt (diffuser),"PC, frosted",Injection moulding,Frosted clear,
 P08,Lift plate,"Aluminium 5052, 2 mm",Laser cut + bend,Natural,2 mm,360 x 380 mm,1,Carries cap; 2 guide bushing holes + lead-screw nut; earthed
 P09,Lift guide rods,Stainless steel 304,Ground rod,-,6 mm dia,6 x 100 mm,2,With igus JFM-0608-06 polymer bushings
 P10,Fan deck / filter seal plate,PP + 30 % glass fibre,Injection moulding,Black,3.0 mm,440 x 460 mm,1,Inlet ring 230 mm dia; PU foam seal to filter top; grommet G1 for cables
-P11,Fan scroll / outlet duct,ABS V-0,Injection moulding,Black,2.5 mm,400 x 420 x 260 mm,1,Guides fan air to the 360 deg cap gap
+P11,Fan scroll / outlet duct,"ABS V-0, 3 mm ribbed walls",Injection moulding,Black,3.0 mm,400 x 420 x 260 mm,1,Guides fan air to the 360 deg cap gap; lined with P19 foam; ribs stop panel drumming
 P12,Base / plinth,PC/ABS V-0 + 1.2 kg steel ballast plate,Injection moulding,Graphite,3.0 mm,460 x 480 x 70 mm,1,Tip-over stable to 10 deg; 4 rubber feet; DC jack at rear
 P13,Base halo diffuser ring,"PC, opal",Injection moulding,Opal white,1.2 mm,470 x 490 x 5 mm,1,Holds 36-LED strip facing the floor
 P14,"Flush front glass panel, back-printed body white","Chemically strengthened glass 1.1 mm, AG + AF coating, ceramic ink back-print matched to the body white","Cut, CNC edge, back-print, OCA-bonded to the touch sensor","Warm white (matches P03), clear 92 x 64 mm window over the screen",1.1 mm,"230 x 110 mm, R16 corners",1,"Sits FLUSH in a 1.2 mm pocket in P03, so the display is part of the body surface"
@@ -20,7 +20,9 @@ P18,Hidden display carrier frame,PC/ABS V-0,Injection moulding,Black,1.5 mm,96 x
 F01,DebrisGuard DG-360: outer washable debris catcher (4 magnetic panels),PET monofilament mesh 60 mesh (250 um) on PP frames,Moulded frame + insert mesh,Grey,-,"4 panels, 2 x 404 x 470 + 2 x 420 x 470 mm",1,"Catches hair, lint, pet fur and coarse dust before the HEPA. Lifetime part: rinse every 2-4 weeks (app reminds)"
 F02,LifeHEPA LF-5: 5-year H13 square-tube HEPA,"H13 glass-fibre mini-pleat, 60 mm deep, 4 mm pleat pitch, hot-melt separators, PU frame",Filter maker,White,-,"400 x 400 x 480 mm, centre 280 x 280",1,23 m2 of media; air enters all 4 sides; magnet in frame for presence sensor; replace about every 5 years
 F03,OdourCore OC-12: inner carbon sleeve,1.4 kg coconut-shell activated carbon (CTC 60) + MnO2 catalyst granules in 6 mm mesh pockets,Filter maker,Black,-,"270 x 270 x 470 mm, slides into the HEPA centre",1,"Gases, smells, formaldehyde; replace about every 12 months"
-M01,"EC centrifugal fan, backward curved","24 V DC EC, PWM + FG",Bought-in,-,-,225 mm impeller,1,">= 900 m3/h free air, <= 55 W, ball bearing, PWM 25 kHz"
+M01,"Quiet EC centrifugal fan, backward curved","24 V DC EC, sine-wave (FOC) drive, PWM + FG",Bought-in,-,-,"250 mm impeller, 9 blades, uneven pitch, serrated trailing edges",1,">= 950 m3/h free air at 1,400 rpm, <= 50 W, fluid-dynamic or low-noise ball bearings, PWM 25 kHz"
+P19,Acoustic lining of fan scroll + outlet,"Melamine foam (Basotect UL94 V-0) 10 mm, film-faced",Die-cut + adhesive,Grey,10 mm,0.35 m2 per unit,1,"Absorbs fan noise inside the duct; washable film face, no fibres in the air"
+P20,Inlet bell-mouth ring,PP + 30 % GF,Injection moulding,Black,2.5 mm,"180 mm inlet, R25 radius",1,Smooth air entry to the fan: less turbulence noise
 M02,Micro stepper linear actuator,"NEMA 8 (20 mm) 2-phase, T6 x 2 mm lead screw, 80 mm",Bought-in,-,-,20 x 20 x 30 mm + screw,1,"0.5 A, 200 steps/rev, anti-backlash nut"
 M03,Home micro-switch,Omron D2F-01L,Bought-in,-,-,-,1,Closed when the cap is fully down
 M04,Power adapter 24 V 4 A,Mean Well GST96A24-P1M or BIS-approved equivalent,Bought-in,-,-,-,1,"IEC 62368-1, BIS IS 13252, level VI efficiency"

@@ -10,6 +10,6 @@ Touch,Tap the 4 corners and the 4 on-screen buttons; hold Filter 5 s = filter re
 Safety,Remove front panel: fan stops < 1 s; remove filter: fan stays off; tilt 40 deg: off + beep,All 3 interlocks
 Air leak,Smoke pen around LifeHEPA top gasket at Turbo: no bypass,No leak
 Filter pressure,dP across LifeHEPA + OdourCore at 700 m3/h <= 150 Pa (golden filter),Within limit
-Noise,"Sleep <= 30 dB(A), Turbo <= 54 dB(A) at 1 m (sample 1 in 50)",Within limits
+Noise,"Sleep <= 23 dB(A), Auto <= 38, Turbo <= 46 dB(A) at 1 m; no tone > 6 dB above the broadband (sample 1 in 50)",Within limits
 Stability,10 deg tilt in all 4 directions with filters out: must not fall; push test 40 N at top,Does not tip
 Hi-pot / earth,Adapter is certified; check earth continuity lift plate to GND < 0.5 ohm,Pass
