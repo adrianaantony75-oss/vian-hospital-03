@@ -1,0 +1,10 @@
+﻿Item,Specification
+Type,"Backward-curved centrifugal impeller with 24 V DC EC (brushless, electronically commutated) outer-rotor motor"
+Impeller,"225 mm diameter, 7 blades, 160 mm inlet, PA66-GF30 (or aluminium), balanced G2.5"
+Position,"Horizontal on the fan deck at z = 600-760 mm, sucking up through the filter centre and blowing out to the 360 deg pop-up gap"
+Max speed,"2,000 rpm limit; Turbo set point 1,650 rpm"
+Free air,>= 900 m3/h
+Control,"PWM 25 kHz (speed), FG tach 2 pulses per revolution, INA226 power monitor on the 24 V fan rail"
+Bearings,"Ball bearings, L10 life >= 40,000 h at 40 deg C (about 9 years at 12 h/day)"
+Mounting,4 x M4 on rubber grommets (40 Shore A) to the fan deck; inlet sealed with PU foam
+System pressure at Turbo,DebrisGuard 5 + LifeHEPA 60 + OdourCore 50 + outlet/cap 15 = 130 Pa at 750 m3/h

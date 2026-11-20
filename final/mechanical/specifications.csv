@@ -1,12 +1,13 @@
 ﻿Area,Item,Specification
 Display,Type,"4.0-inch IPS colour TFT, 480 x 320 px, ST7796S driver, SPI 40 MHz; projected-capacitive touch FT6336U (I2C)"
-Display,Placement,"On the OUTSIDE of the front, at eye height (centre z = 925 mm), under 1.1 mm black-bordered cover glass that sits 2 mm proud of the body"
-Display,Sizes,Active area 83.5 x 55.7 mm; cover glass 116 x 84 mm; bezel 120 x 88 mm; body cut-out 104 x 72 mm
-Display,Screens,"Home: AQI ring + number, PM2.5, humidity, temperature, VOC; buttons Power / Mode / Light / Filter. Light screen: colour + effect. Filter screen: DebrisGuard wash, LifeHEPA %, OdourCore %"
+Display,Blended placement,"Behind ONE flush glass panel (230 x 110 mm) set into the body; the glass is back-printed in the same warm white as the body, with a clear window only over the screen. No step, no frame, nothing standing out"
+Display,Light theme UI,"Screen background is warm white (#F4F3EF) to match the glass print, dark grey text, AQI ring in the air-quality colour; by day it reads as part of the white panel"
+Display,Sizes,Active area 83.5 x 55.7 mm; screen window in the print 92 x 64 mm; glass 230 x 110 x 1.1 mm; body pocket 232 x 112 x 1.2 mm
+Display,Screens,"Home: AQI ring + number, PM2.5, PM10, humidity, temperature; buttons Power / Mode / Light / Filter. Light page: colour + effect. Filter page: DebrisGuard, LifeHEPA, OdourCore"
 Display,Brightness,"Auto from VEML7700; 0-100 % PWM backlight; off at night (< 3 lux) after 15 s, wakes on touch"
-Display,Viewing,"IPS 178 deg, 350-400 nit, anti-glare + anti-fingerprint glass"
-Display,Logo,"VIAN logo separate, below the display, front only, lit in the light-strip colour"
-Display,Cost (1k pcs),Module INR 650-900 + cover glass INR 120-180 + bezel INR 40 + carrier board INR 90
+Display,Off state,When fully off the window looks soft grey under the white print; in normal use the screen stays on (dim white) so the panel looks uniform
+Display,Logo,"VIAN logo separate, below the glass, front only, lit in the light-strip colour"
+Display,Cost (1k pcs),Module INR 650-900 + back-printed glass INR 160-240 + carrier INR 30 + display board INR 90
 Pop-up lift,Heights,"Off 0 mm (closed), Sleep 15 mm, Auto 30 mm, Turbo 46 mm"
 Pop-up lift,Speed,"5 mm/s (quiet), StealthChop silent mode"
 Pop-up lift,Hunting guard,"In Auto, moves only after the fan mode is stable for 30 s"

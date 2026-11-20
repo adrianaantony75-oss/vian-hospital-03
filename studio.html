@@ -58,7 +58,7 @@ td.best{color:var(--accent);font-weight:800}
 <div class="app">
   <header>
     <svg class="logo" viewBox="0 0 80 20" role="img" aria-label="VIAN"><path d="M2 2 L10 18 L18 2 M28 2 V18 M38 18 L46 2 L54 18 M64 18 V2 L78 18 V2"/></svg>
-    <div class="ttl"><b>VIAN Design Studio · final pick: Slope Glow</b><span>360° intake · pop-up light top · outside colour touch display · front VIAN logo in your light colour</span></div>
+    <div class="ttl"><b>VIAN Design Studio · final pick: Slope Glow</b><span>360° intake · pop-up light top · blended colour touch display · front VIAN logo in your light colour</span></div>
     <div class="hdr-r"><a class="navlink" href="index.html">All products</a><a class="navlink" href="hospital.html">Hospital engineering model</a></div>
   </header>
   <div class="picker" id="picker"></div>
@@ -88,7 +88,7 @@ const TUN = {"tower": {"reach": 72.85426629750819, "stagnant": 4.631261011829851
 const C=[
  {id:"final",name:"VIAN Slope Glow",tag:"Final: 360° intake · pop-up glowing top",rec:true,amb:true,
   idea:"Your pick, now with air drawn in from all sides. The whole lower section is perforated all round, so it cleans from every direction (360°) and can stand anywhere, even against a wall. When you switch it on, the top pops up 45 mm. Clean air leaves through that 360° gap and the top grille, and inside the gap a ring of light runs round, breathes, or stays steady. When you switch it off, the top closes so no dust gets into the fan.",
-  change:["360° perforated intake all round the lower section","Pop-up top follows fan speed: Sleep 15 mm, Auto 30 mm, Turbo 46 mm; closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","Outside 4-inch colour touch display at eye height, under black cover glass","Front VIAN logo below the display, lit in the same colour as the light strip","Rear-high 8° top (Classic Slope)"],
+  change:["360° perforated intake all round the lower section","Pop-up top follows fan speed: Sleep 15 mm, Auto 30 mm, Turbo 46 mm; closes when off","Running light ring in the pop-up gap (or steady / breathing)","Warm light line between the two tones + floor halo","Light colour from app or screen; auto-dim at night","4-inch colour touch display blended into the body: flush white glass, light-theme screen","Front VIAN logo below the display, lit in the same colour as the light strip","Rear-high 8° top (Classic Slope)"],
   dims:"450 W × 470 D × 1,000–1,080 H mm"},
  {id:"classic",name:"VIAN Classic",tag:"The familiar rounded tower",
   idea:"The shape buyers already trust: a rounded tower with soft corners, clean air out of the top. VIAN touches: a graphite visor with a bar screen, and the VIAN logo lit from behind.",
@@ -240,20 +240,21 @@ const dispMat=new THREE.MeshBasicMaterial({color:0xFFB36B,transparent:true,depth
 const logoHalo=new THREE.MeshBasicMaterial({color:0xFFB36B,transparent:true,opacity:.22,depthWrite:false,blending:THREE.AdditiveBlending});
 function tint(col){[logoMat,dispMat,logoHalo].forEach(m=>m.color.setHex(col))}
 function screenTouch(w,h,parent){const c=document.createElement("canvas");c.width=960;c.height=640;const g=c.getContext("2d");
-  g.fillStyle="#080b10";g.fillRect(0,0,960,640);g.fillStyle="#8a96a3";g.font="600 26px Manrope, sans-serif";g.fillText("AUTO",24,40);g.fillText("Wi-Fi",400,40);g.textAlign="right";g.fillText("Filter 92%",936,40);g.textAlign="left";
-  g.lineCap="round";g.lineWidth=28;g.strokeStyle="#1f262f";g.beginPath();g.arc(260,290,190,Math.PI*.75,Math.PI*2.25);g.stroke();
-  g.strokeStyle="#43D18F";g.beginPath();g.arc(260,290,190,Math.PI*.75,Math.PI*1.05);g.stroke();
-  g.fillStyle="#fff";g.textAlign="center";g.font="700 130px Manrope, sans-serif";g.fillText("24",260,320);g.font="700 30px Manrope";g.fillStyle="#43D18F";g.fillText("GOOD",260,385);g.fillStyle="#8a96a3";g.fillText("AQI",260,200);g.textAlign="left";
-  const row=(y,l,v,u)=>{g.fillStyle="#8a96a3";g.font="600 24px Manrope";g.fillText(l,540,y);g.fillStyle="#fff";g.font="700 60px Manrope";g.fillText(v,540,y+58);const ww=g.measureText(v).width;g.fillStyle="#8a96a3";g.font="600 24px Manrope";g.fillText(u,550+ww,y+58)};
+  const BG="#F4F3EF",FG="#1d2126",MU="#7b8794",TR="#e3e2dd";
+  g.fillStyle=BG;g.fillRect(0,0,960,640);g.fillStyle=MU;g.font="600 26px Manrope, sans-serif";g.fillText("AUTO",24,40);g.fillText("Wi-Fi",400,40);g.textAlign="right";g.fillText("Filter 92%",936,40);g.textAlign="left";
+  g.lineCap="round";g.lineWidth=28;g.strokeStyle=TR;g.beginPath();g.arc(260,290,190,Math.PI*.75,Math.PI*2.25);g.stroke();
+  g.strokeStyle="#2fbf7a";g.beginPath();g.arc(260,290,190,Math.PI*.75,Math.PI*1.05);g.stroke();
+  g.fillStyle=FG;g.textAlign="center";g.font="700 130px Manrope, sans-serif";g.fillText("24",260,320);g.font="700 30px Manrope";g.fillStyle="#2fbf7a";g.fillText("GOOD",260,385);g.fillStyle=MU;g.fillText("AQI",260,200);g.textAlign="left";
+  const row=(y,l,v,u)=>{g.fillStyle=MU;g.font="600 24px Manrope";g.fillText(l,540,y);g.fillStyle=FG;g.font="700 60px Manrope";g.fillText(v,540,y+58);const ww=g.measureText(v).width;g.fillStyle=MU;g.font="600 24px Manrope";g.fillText(u,550+ww,y+58)};
   row(110,"PM2.5","8","µg/m³");row(210,"PM10","14","µg/m³");row(310,"Humidity","46","%");row(410,"Temp","27","°C");
-  ["Power","Mode","Light","Filter"].forEach((t,i)=>{g.fillStyle=i===2?"#FFB36B":"#1f262f";const x=16+i*236;g.beginPath();g.roundRect(x,530,220,92,22);g.fill();g.fillStyle=i===2?"#000":"#fff";g.font="700 30px Manrope";g.textAlign="center";g.fillText(t,x+110,587);g.textAlign="left"});
-  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,toneMapped:false}));parent.add(m);return m}
+  ["Power","Mode","Light","Filter"].forEach((t,i)=>{g.fillStyle=i===2?"#FFB36B":TR;const x=16+i*236;g.beginPath();g.roundRect(x,530,220,92,22);g.fill();g.fillStyle=FG;g.font="700 30px Manrope";g.textAlign="center";g.fillText(t,x+110,587);g.textAlign="left"});
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;const m=new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:t,toneMapped:false,color:0xdedcd6}));parent.add(m);return m}
 const smoked=new THREE.MeshStandardMaterial({color:0x05070a,metalness:.6,roughness:.06,envMapIntensity:1.2});
+const flushGlass=new THREE.MeshStandardMaterial({color:0xF1F0EC,metalness:.05,roughness:.08,envMapIntensity:1.0});
 function frontFinal(g){
-  /* outside display: graphite bezel + black-bordered cover glass sitting 2 mm proud of the body */
-  const bz=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(120,88,10),{depth:5,bevelEnabled:true,bevelThickness:1,bevelSize:1,bevelSegments:2,curveSegments:10}),graphite);bz.position.set(0,925,ZF-3);g.add(bz);
-  const gl=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(116,84,8),{depth:1.1,bevelEnabled:false,curveSegments:10}),smoked);gl.position.set(0,925,ZF+3);g.add(gl);
-  const sc=screenTouch(84,56,g);sc.position.set(0,925,ZF+4.3);
+  /* blended display: one glass panel set FLUSH into the body, back-printed in the body white; light-theme screen behind a clear window */
+  const gl=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(230,110,16),{depth:1.1,bevelEnabled:false,curveSegments:12}),flushGlass);gl.position.set(0,925,ZF-0.4);g.add(gl);
+  const sc=screenTouch(84,56,g);sc.position.set(0,925,ZF+0.9);
   /* VIAN logo: front only, below the screen, lit in the same colour as the light strip */
   const y=800,faces=[[0,ZF+1,0]];
   faces.forEach(([x,z,ry])=>{const lg=new THREE.Group();const h=34,r=h*.11;
@@ -282,7 +283,7 @@ function bar(l,v){return `<div><span>${l}</span><i><b style="width:${v*10}%"></b
 function renderSheet(c){const t=TUN.tower||{};
   $("#sheet").innerHTML=`<div><div class="lbl">${c.amb?"Final design":"Option "+C.indexOf(c)+" of 6"}</div><h2>${esc(c.name)}</h2><p>${esc(c.idea)}</p></div>
   <div><div class="lbl" style="margin-bottom:6px">What is different from a normal tower</div><ul>${c.change.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
-  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>${c.amb?"3 stages: DebrisGuard (washable) + LifeHEPA 5-year H13 + OdourCore carbon; front panel access":"One 305 × 610 × 115 mm pack (₹ 3,999), right-side door"}</div><div>Screen</div><div>${c.amb?"4.0-inch IPS colour touch display, 480 × 320, on the outside of the front at eye height, black cover glass":"Bar touch screen in the graphite visor, eye height"}</div><div>Logo</div><div>${c.amb?"Front only, below the display, same colour as the light strip, dims at night":"Backlit VIAN, dims at night"}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
+  <div class="kv"><div>Size</div><div>${esc(c.dims)}</div><div>Filter</div><div>${c.amb?"3 stages: DebrisGuard (washable) + LifeHEPA 5-year H13 + OdourCore carbon; front panel access":"One 305 × 610 × 115 mm pack (₹ 3,999), right-side door"}</div><div>Screen</div><div>${c.amb?"4.0-inch IPS colour touch display, 480 × 320, behind a flush glass panel printed in the body white":"Bar touch screen in the graphite visor, eye height"}</div><div>Logo</div><div>${c.amb?"Front only, below the display, same colour as the light strip, dims at night":"Backlit VIAN, dims at night"}</div><div>Inside</div><div>Same engineering as VIAN Hospital 03: EC fan, sensors, main board, app</div></div>
   ${c.amb?`<div><div class="lbl" style="margin-bottom:6px">360° intake, pop-up top and light: what they cost</div>
   <table><tr><th>Part</th><th>Spec</th><th>Landed cost</th></tr>
   <tr><td>Groove light line</td><td>Addressable RGB + warm-white LED strip (WS2812B-class, 60/m, ~1.5 m) behind an opal PC diffuser</td><td>₹ 140–200</td></tr>
@@ -301,8 +302,8 @@ function renderSheet(c){const t=TUN.tower||{};
   <tr><td>Philips 2000–3000i</td><td>Number display + colour ring, touch buttons on top</td></tr>
   <tr><td>Coway, Levoit, LG, Samsung</td><td>Top panel: LED digits, colour light ring or dots</td></tr>
   <tr><td>Blueair</td><td>Minimal: light ring / dots, little or no numbers</td></tr>
-  <tr><td class="best">VIAN Slope Glow</td><td class="best">4.0-inch colour touch display on the outside of the front at eye height, under black glass: AQI ring, PM2.5, PM10, humidity, temperature, filter status, light controls</td></tr></table>
-  <ul style="margin-top:8px"><li><b>Competitive:</b> most brands put small digits on top, so you must stand over the unit to read them. VIAN is readable from a sofa or a bed.</li><li><b>Attractive:</b> one clean black glass panel on the white body, like a premium speaker or thermostat. Sharp colour graphics, not just digits.</li><li><b>Touch:</b> Power, Mode, Light and Filter buttons on the screen; light colours and effects on their own page.</li><li>Auto-brightness from a light sensor; screen off at night, only the logo and ambient light stay on (dimmed).</li><li>Cost: 4.0-inch IPS + touch module ₹ 650–900, cover glass ₹ 120–180 landed.</li></ul></div>`:""}
+  <tr><td class="best">VIAN Slope Glow</td><td class="best">4.0-inch colour touch display at eye height, blended into the body behind flush white glass: AQI ring, PM2.5, PM10, humidity, temperature, filter status, light controls</td></tr></table>
+  <ul style="margin-top:8px"><li><b>Competitive:</b> most brands put small digits on top, so you must stand over the unit to read them. VIAN is readable from a sofa or a bed.</li><li><b>Attractive:</b> one flush glass panel printed in the same white as the body, with a light-theme screen, so it blends in instead of standing out.</li><li><b>Touch:</b> Power, Mode, Light and Filter buttons on the screen; light colours and effects on their own page.</li><li>Auto-brightness from a light sensor; screen off at night, only the logo and ambient light stay on (dimmed).</li><li>Cost: 4.0-inch IPS + touch module ₹ 650–900, cover glass ₹ 120–180 landed.</li></ul></div>`:""}
   ${c.amb?`<div><div class="lbl" style="margin-bottom:6px">Why a customer should buy VIAN</div>
   <table><tr><th>VIAN</th><th>Most other purifiers</th></tr>
   <tr><td>Cleans from all 4 sides (360° intake) + 360° pop-up outlet</td><td>Many take air from one or two sides only</td></tr>

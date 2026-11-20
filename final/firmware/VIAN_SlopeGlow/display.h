@@ -39,6 +39,7 @@ struct UiData {
   uint32_t accent; uint8_t hepa, odour, debrisDays; bool alarm; const char *alarmText; uint8_t fx; bool lightOn;
 };
 static uint16_t c565(uint32_t rgb) { return lgfx::color565((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255); }
+static const uint16_t TRACK = lgfx::color565(0xE3, 0xE2, 0xDD);   // light grey tracks and buttons
 static uint32_t aqiRgb(int a) { return a <= 50 ? 0x43D18F : a <= 100 ? 0xA6D84B : a <= 200 ? 0xF2B33D : 0xFF5A4F; }
 static const char *aqiWord(int a) { return a <= 50 ? "GOOD" : a <= 100 ? "SATISFACTORY" : a <= 200 ? "MODERATE" : a <= 300 ? "POOR" : "VERY POOR"; }
 
@@ -55,7 +56,7 @@ class VianUI {
   }
   void brightness(uint8_t b) { lcd.setBrightness(b); }
   void draw(const UiData &d) {
-    const uint16_t bg = 0x0841, fg = TFT_WHITE, mut = 0x8C71, acc = c565(d.accent);
+    const uint16_t bg = c565(0xF4F3EF), fg = c565(0x1D2126), mut = c565(0x7B8794), acc = c565(d.accent);   // light theme: blends with the white glass
     spr.fillSprite(bg); spr.setTextDatum(textdatum_t::top_left);
     // top bar
     spr.setFont(&fonts::Font2); spr.setTextColor(mut);
@@ -67,7 +68,7 @@ class VianUI {
     // buttons
     spr.setFont(&fonts::FreeSans9pt7b);
     for (int i = 0; i < 4; i++) { const Button &k = BTN[i]; bool on = (i == 2 && page == PG_LIGHT) || (i == 3 && page == PG_FILTER);
-      spr.fillRoundRect(k.x, k.y, k.w, k.h, 12, on ? acc : 0x2124); spr.setTextColor(on ? TFT_BLACK : fg);
+      spr.fillRoundRect(k.x, k.y, k.w, k.h, 12, on ? acc : TRACK); spr.setTextColor(fg);
       spr.setTextDatum(textdatum_t::middle_center); spr.drawString(k.label, k.x + k.w / 2, k.y + k.h / 2); }
     spr.setTextDatum(textdatum_t::top_left);
     spr.pushSprite(0, 0);
@@ -75,7 +76,7 @@ class VianUI {
  private:
   void home(const UiData &d, uint16_t fg, uint16_t mut, uint16_t acc) {
     uint16_t ac = c565(aqiRgb(d.aqi)); int ang = 135 + min(d.aqi, 500) * 270 / 500;
-    spr.fillArc(130, 145, 100, 86, 135, 405, 0x2124); spr.fillArc(130, 145, 100, 86, 135, ang, ac);
+    spr.fillArc(130, 145, 100, 86, 135, 405, TRACK); spr.fillArc(130, 145, 100, 86, 135, ang, ac);
     spr.setTextDatum(textdatum_t::middle_center); spr.setTextColor(fg); spr.setFont(&fonts::FreeSansBold24pt7b);
     spr.drawNumber(d.aqi, 130, 135); spr.setFont(&fonts::FreeSans9pt7b); spr.setTextColor(ac); spr.drawString(aqiWord(d.aqi), 130, 178);
     spr.setTextColor(mut); spr.drawString("AQI", 130, 98); spr.setTextDatum(textdatum_t::top_left);
@@ -94,7 +95,7 @@ class VianUI {
     for (int i = 0; i < 6; i++) { spr.fillCircle(50 + i * 75, 120, 26, c565(sw[i])); if (sw[i] == d.accent) spr.drawCircle(50 + i * 75, 120, 31, fg); }
     static const char *fx[3] = {"Steady", "Running", "Breathing"};
     spr.setFont(&fonts::FreeSans9pt7b);
-    for (int i = 0; i < 3; i++) { spr.fillRoundRect(16 + i * 152, 180, 140, 46, 10, i == d.fx ? acc : 0x2124);
+    for (int i = 0; i < 3; i++) { spr.fillRoundRect(16 + i * 152, 180, 140, 46, 10, i == d.fx ? acc : TRACK);
       spr.setTextColor(i == d.fx ? TFT_BLACK : fg); spr.setTextDatum(textdatum_t::middle_center); spr.drawString(fx[i], 86 + i * 152, 203); }
     spr.setTextDatum(textdatum_t::top_left); spr.setTextColor(mut); spr.setFont(&fonts::Font2);
     spr.drawString(d.lightOn ? "Hold Light 1 s to switch lights off" : "Lights are off - hold Light 1 s to switch on", 16, 236);
@@ -109,6 +110,6 @@ class VianUI {
   void bar(int y, const char *l, int pct, const char *st, uint16_t fg, uint16_t mut, uint16_t acc) {
     spr.setFont(&fonts::FreeSans9pt7b); spr.setTextColor(fg); spr.drawString(l, 16, y);
     char b[24]; snprintf(b, sizeof b, "%d%%  %s", pct, st); spr.setTextColor(mut); spr.drawRightString(b, 464, y);
-    spr.fillRoundRect(16, y + 26, 448, 10, 5, 0x2124); spr.fillRoundRect(16, y + 26, max(10, 448 * pct / 100), 10, 5, pct < 10 ? c565(0xFF5A4F) : acc);
+    spr.fillRoundRect(16, y + 26, 448, 10, 5, TRACK); spr.fillRoundRect(16, y + 26, max(10, 448 * pct / 100), 10, 5, pct < 10 ? c565(0xFF5A4F) : acc);
   }
 };

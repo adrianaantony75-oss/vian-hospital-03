@@ -1,7 +1,7 @@
 ﻿Code,Part,Material,Process,Colour / finish,Wall,Size,Qty,Notes
 P01,"Lower intake sleeve (4 sides, 360 deg perforated)","PC/ABS, UL94 V-0, UV-stabilised","Injection moulding, 2 cavities (rear U + front panel)",Sage / Sand / Ice / Graphite (moulded-in colour),2.5 mm,450 x 470 x 530 mm,1,"Perforation 2.0 mm holes, 4.0 mm hex pitch, 22 % open area; 1 deg draft; front panel is removable"
 P02,"Front intake panel (removable, filter access)",PC/ABS V-0,Injection moulding,Same as P01,2.5 mm,310 x 525 mm (front face),1,4 x N35 magnets 10 x 3 mm + 2 bottom hooks; carries door-switch magnet
-P03,Upper shell with 8 deg sloped top,"PC/ABS V-0, white",Injection moulding,"Matte warm white, texture MT-11010","2.5 mm, 0.8 mm at display and logo windows",450 x 470 x 400-466 mm,1,Display opening 104 x 72 mm for the glass display bezel; logo window 132 x 40 mm thinned to 0.8 mm; light sensor window 3 mm dia
+P03,Upper shell with 8 deg sloped top,"PC/ABS V-0, white",Injection moulding,"Matte warm white, texture MT-11010","2.5 mm, 0.8 mm at display and logo windows",450 x 470 x 400-466 mm,1,Flush glass pocket 232 x 112 x 1.2 mm with 92 x 64 mm screen cut-out; logo window 132 x 40 mm thinned to 0.8 mm; light sensor window 3 mm dia
 P04,Groove light diffuser ring,"PC, opal 50 % transmission",Injection moulding,Opal white,1.5 mm,492 x 512 x 14 mm,1,U-channel holds the LED strip; snaps between P01 and P03
 P05,Pop-up cap,PC/ABS V-0,Injection moulding,Matte warm white,2.5 mm,436 x 456 x 28 mm,1,"Bosses for the lift plate, 4 x M3 inserts"
 P06,Outlet grille,PC/ABS V-0,Injection moulding,Graphite,2.0 mm,380 x 400 mm,1,"Slots 3 x 40 mm, 52 % open; clips into P05"
@@ -12,11 +12,11 @@ P10,Fan deck / filter seal plate,PP + 30 % glass fibre,Injection moulding,Black,
 P11,Fan scroll / outlet duct,ABS V-0,Injection moulding,Black,2.5 mm,400 x 420 x 260 mm,1,Guides fan air to the 360 deg cap gap
 P12,Base / plinth,PC/ABS V-0 + 1.2 kg steel ballast plate,Injection moulding,Graphite,3.0 mm,460 x 480 x 70 mm,1,Tip-over stable to 10 deg; 4 rubber feet; DC jack at rear
 P13,Base halo diffuser ring,"PC, opal",Injection moulding,Opal white,1.2 mm,470 x 490 x 5 mm,1,Holds 36-LED strip facing the floor
-P14,Display cover glass with black border print,"Chemically strengthened glass 1.1 mm, AG + AF coating","Cut, CNC edge, screen print, OCA-bonded to touch panel","Gloss black border, clear centre",1.1 mm,"116 x 84 mm, R8 corners",1,Sits 2 mm proud of the body: the display is on the outside
+P14,"Flush front glass panel, back-printed body white","Chemically strengthened glass 1.1 mm, AG + AF coating, ceramic ink back-print matched to the body white","Cut, CNC edge, back-print, OCA-bonded to the touch sensor","Warm white (matches P03), clear 92 x 64 mm window over the screen",1.1 mm,"230 x 110 mm, R16 corners",1,"Sits FLUSH in a 1.2 mm pocket in P03, so the display is part of the body surface"
 P15,Logo light guide + VIAN mask,PMMA + black printed mask,Laser cut + screen print,Clear / black,3 mm,132 x 40 mm,1,Mask leaves only the VIAN letters open
 P16,Rear service cover,PC/ABS V-0,Injection moulding,Matte warm white,2.0 mm,90 x 40 mm,1,Covers USB-C and reset pin-hole; rubber plug
 P17,Filter tray rails,POM,Injection moulding,Natural,-,400 mm,2,Filter slides out to the front
-P18,Display bezel frame,PC/ABS V-0,Injection moulding,Graphite,1.5 mm,120 x 88 x 6 mm,1,Holds glass + module; clips into the P03 display opening; gasket for dust
+P18,Hidden display carrier frame,PC/ABS V-0,Injection moulding,Black,1.5 mm,96 x 68 x 5 mm,1,"Behind the glass, invisible from outside; holds the module; foam dust gasket"
 F01,DebrisGuard DG-360: outer washable debris catcher (4 magnetic panels),PET monofilament mesh 60 mesh (250 um) on PP frames,Moulded frame + insert mesh,Grey,-,"4 panels, 2 x 404 x 470 + 2 x 420 x 470 mm",1,"Catches hair, lint, pet fur and coarse dust before the HEPA. Lifetime part: rinse every 2-4 weeks (app reminds)"
 F02,LifeHEPA LF-5: 5-year H13 square-tube HEPA,"H13 glass-fibre mini-pleat, 60 mm deep, 4 mm pleat pitch, hot-melt separators, PU frame",Filter maker,White,-,"400 x 400 x 480 mm, centre 280 x 280",1,23 m2 of media; air enters all 4 sides; magnet in frame for presence sensor; replace about every 5 years
 F03,OdourCore OC-12: inner carbon sleeve,1.4 kg coconut-shell activated carbon (CTC 60) + MnO2 catalyst granules in 6 mm mesh pockets,Filter maker,Black,-,"270 x 270 x 470 mm, slides into the HEPA centre",1,"Gases, smells, formaldehyde; replace about every 12 months"

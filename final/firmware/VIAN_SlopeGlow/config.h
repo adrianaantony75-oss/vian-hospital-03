@@ -75,7 +75,7 @@
 #define FAN_PWM_HZ    25000
 #define FAN_PWM_BITS  10
 #define FAN_MIN_PCT   18     // below this the EC fan stops
-#define FAN_SLEEP_PCT 22
+#define FAN_SLEEP_PCT 35     // 578 rpm, 262 m3/h, ~29 dB(A)
 #define FAN_TURBO_PCT 100
 
 // ---------- Safety ----------
