@@ -1,0 +1,5 @@
+﻿Board,References,Qty,Description,Manufacturer part number,Footprint,Fitting
+VSG-LB,J1,1,"From display board, JST PH 3",JST B3B-PH-K-S,PH 3,
+VSG-LB,C1,1,10 uF 10 V 0805,GRM21BR61A106KE19,0805,
+VSG-LB,D1 D2 D3 D4 D5 D6 D7 D8 D9 D10 D11 D12,12,"RGBW LED, warm white 3000 K, logo backlight",Opsco SK6812RGBW-WW 5050,5050 4-pin,
+VSG-LB,C2 C3 C4 C5 C6 C7 C8 C9 C10 C11 C12 C13,12,100 nF 0603 (LED decoupling),GCM188R71H104KA57,0603,

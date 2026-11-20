@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="Segoe UI, Arial, sans-serif" font-size="13">
+<rect width="1000" height="560" fill="#ffffff"/>
+<rect x="380" y="200" width="240" height="160" rx="10" fill="#FFF4E6" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="500.0" y="222" text-anchor="middle" font-weight="700">VSG-MB main board</text>
+<text x="500.0" y="242" text-anchor="middle" fill="#334">ESP32-S3, 24 V in</text>
+<text x="500.0" y="259" text-anchor="middle" fill="#334">5 V 3 A + 3.3 V 2 A bucks</text>
+<text x="500.0" y="276" text-anchor="middle" fill="#334">TMC2209, INA226, LIS2DH12</text>
+<text x="500.0" y="293" text-anchor="middle" fill="#334">LED level shift, USB-C</text>
+<rect x="30" y="30" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="145.0" y="52" text-anchor="middle" font-weight="700">24 V 4 A adapter</text>
+<text x="145.0" y="72" text-anchor="middle" fill="#334">DC jack, rear of base</text>
+<line x1="260" y1="65" x2="380" y2="220" stroke="#555" stroke-width="1.6"/>
+<text x="324.0" y="138.5" fill="#666" font-size="11">W1 24 V</text>
+<rect x="30" y="140" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="145.0" y="162" text-anchor="middle" font-weight="700">EC fan 225 mm</text>
+<text x="145.0" y="182" text-anchor="middle" fill="#334">24 V, PWM, FG</text>
+<line x1="260" y1="175" x2="380" y2="250" stroke="#555" stroke-width="1.6"/>
+<text x="324.0" y="208.5" fill="#666" font-size="11">W2</text>
+<rect x="30" y="250" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="145.0" y="272" text-anchor="middle" font-weight="700">Pop-up lift</text>
+<text x="145.0" y="292" text-anchor="middle" fill="#334">stepper + home switch</text>
+<line x1="260" y1="285" x2="380" y2="280" stroke="#555" stroke-width="1.6"/>
+<text x="324.0" y="278.5" fill="#666" font-size="11">W3 W4</text>
+<rect x="30" y="360" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="145.0" y="382" text-anchor="middle" font-weight="700">Safety inputs</text>
+<text x="145.0" y="402" text-anchor="middle" fill="#334">door reed, filter hall</text>
+<line x1="260" y1="395" x2="380" y2="320" stroke="#555" stroke-width="1.6"/>
+<text x="324.0" y="353.5" fill="#666" font-size="11">W12 W13</text>
+<rect x="30" y="470" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="145.0" y="492" text-anchor="middle" font-weight="700">UV-C (Hospital/Pro)</text>
+<text x="145.0" y="512" text-anchor="middle" fill="#334">relay + interlock</text>
+<line x1="260" y1="505" x2="380" y2="345" stroke="#555" stroke-width="1.6"/>
+<text x="324.0" y="421.0" fill="#666" font-size="11">W14 W15</text>
+<rect x="740" y="30" width="230" height="90" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="52" text-anchor="middle" font-weight="700">VSG-DB display board</text>
+<text x="855.0" y="72" text-anchor="middle" fill="#334">HT1622 + VA LCD</text>
+<text x="855.0" y="89" text-anchor="middle" fill="#334">touch QT1070, VEML7700</text>
+<text x="855.0" y="106" text-anchor="middle" fill="#334">8 backlight LEDs</text>
+<line x1="620" y1="220" x2="740" y2="75" stroke="#555" stroke-width="1.6"/>
+<text x="684.0" y="143.5" fill="#666" font-size="11">W5 12-way</text>
+<rect x="740" y="150" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="172" text-anchor="middle" font-weight="700">VSG-LB logo board</text>
+<text x="855.0" y="192" text-anchor="middle" fill="#334">12 RGBW LEDs</text>
+<line x1="855" y1="120" x2="855" y2="150" stroke="#555" stroke-width="1.6"/>
+<text x="859.0" y="131.0" fill="#666" font-size="11">W6</text>
+<rect x="740" y="240" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="262" text-anchor="middle" font-weight="700">Groove strip</text>
+<text x="855.0" y="282" text-anchor="middle" fill="#334">96 RGBW LEDs</text>
+<line x1="620" y1="260" x2="740" y2="270" stroke="#555" stroke-width="1.6"/>
+<text x="684.0" y="261.0" fill="#666" font-size="11">W7 CH1</text>
+<rect x="740" y="320" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="342" text-anchor="middle" font-weight="700">VSG-RB pop-up ring</text>
+<text x="855.0" y="362" text-anchor="middle" fill="#334">84 RGBW LEDs, flex</text>
+<line x1="620" y1="290" x2="740" y2="350" stroke="#555" stroke-width="1.6"/>
+<text x="684.0" y="316.0" fill="#666" font-size="11">W8 CH2</text>
+<rect x="740" y="400" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="422" text-anchor="middle" font-weight="700">Base halo strip</text>
+<text x="855.0" y="442" text-anchor="middle" fill="#334">36 RGBW LEDs</text>
+<line x1="620" y1="320" x2="740" y2="430" stroke="#555" stroke-width="1.6"/>
+<text x="684.0" y="371.0" fill="#666" font-size="11">W9 CH3</text>
+<rect x="740" y="480" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
+<text x="855.0" y="502" text-anchor="middle" font-weight="700">VSG-SB sensor board</text>
+<text x="855.0" y="522" text-anchor="middle" fill="#334">SHT40, SGP41</text>
+<text x="855.0" y="539" text-anchor="middle" fill="#334">+ PMS5003</text>
+<line x1="620" y1="350" x2="740" y2="510" stroke="#555" stroke-width="1.6"/>
+<text x="684.0" y="426.0" fill="#666" font-size="11">W10</text>
+</svg>

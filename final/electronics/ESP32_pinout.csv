@@ -1,0 +1,36 @@
+﻿ESP32-S3 pin,Net,Direction,Function,Notes
+IO1,LIFT_DIAG,in,TMC2209 StallGuard DIAG,High = stall; anti-pinch reverse
+IO2,LIFT_HOME,in,Lift home micro-switch,"Pull-up 10 k, low = cap fully closed"
+IO3,UV_RELAY_DRV,out,UV-C relay (Hospital/Pro),"Pull-down 100 k; strapping pin, safe low at boot"
+IO4,FAN_PWM_DRV,out,EC fan PWM 25 kHz via 2N7002,Open drain to fan PWM input; firmware inverts duty
+IO5,FAN_TACH,in,EC fan FG tach,"2 pulses / rev; 10 k pull-up, RC filter"
+IO6,QT_CHANGE,in,Touch controller CHANGE,"Open drain, 10 k pull-up"
+IO7,BUZ_DRV,out,Buzzer via 2N7002,2.7 kHz
+IO8,I2C0_SDA,i/o,I2C0 data,"LIS2DH12, INA226, VEML7700, AT42QT1070; 400 kHz"
+IO9,I2C0_SCL,out,I2C0 clock,4.7 k pull-ups on MB
+IO10,TMC_TX,out,TMC2209 UART TX,Through 1 k into PDN_UART
+IO11,TMC_UART,in,TMC2209 UART RX,"Single-wire UART, 115200"
+IO12,LIFT_STEP,out,Lift STEP,1600 steps / mm
+IO13,LIFT_DIR,out,Lift DIR,High = up
+IO14,PMS_SET,out,PMS5003 SET,High = run
+IO15,PMS_TX,in,UART1 RX from PMS5003 TX,9600 8N1
+IO16,PMS_RX,out,UART1 TX to PMS5003 RX,
+IO17,I2C1_SDA,i/o,I2C1 data (sensor board),"SHT40, SGP41; 100 kHz, 2.2 k pull-ups"
+IO18,I2C1_SCL,out,I2C1 clock,
+IO19,USB_DN,i/o,Native USB D-,Service / firmware via USB-C
+IO20,USB_DP,i/o,Native USB D+,
+IO21,LIFT_EN,out,TMC2209 ENN,Low = enabled
+IO35,DOOR,in,Front intake panel reed switch,Low = closed
+IO36,FILTER_DET,in,Filter hall sensor DRV5032,Low = filter present
+IO37,TILT_INT,in,LIS2DH12 INT1,Optional; tilt is also polled
+IO38,LED1_3V,out,Groove strip data CH1,"Via 74AHCT125, 96 LEDs"
+IO39,LED2_3V,out,Pop-up ring data CH2,"Via 74AHCT125, 84 LEDs"
+IO40,LED3_3V,out,Base halo data CH3,"Via 74AHCT125, 36 LEDs"
+IO41,LED4_3V,out,Display backlight + logo CH4,"Via 74AHCT125, 8 + 12 LEDs"
+IO42,HT_CS,out,HT1622 CS,
+IO47,HT_WR,out,HT1622 WR,
+IO48,HT_DATA,out,HT1622 DATA,
+IO43,TXD0,out,Factory log UART0,Test point TP5
+IO44,RXD0,in,Factory UART0,Test point TP6
+IO0,BOOT,in,Boot button,Hold during reset to flash
+EN,ESP_EN,in,Reset,Reset button reachable through rear pin-hole

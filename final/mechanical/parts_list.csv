@@ -1,0 +1,32 @@
+﻿Code,Part,Material,Process,Colour / finish,Wall,Size,Qty,Notes
+P01,"Lower intake sleeve (4 sides, 360 deg perforated)","PC/ABS, UL94 V-0, UV-stabilised","Injection moulding, 2 cavities (rear U + front panel)",Sage / Sand / Ice / Graphite (moulded-in colour),2.5 mm,450 x 470 x 530 mm,1,"Perforation 2.0 mm holes, 4.0 mm hex pitch, 22 % open area; 1 deg draft; front panel is removable"
+P02,"Front intake panel (removable, filter access)",PC/ABS V-0,Injection moulding,Same as P01,2.5 mm,310 x 525 mm (front face),1,4 x N35 magnets 10 x 3 mm + 2 bottom hooks; carries door-switch magnet
+P03,Upper shell with 8 deg sloped top,"PC/ABS V-0, white",Injection moulding,"Matte warm white, texture MT-11010","2.5 mm, 0.8 mm at display and logo windows",450 x 470 x 400-466 mm,1,Display window 230 x 78 mm and logo window 132 x 40 mm thinned to 0.8 mm (hidden-till-lit); light sensor window 3 mm dia
+P04,Groove light diffuser ring,"PC, opal 50 % transmission",Injection moulding,Opal white,1.5 mm,492 x 512 x 14 mm,1,U-channel holds the LED strip; snaps between P01 and P03
+P05,Pop-up cap,PC/ABS V-0,Injection moulding,Matte warm white,2.5 mm,436 x 456 x 28 mm,1,"Bosses for the lift plate, 4 x M3 inserts"
+P06,Outlet grille,PC/ABS V-0,Injection moulding,Graphite,2.0 mm,380 x 400 mm,1,"Slots 3 x 40 mm, 52 % open; clips into P05"
+P07,Pop-up ring skirt (diffuser),"PC, frosted",Injection moulding,Frosted clear,1.2 mm,430 x 450 x 44 mm,1,Holds the flex light ring RB; slides inside P03 top opening
+P08,Lift plate,"Aluminium 5052, 2 mm",Laser cut + bend,Natural,2 mm,360 x 380 mm,1,Carries cap; 2 guide bushing holes + lead-screw nut; earthed
+P09,Lift guide rods,Stainless steel 304,Ground rod,-,6 mm dia,6 x 100 mm,2,With igus JFM-0608-06 polymer bushings
+P10,Fan deck / filter seal plate,PP + 30 % glass fibre,Injection moulding,Black,3.0 mm,440 x 460 mm,1,Inlet ring 230 mm dia; PU foam seal to filter top; grommet G1 for cables
+P11,Fan scroll / outlet duct,ABS V-0,Injection moulding,Black,2.5 mm,400 x 420 x 260 mm,1,Guides fan air to the 360 deg cap gap
+P12,Base / plinth,PC/ABS V-0 + 1.2 kg steel ballast plate,Injection moulding,Graphite,3.0 mm,460 x 480 x 70 mm,1,Tip-over stable to 10 deg; 4 rubber feet; DC jack at rear
+P13,Base halo diffuser ring,"PC, opal",Injection moulding,Opal white,1.2 mm,470 x 490 x 5 mm,1,Holds 36-LED strip facing the floor
+P14,Display light guide,"PMMA, laser-dot pattern",Laser cut + dot etch,Clear,3 mm,214 x 72 mm,1,"Edge-lit by 8 RGBW LEDs, white reflector film behind"
+P15,Logo light guide + VIAN mask,PMMA + black printed mask,Laser cut + screen print,Clear / black,3 mm,132 x 40 mm,1,Mask leaves only the VIAN letters open
+P16,Rear service cover,PC/ABS V-0,Injection moulding,Matte warm white,2.0 mm,90 x 40 mm,1,Covers USB-C and reset pin-hole; rubber plug
+P17,Filter tray rails,POM,Injection moulding,Natural,-,400 mm,2,Filter slides out to the front
+P18,Display/touch window IMD film,"PC film 0.175 mm, printed",In-mould decoration,White with icon print,-,240 x 90 mm,1,Prints icon outlines that show only when lit
+F01,"Filter HC-360 (square tube, 4-sided)",H13 glass-fibre mini-pleat 50 mm + 10 mm activated carbon (MnO2 coated),Filter maker,-,-,"400 x 400 x 480 mm, centre channel 280 x 280",1,"Air enters all 4 sides, exits up the centre; PU top gasket; magnet in frame for presence sensor; pull strap"
+F02,Pre-filter sleeve PF-360 (washable),PET mesh 40 mesh,Sewn sleeve with hook-and-loop,Grey,-,Wraps F01,1,Wash up to 5 times; app tracks washes
+M01,"EC centrifugal fan, backward curved","24 V DC EC, PWM + FG",Bought-in,-,-,225 mm impeller,1,">= 900 m3/h free air, <= 55 W, ball bearing, PWM 25 kHz"
+M02,Micro stepper linear actuator,"NEMA 8 (20 mm) 2-phase, T6 x 2 mm lead screw, 80 mm",Bought-in,-,-,20 x 20 x 30 mm + screw,1,"0.5 A, 200 steps/rev, anti-backlash nut"
+M03,Home micro-switch,Omron D2F-01L,Bought-in,-,-,-,1,Closed when the cap is fully down
+M04,Power adapter 24 V 4 A,Mean Well GST96A24-P1M or BIS-approved equivalent,Bought-in,-,-,-,1,"IEC 62368-1, BIS IS 13252, level VI efficiency"
+M05,DC panel jack 5.5 x 2.5 mm,CUI PJ-063AH or equivalent,Bought-in,-,-,-,1,Rear of base
+M06,Groove LED strip 1.6 m,"SK6812 RGBW-WW, 60/m, 10 mm, IP30",Bought-in,-,-,96 LEDs,1,
+M07,Base halo LED strip 0.6 m,"SK6812 RGBW-WW, 60/m, 10 mm",Bought-in,-,-,36 LEDs,1,
+M08,PM2.5 sensor,Plantower PMS5003,Bought-in,-,-,50 x 38 x 21 mm,1,Mounted on intake side with its own inlet path
+M09,Door reed switch + magnet,Littelfuse 59140-1-S-00-A + 57140-000,Bought-in,-,-,-,1,
+M10,Filter hall sensor,TI DRV5032FB on carrier + 10 x 2 mm magnet in filter,Bought-in,-,-,-,1,
+M11,UV-C LED module (Hospital/Pro only),"2 x 275 nm UV-C LED, 24 V, aluminium reflector",Bought-in,-,-,-,1,Faces filter outlet face; no ozone

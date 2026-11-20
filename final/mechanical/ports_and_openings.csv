@@ -1,0 +1,18 @@
+﻿Opening / port,Face,Position,Size,Purpose
+360 deg intake perforation,All 4 sides of lower sleeve,z = 90 to 580 mm,"2.0 mm holes, 4.0 mm hex pitch",Dirty air in from every side
+360 deg outlet gap,"Top, under pop-up cap","z = 1,000-1,080 mm (slope)",0 / 15 / 30 / 46 mm lift,"Clean air out, all round"
+Outlet grille,Top of pop-up cap,Centre,"380 x 400 mm, 3 x 40 mm slots","Clean air out, upward"
+Hidden display window,"Front, upper shell",Centre at z = 925 mm,"230 x 78 mm, wall 0.8 mm",Display glows through; touch keys under it
+"Touch keys (Power, Mode, Light)","Front, below display text",z = 885 mm,"3 x 14 mm dia icons, 40 mm pitch",Capacitive through 0.8-2.5 mm plastic
+Ambient light sensor window,"Front, above display",z = 975 mm,"3 mm dia, thinned",Auto brightness / night mode
+VIAN logo window,"Front, upper shell",Centre at z = 800 mm,"132 x 40 mm, wall 0.8 mm",Lit logo in light-strip colour
+Groove light line,"All round, z = 600-614 mm",Between P01 and P03,14 mm high opal ring,Ambient light
+Base halo slot,"Underside of base, all round",z = 3-8 mm,5 mm opal ring,Floor glow
+Front intake panel,"Front, lower sleeve",z = 75-600 mm,310 x 525 mm,Remove to change filter (door switch)
+DC jack 24 V,Rear of base,"z = 35 mm, centre",8 mm hole for PJ-063AH,Power in
+Cable clip,Rear of base,Next to DC jack,R-clip for 3.5 mm cable,Strain relief
+USB-C service port,"Rear of upper shell, under P16 cover",z = 700 mm,9.5 x 3.6 mm,Firmware + diagnostics
+Reset pin-hole,"Rear, under P16 cover","z = 700 mm, 20 mm right of USB-C",1.5 mm dia,Hardware reset
+Carry recesses,"Left and right sides, upper shell",z = 640-670 mm,"140 x 30 mm, 25 mm deep",Lifting the unit
+Label recess,"Rear, base",z = 10-60 mm,90 x 50 mm,"Rating label, QR, serial, Wi-Fi password"
+Internal cable channel,Rear inside corner,Base to upper shell,16 mm dia + grommet G1 in fan deck,Harness route

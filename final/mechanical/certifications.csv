@@ -1,0 +1,9 @@
+﻿Area,Standard
+"Safety, air cleaners",IEC 60335-1 + IEC 60335-2-65 (BIS IS 302-2-65 in India)
+EMC,"CISPR 14-1 / 14-2, IEC 61000-3-2/3-3"
+Radio (Wi-Fi/BLE),"ETSI EN 300 328; India WPC ETA (module already certified, product listing needed)"
+Adapter,"IEC 62368-1, BIS IS 13252 registration (bought-in, certified)"
+Performance,CADR to AHAM AC-1 or GB/T 18801; noise to IEC 60704-2-11
+Filter,EN 1822 / ISO 29463 H13 test report per batch
+UV-C (Hospital/Pro),IEC 62471 photobiological safety; ozone test < 0.005 ppm
+Materials,"RoHS, REACH; UL94 V-0 for housings near electronics"

@@ -1,0 +1,17 @@
+﻿Wire,From,To,Conductors,Gauge,Length (mm),Connector at from,Connector at to,Notes
+W1,DC jack (rear base),MB J1,"2: VIN_RAW, GND",18 AWG,650,Panel jack solder lugs,Molex 39-01-2020 housing + 39-00-0039 crimps,"Route up the rear cable channel, 2 clips"
+W2,MB J2,EC fan,"4: 24V, GND, PWM, FG",20 AWG power / 26 AWG signal,350,JST XHP-4 + SXH-001T-P0.6,Fan maker connector,Keep away from LED data wires
+W3,MB J3,Lift stepper,"4: A1, A2, B1, B2",26 AWG,450,JST PHR-4 + SPH-002T-P0.5S,Motor pigtail,"Fixed run, no flex"
+W4,MB J4,Home switch,"2: HOME, GND",26 AWG,450,JST PHR-2,Faston 2.8 / solder,
+W5,MB J5,DB J1,12: see pinout,28 AWG,300,JST PHR-12,JST PHR-12,Twist I2C pair with GND
+W6,DB J2,LB J1,"3: 5V, DATA, GND",26 AWG,160,JST PHR-3,JST PHR-3,
+W7,MB J6,Groove strip (96 LEDs),"3: 5V, DATA, GND",22 AWG,300,JST XHP-3,JST SM 3-pin (strip pigtail),"Inject 5 V also at strip end (W7b, 22 AWG, 1.6 m loop)"
+W8,MB J7,Pop-up ring RB J1,"4: 5V, DATA, GND, GND","22 AWG silicone, high-flex",700,JST XHP-4,JST XHP-4,"150 mm coiled service loop for 46 mm lift; rated 100,000 cycles"
+W9,MB J8,Base halo strip (36 LEDs),"3: 5V, DATA, GND",22 AWG,900,JST XHP-3,JST SM 3-pin,Down the rear cable channel
+W10,MB J9,SB J1,8: see pinout,"26 AWG, I2C pair twisted with GND",800,JST PHR-8,JST PHR-8,Through fan-deck grommet G1
+W11,SB J2,PMS5003,8 (sensor cable),supplied,150,Molex 51021-0800,PMS5003 G7 socket,Supplied with sensor
+W12,MB J10,Door reed switch,"2: DOOR, GND",26 AWG,750,JST PHR-2,Reed pigtail,Magnet in removable front intake panel
+W13,MB J11,Filter hall sensor,"3: 3V3, OUT, GND",26 AWG,800,JST PHR-3,Sensor on 10 x 15 mm carrier,Magnet moulded in filter frame corner
+W14,MB J12,UV-C LED module (Hospital/Pro),"2: 24V, GND",22 AWG,400,JST XHP-2,Module connector,Not fitted on Home
+W15,MB J14,UV interlock micro-switch (Hospital/Pro),2: loop,22 AWG,750,JST PHR-2,Faston 2.8,Opens the relay coil when the panel is removed; not fitted on Home
+G,Earth / ESD,Metal lift plate to GND,1,20 AWG,200,Ring M3,MB TP4 via M3 screw,ESD path for touch-through metal

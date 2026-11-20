@@ -1,0 +1,8 @@
+﻿Board,References,Qty,Description,Manufacturer part number,Footprint,Fitting
+VSG-SB,J1,1,"Main board link, JST PH 8",JST B8B-PH-K-S,PH 8,
+VSG-SB,U1,1,"Temperature + humidity sensor, I2C 0x44",Sensirion SHT40-AD1B,DFN-4 1.5x1.5,
+VSG-SB,U2,1,"VOC + NOx gas sensor, I2C 0x59",Sensirion SGP41-D-R4,DFN-6 2.44x2.44,
+VSG-SB,C1 C2,2,100 nF 0402,GRM155R71C104KA88,0402,
+VSG-SB,C3,1,10 uF 0805 (PMS supply),GRM21BR61A106KE19,0805,
+VSG-SB,J2,1,PMS5003 cable connector 8-pin 1.25 mm,Molex 53398-0871 (PicoBlade),PicoBlade 8,
+VSG-SB,R1,1,10 k 0603 (PMS reset pull-up),RC0603FR-0710KL,0603,

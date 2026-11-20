@@ -1,0 +1,10 @@
+﻿Load,Rail,Typical W,Max W,Note
+EC fan (Turbo),24 V,38,55,Measured on INA226
+LEDs: groove 96 + ring 84 + base 36 + display 8 + logo 12 (firmware cap 25 %),5 V,4,12.5,"Full white uncapped would be 65 W, never allowed"
+ESP32-S3 + Wi-Fi,3.3 V,0.6,1.6,Peak at Wi-Fi TX
+"Sensors (PMS5003, SHT40, SGP41, LIS2DH12, VEML7700, QT1070)",5 V / 3.3 V,0.6,0.9,
+Display (HT1622 + VA LCD),3.3 V,0.05,0.1,
+Lift stepper (moving),24 V,0,4.5,"Only while moving, about 10 s per change"
+UV-C module (Hospital/Pro),24 V,0,4,Not on Home
+"Conversion losses (bucks, ~88 %)",-,0.8,3.0,
+TOTAL,,44.1,81.6,Adapter 24 V 4 A = 96 W
