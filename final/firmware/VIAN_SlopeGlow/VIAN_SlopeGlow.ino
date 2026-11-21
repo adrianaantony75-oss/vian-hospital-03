@@ -1,6 +1,7 @@
 // VIAN Slope Glow - main firmware
 // Functions: fan control (Off / Sleep / Auto / Turbo), pop-up lift that follows fan mode,
-// RGBW ambient lighting (groove, running ring, base halo, VIAN logo), outside 4.0" colour touch display,
+// RGBW lighting (mesh light, running ring, base halo, VIAN logo, icon glow), 4.0" flush screen with 9 pages, 4 touch icons,
+// auto colour by time, sunrise wake-up, child lock, OTA updates, multi-unit discovery (mDNS),
 // sensors, safety interlocks, 3-stage filter life (DebrisGuard, LifeHEPA, OdourCore), Wi-Fi app API.
 // Status: compiles for ESP32-S3; first hardware bring-up must confirm each block.
 #include <Adafruit_NeoPixel.h>
@@ -8,6 +9,9 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Preferences.h>
+#include <ESPmDNS.h>
+#include <ArduinoOTA.h>
+#include <time.h>
 #include "config.h"
 #include "sensors.h"
 #include "display.h"
@@ -26,6 +30,7 @@ struct State {
   float odourHours = 0, odourDose = 0; uint8_t odourLife = 100;
   uint32_t debrisWashedDay = 0; uint8_t debrisDays = 0;
   uint32_t modeChangedAt = 0, lastTouch = 0;
+  bool locked = false, autoTime = true; int alarmMin = -1; uint8_t units = 1; long tzOffset = 19800;   // IST default
 } st;
 
 Preferences prefs;
@@ -99,22 +104,37 @@ uint32_t scaleColor(uint32_t rgb, float k) {
   if (r > 200 && g > 150 && b > 80) { w = min(r, min(g, b)); r -= w; g -= w; b -= w; }  // warm/soft white -> W channel
   return Adafruit_NeoPixel::Color(r * k, g * k, b * k, w * k);
 }
+bool localTime(struct tm &t) { time_t now = time(nullptr); if (now < 1700000000) return false; localtime_r(&now, &t); return true; }
+// auto colour by time (when enabled and no manual colour change in the last hour): warm evening, dim amber night, soft white day
+uint32_t timeColour(float &k) {
+  struct tm t; k = 1; if (!st.autoTime || !localTime(t)) return 0;
+  int m = t.tm_hour * 60 + t.tm_min;
+  if (st.alarmMin >= 0) { int d = (m - (st.alarmMin - 20) + 1440) % 1440; if (d < 20) { k = 0.05f + d / 20.0f * 0.95f; return d < 10 ? 0xFF5A2A : 0xFFB36B; } }  // sunrise: 20 min ramp
+  if (m >= 23 * 60 || m < 6 * 60) { k = 0; return 0xFF8A3D; }        // sleeping: lights off
+  if (m >= 21 * 60) { k = 0.25f; return 0xFF8A3D; }                  // night: dim amber
+  if (m >= 18 * 60) return 0xFFB36B;                                 // evening: warm
+  return 0xFFF0DA;                                                   // day: soft white
+}
 uint32_t currentColor() { return st.aqColor ? aqiRgb(st.aqi) : st.color; }
 void fillAll(Adafruit_NeoPixel &s, uint32_t c) { for (uint16_t i = 0; i < s.numPixels(); i++) s.setPixelColor(i, c); }
 void lightingFrame(uint32_t now) {
   bool off = !st.lightOn || st.mode == M_OFF;
   float user = st.bright / 100.0f * (st.night ? 0.08f : 1.0f);
-  uint32_t col = currentColor();
+  uint32_t col = currentColor(); float tk; uint32_t tc = timeColour(tk);
+  if (tc && !st.aqColor && millis() - st.lastTouch > 3600000UL) { col = tc; user *= tk; }
   float br = (st.fx == FX_BREATHE) ? 0.35f + 0.65f * (0.5f + 0.5f * sinf(now / 1000.0f * 1.6f)) : 1.0f;
   uint32_t base = off ? 0 : scaleColor(col, user * br);
-  fillAll(ledGroove, base); fillAll(ledBase, base);
+  fillAll(ledGroove, base); fillAll(ledBase, base);   // ledGroove drives the mesh light strips (CH1)
   bool ringOn = !off && st.liftMm > 3;   // running ring only when the cap is open
-  for (int i = 0; i < N_RING; i++) {
+  for (int i = 0; i < N_RING_LEDS; i++) {
     float b = 1;
-    if (st.fx == FX_RUN) { float ph = fmodf((float)i / N_RING - now / 1000.0f * 0.22f + 10, 1.0f);
+    if (st.fx == FX_RUN) { float ph = fmodf((float)i / N_RING_LEDS - now / 1000.0f * 0.22f + 10, 1.0f);
       float q = min(min(ph, 1 - ph), fabsf(ph - 0.5f)); b = 0.4f + 0.6f * powf(max(0.0f, 1 - q * 9), 2); }
     ledRing.setPixelColor(i, ringOn ? scaleColor(col, user * br * b) : 0);
   }
+  // touch-icon glow: faint all the time, brighter for 5 s after a touch, off at night unless touched
+  bool recent = millis() - st.lastTouch < 5000;
+  for (int i = N_RING_LEDS; i < N_RING; i++) ledRing.setPixelColor(i, scaleColor(0xFFB36B, recent ? 0.6f : (st.night ? 0.0f : 0.08f)));
   // VIAN logo (front only) follows the strip colour; soft white is shown warm gold on the white body
   uint32_t fc = (col == 0xFFF0DA) ? 0xE3A55A : col;
   uint32_t logo = scaleColor(fc, st.night ? 0.05f : (st.mode == M_OFF ? 0.15f : max(0.3f, user)));
@@ -129,10 +149,11 @@ void displayFrame(uint32_t now) {
   bool asleep = (st.night || st.mode == M_OFF) && now - st.lastTouch > 15000;
   ui.brightness(asleep ? 0 : (uint8_t)constrain(40 + st.lux * 0.6f, 40.0f, 255.0f));
   if (asleep) return;
-  UiData d{st.aqi, st.pm25, st.pm10, st.rh, st.t, st.voc, st.fanPct, modeTitle(st.mode), WiFi.status() == WL_CONNECTED,
-           currentColor(), st.hepaLife, st.odourLife, st.debrisDays,
+  static const char *FX[3] = {"STEADY", "RUNNING", "BREATHE"};
+  UiData d{st.aqi, st.pm25, st.pm10, st.rh, st.t, st.voc, st.fanPct, modeTitle(st.mode), (uint8_t)(st.fanPct < 30 ? 22 : st.fanPct < 75 ? 37 : 45),
+           WiFi.status() == WL_CONNECTED, st.units, currentColor(), st.hepaLife, st.odourLife, st.debrisDays,
            st.tilted || st.doorOpen || st.filterMissing,
-           st.tilted ? "Unit tilted - fan off" : st.doorOpen ? "Front panel open" : "Fit the filter", (uint8_t)st.fx, st.lightOn};
+           st.tilted ? "Unit tilted - fan off" : st.doorOpen ? "Front panel open" : "Fit the filter", FX[st.fx], st.bright, st.locked};
   ui.draw(d);
 }
 
@@ -168,25 +189,24 @@ void resetFilters() {
   prefs.putUInt("dgDay", dayCounter); beep(300);
 }
 
-// ---------------- on-screen touch ----------------
+// ---------------- touch icons on the pop-up top ----------------
+// Power: tap = on/off. Previous / Next: change screen page. Light: tap = next effect, hold 1 s = lights on/off.
+// Hold Previous + Next 3 s = child lock on/off. Hold Light 5 s = filter reset (after a filter change).
 void touch(uint32_t now) {
-  static bool was = false; static uint32_t downAt = 0; static int btn = -1; static TouchPt first;
-  TouchPt t = (digitalRead(PIN_TP_INT) == LOW || was) ? touchRead() : TouchPt{false, 0, 0};
-  if (t.down && !was) { downAt = now; first = t; btn = hitButton(t.x, t.y); st.lastTouch = now; }
-  if (!t.down && was) {
+  static uint8_t last = 0; static uint32_t downAt = 0; static bool comboDone = false;
+  if (digitalRead(PIN_TOUCH_CHANGE) == HIGH && last == 0) return;   // CHANGE goes low on any key event
+  uint8_t k = qtKeys();
+  if (k && !last) { downAt = now; comboDone = false; st.lastTouch = now; }
+  if ((k & 0b0110) == 0b0110 && !comboDone && now - downAt > 3000) { st.locked = !st.locked; comboDone = true; beep(st.locked ? 200 : 60); }
+  if (!k && last && !comboDone) {
     uint32_t held = now - downAt;
-    if (btn == 0) setMode(st.mode == M_OFF ? M_AUTO : M_OFF);
-    else if (btn == 1) setMode(st.mode == M_SLEEP ? M_AUTO : st.mode == M_AUTO ? M_TURBO : M_SLEEP);
-    else if (btn == 2) { if (held > 1000) st.lightOn = !st.lightOn; else ui.page = ui.page == PG_LIGHT ? PG_HOME : PG_LIGHT; }
-    else if (btn == 3) { if (held > 5000) resetFilters(); else ui.page = ui.page == PG_FILTER ? PG_HOME : PG_FILTER; }
-    else if (ui.page == PG_LIGHT) {   // colour dots and effect buttons on the light page
-      static const uint32_t sw[6] = {0xFFB36B, 0xFF7A45, 0xFFF0DA, 0x4FE3D0, 0xFF7FB0, 0x43D18F};
-      if (first.y > 90 && first.y < 150) { int k = (first.x - 15) / 75; if (k >= 0 && k < 6) { st.color = sw[k]; st.aqColor = (k == 5); prefs.putUInt("color", st.color); } }
-      if (first.y > 180 && first.y < 226) { int k = (first.x - 16) / 152; if (k >= 0 && k < 3) st.fx = (Fx)k; }
-    }
-    btn = -1;
+    if (st.locked) { beep(30); }
+    else if (last & 1) setMode(st.mode == M_OFF ? M_AUTO : M_OFF);
+    else if (last & 2) ui.next(-1);
+    else if (last & 4) ui.next(+1);
+    else if (last & 8) { if (held > 5000) resetFilters(); else if (held > 1000) st.lightOn = !st.lightOn; else st.fx = (Fx)((st.fx + 1) % 3); }
   }
-  was = t.down;
+  last = k;
 }
 
 // ---------------- filter life (3 stages) ----------------
@@ -229,6 +249,10 @@ void apiSet() {
   if (http.hasArg("light")) st.lightOn = http.arg("light") == "1";
   if (http.hasArg("reset_filters")) resetFilters();
   if (http.hasArg("debris_washed")) { st.debrisWashedDay = dayCounter; prefs.putUInt("dgDay", dayCounter); }
+  if (http.hasArg("alarm")) { String a = http.arg("alarm"); st.alarmMin = a.length() >= 4 ? a.substring(0, 2).toInt() * 60 + a.substring(3, 5).toInt() : -1; prefs.putInt("alarm", st.alarmMin); }
+  if (http.hasArg("autotime")) { st.autoTime = http.arg("autotime") == "1"; prefs.putBool("autot", st.autoTime); }
+  if (http.hasArg("lock")) st.locked = http.arg("lock") == "1";
+  if (http.hasArg("tz")) { st.tzOffset = http.arg("tz").toInt(); prefs.putLong("tz", st.tzOffset); configTime(st.tzOffset, 0, "pool.ntp.org", "time.google.com"); }
   if (http.hasArg("ssid")) { prefs.putString("ssid", http.arg("ssid")); prefs.putString("pass", http.arg("pass")); http.send(200, "text/plain", "saved, rebooting"); delay(300); ESP.restart(); }
   apiState();
 }
@@ -237,6 +261,11 @@ void wifiBegin() {
   if (ssid.length()) { WiFi.mode(WIFI_STA); WiFi.begin(ssid.c_str(), pass.c_str()); }
   else { WiFi.mode(WIFI_AP); String ap = AP_PREFIX + String((uint32_t)ESP.getEfuseMac(), HEX); WiFi.softAP(ap.c_str(), AP_PASS); }
   http.on("/api/state", HTTP_GET, apiState); http.on("/api/set", HTTP_ANY, apiSet); http.begin();
+  // multi-unit: every VIAN announces itself on the home network; the app (and other units) find them by mDNS
+  String host = "vian-" + String((uint32_t)ESP.getEfuseMac(), HEX);
+  if (MDNS.begin(host.c_str())) { MDNS.addService("vian", "tcp", 80); MDNS.addServiceTxt("vian", "tcp", "model", "home700"); }
+  ArduinoOTA.setHostname(host.c_str()); ArduinoOTA.setPassword(AP_PASS); ArduinoOTA.begin();   // firmware updates over Wi-Fi
+  configTime(st.tzOffset, 0, "pool.ntp.org", "time.google.com");
 }
 
 // ---------------- setup / loop ----------------
@@ -244,12 +273,12 @@ void setup() {
   ledcAttach(PIN_FAN_PWM, FAN_PWM_HZ, FAN_PWM_BITS); fanSet(0);   // first: hold the fan stopped
   Serial.begin(115200);
   pinMode(PIN_DOOR, INPUT_PULLUP); pinMode(PIN_FILTER, INPUT_PULLUP); pinMode(PIN_LIFT_HOME, INPUT_PULLUP);
-  pinMode(PIN_LIFT_DIAG, INPUT); pinMode(PIN_TP_INT, INPUT_PULLUP); pinMode(PIN_TILT_INT, INPUT);
+  pinMode(PIN_LIFT_DIAG, INPUT); pinMode(PIN_TOUCH_CHANGE, INPUT_PULLUP); pinMode(PIN_TILT_INT, INPUT);
   pinMode(PIN_LIFT_STEP, OUTPUT); pinMode(PIN_LIFT_DIR, OUTPUT); pinMode(PIN_LIFT_EN, OUTPUT); digitalWrite(PIN_LIFT_EN, HIGH);
   pinMode(PIN_UV_RELAY, OUTPUT); digitalWrite(PIN_UV_RELAY, LOW); pinMode(PIN_BUZZER, OUTPUT);
   pinMode(PIN_FAN_TACH, INPUT); attachInterrupt(PIN_FAN_TACH, onTach, FALLING);
   busMain.begin(PIN_I2C0_SDA, PIN_I2C0_SCL, 400000); busSens.begin(PIN_I2C1_SDA, PIN_I2C1_SCL, 100000);
-  lisBegin(); inaBegin(); vemlBegin(); pmsBegin(); sgpStart = millis();
+  lisBegin(); inaBegin(); vemlBegin(); qtBegin(); pmsBegin(); sgpStart = millis();
   for (auto *s : {&ledGroove, &ledRing, &ledBase, &ledFront}) { s->begin(); s->setBrightness(LED_MAX_BRIGHT); s->clear(); s->show(); }
   ui.begin();
   TMCSerial.begin(115200, SERIAL_8N1, PIN_TMC_RX, PIN_TMC_TX);
@@ -260,6 +289,7 @@ void setup() {
   st.mode = (Mode)prefs.getUChar("mode", M_AUTO); st.color = prefs.getUInt("color", 0xFFB36B);
   st.hepaG = prefs.getFloat("hepaG", 0); st.hepaHours = prefs.getFloat("hepaH", 0); st.basePowerW = prefs.getFloat("pw0", 0);
   st.odourHours = prefs.getFloat("odH", 0); st.odourDose = prefs.getFloat("odD", 0);
+  st.alarmMin = prefs.getInt("alarm", -1); st.autoTime = prefs.getBool("autot", true); st.tzOffset = prefs.getLong("tz", 19800);
   dayCounter = prefs.getUInt("days", 0); st.debrisWashedDay = prefs.getUInt("dgDay", 0);
   st.lastTouch = millis();
   liftHome(); wifiBegin(); beep(80);
@@ -269,7 +299,9 @@ void setup() {
 void loop() {
   uint32_t now = millis();
   static uint32_t tFast = 0, tSlow = 0, tLed = 0, tSave = 0, runMs = 0;
-  pmsPoll(); http.handleClient(); touch(now);
+  pmsPoll(); http.handleClient(); ArduinoOTA.handle(); touch(now);
+  static uint32_t tUnits = 0;
+  if (now - tUnits > 60000 && WiFi.status() == WL_CONNECTED) { tUnits = now; int n = MDNS.queryService("vian", "tcp"); st.units = (uint8_t)max(1, n + 1); }
   if (now - tFast >= 100) {                 // 10 Hz: safety + control
     tFast = now;
     st.tilted = lisTiltDeg() > TILT_LIMIT_DEG;

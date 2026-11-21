@@ -1,0 +1,8 @@
+﻿Rule
+"Every cable is a pre-made harness: crimped JST housings, labelled at both ends with its wire number (W1, W2...)."
+Clip harnesses every 100 mm to the moulded cable clips / tie mounts; never let a wire touch the fan or the lift screw.
+"Route the power wires (W1, W2) on the left rear channel and the LED data and sensor wires (W5, W7, W9, W10) on the right: no crossing."
+"W8 to the pop-up top: 150 mm coiled service loop, clipped at both ends, tested for 100,000 lift cycles."
+Twist I2C pairs (SDA/SCL) with a ground wire; keep the display cable (W5) under 300 mm.
+Grommet G1 in the fan deck seals all cables passing into the filter bay (no air leak around the filter).
+Strain relief at the DC jack (R-clip) and at every board connector (tie 20 mm from the connector).

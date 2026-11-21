@@ -1,11 +1,11 @@
 ﻿Item,Result
 Total mass (with filters),19.1 kg
-Centre of gravity height,"503 mm above the floor (heavy filter, ballast and base are low)"
+Centre of gravity height,"500 mm above the floor (heavy filter, ballast and base are low)"
 Support base,Feet at the corners of the 460 x 480 mm plinth; narrowest half-width 225 mm
-Tip-over angle,24.1 deg (it must be tilted this far before it falls)
-Safety standard,IEC 60335-1 clause 20.1: must not fall when tilted 10 deg. VIAN: 24.1 deg = 2.4 x the requirement
-Without filters (filter change),"21.4 deg, still more than 2 x the 10 deg rule"
-Without ballast plate,21.9 deg (the 2 kg plate adds about 2 deg and lowers the centre of gravity)
+Tip-over angle,24.2 deg (it must be tilted this far before it falls)
+Safety standard,IEC 60335-1 clause 20.1: must not fall when tilted 10 deg. VIAN: 24.2 deg = 2.4 x the requirement
+Without filters (filter change),"21.5 deg, still more than 2 x the 10 deg rule"
+Without ballast plate,22.0 deg (the 2 kg plate adds about 2 deg and lowers the centre of gravity)
 Push needed at the top to tip it,"about 39 N (= 4 kg of force), more than a normal knock; a child hanging on it could tip it"
 Child safety,"Wall anti-tip strap in the box (like furniture), tilt sensor cuts the fan and beeps at 35 deg, pop-up cap closes, no sharp edges"
 Shaking / vibration,"Fan balanced to G1.0, mounted on 4 silicone isolators; 4 rubber feet 60 Shore A; tested with 10 deg tilt + push test + 1 h vibration at Turbo"

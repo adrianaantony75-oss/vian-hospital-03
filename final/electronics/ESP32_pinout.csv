@@ -4,9 +4,9 @@ IO2,LIFT_HOME,in,Lift home micro-switch,"Pull-up 10 k, low = cap fully closed"
 IO3,UV_RELAY_DRV,out,UV-C relay (Hospital/Pro),"Pull-down 100 k; strapping pin, safe low at boot"
 IO4,FAN_PWM_DRV,out,EC fan PWM 25 kHz via 2N7002,Open drain to fan PWM input; firmware inverts duty
 IO5,FAN_TACH,in,EC fan FG tach,"2 pulses / rev; 10 k pull-up, RC filter"
-IO6,TP_INT,in,FT6336U touch interrupt,"Open drain, 10 k pull-up"
+IO6,TOUCH_CHANGE,in,Touch-icon controller CHANGE (AT42QT1070 on the pop-up top),"Open drain, 10 k pull-up, via the ring flex cable"
 IO7,BUZ_DRV,out,Buzzer via 2N7002,2.7 kHz
-IO8,I2C0_SDA,i/o,I2C0 data,"LIS2DH12, INA226, VEML7700, FT6336U touch; 400 kHz"
+IO8,I2C0_SDA,i/o,I2C0 data,"LIS2DH12, INA226, VEML7700, AT42QT1070 touch icons (via ring flex); 400 kHz"
 IO9,I2C0_SCL,out,I2C0 clock,4.7 k pull-ups on MB
 IO10,TMC_TX,out,TMC2209 UART TX,Through 1 k into PDN_UART
 IO11,TMC_UART,in,TMC2209 UART RX,"Single-wire UART, 115200"
@@ -23,8 +23,8 @@ IO21,LIFT_EN,out,TMC2209 ENN,Low = enabled
 IO35,DOOR,in,Front intake panel reed switch,Low = closed
 IO36,FILTER_DET,in,Filter hall sensor DRV5032,Low = filter present
 IO37,TILT_INT,in,LIS2DH12 INT1,Optional; tilt is also polled
-IO38,LED1_3V,out,Groove strip data CH1,"Via 74AHCT125, 96 LEDs"
-IO39,LED2_3V,out,Pop-up ring data CH2,"Via 74AHCT125, 84 LEDs"
+IO38,LED1_3V,out,Mesh light data CH1,"Via 74AHCT125, 4 strips x 24 = 96 LEDs"
+IO39,LED2_3V,out,Pop-up ring + icon glow data CH2,"Via 74AHCT125, 84 ring + 4 icon LEDs"
 IO40,LED3_3V,out,Base halo data CH3,"Via 74AHCT125, 36 LEDs"
 IO41,LED4_3V,out,VIAN logo CH4,"Via 74AHCT125, 12 LEDs"
 IO42,LCD_CS,out,Display SPI chip select,ST7796S

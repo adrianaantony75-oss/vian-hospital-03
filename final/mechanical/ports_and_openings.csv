@@ -2,10 +2,12 @@
 360 deg intake perforation,All 4 sides of lower sleeve,z = 90 to 580 mm,"2.0 mm holes, 4.0 mm hex pitch",Dirty air in from every side
 360 deg outlet gap,"Top, under pop-up cap","z = 1,000-1,080 mm (slope)",0 / 15 / 30 / 46 mm lift,"Clean air out, all round"
 Outlet grille,Top of pop-up cap,Centre,"380 x 400 mm, 3 x 40 mm slots","Clean air out, upward"
-Display glass pocket (flush),"Front, upper shell",Centre at z = 925 mm,"232 x 112 mm pocket, 1.2 mm deep; 92 x 64 mm screen cut-out inside it",Glass panel sits flush with the body
-Ambient light sensor window,"Front, above display",z = 975 mm,"3 mm dia, thinned",Auto brightness / night mode
+"Screen (flush, no bezel)","Front, upper shell, above the VIAN logo",Centre at z = 905 mm,90 x 50 mm pocket 1.2 mm deep; 86 x 46 mm cut-out; 2 x M2 bosses behind,"4.0-inch screen, readable from about 5 m"
+"Touch icons (Power, Previous, Next, Light)",Front strip of the sloped pop-up cap,"28 mm in front of the grille, 48 mm pitch","4 icon windows 12 mm, wall thinned to 0.8 mm","Touch, no pressing; icons glow faintly"
+Ambient light sensor window,"Front, beside the screen","z = 905 mm, 52 mm right of centre","3 mm dia, thinned",Auto brightness / night mode
 VIAN logo window,"Front, upper shell",Centre at z = 800 mm,"132 x 40 mm, wall 0.8 mm",Lit logo in light-strip colour
-Groove light line,"All round, z = 600-614 mm",Between P01 and P03,14 mm high opal ring,Ambient light
+Seam line,"All round, z = 600-608 mm",Between P01 and P03,8 mm graphite ring,Visual split between the two tones
+Mesh light,"Inside the lower sleeve, all 4 sides",z = 120-520 mm,Through the 2.0 mm intake holes,Light glows out through the mesh
 Base halo slot,"Underside of base, all round",z = 3-8 mm,5 mm opal ring,Floor glow
 Front intake panel,"Front, lower sleeve",z = 75-600 mm,310 x 525 mm,Remove to rinse DebrisGuard and change filters (door switch)
 DC jack 24 V,Rear of base,"z = 35 mm, centre",8 mm hole for PJ-063AH,Power in

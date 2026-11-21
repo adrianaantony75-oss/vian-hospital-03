@@ -41,7 +41,7 @@
 #define PIN_LCD_MOSI   48
 #define PIN_LCD_DC     45   // strapping pin, 10 k pull-down on the main board
 #define PIN_LCD_BL     43   // backlight PWM
-#define PIN_TP_INT     6    // touch interrupt, low = touch
+#define PIN_TOUCH_CHANGE 6  // AT42QT1070 CHANGE (touch icons on the pop-up top), low = key change
 // Safety inputs
 #define PIN_DOOR       35   // reed switch on front intake panel, low = panel closed
 #define PIN_FILTER     36   // DRV5032 hall sensor, low = magnet in filter frame present
@@ -52,7 +52,9 @@
 
 // ---------- LED counts ----------
 #define N_GROOVE 96
-#define N_RING   84
+#define N_RING_LEDS 84
+#define N_ICONS  4          // icon glow LEDs on the touch board, chained after the ring
+#define N_RING   (N_RING_LEDS + N_ICONS)
 #define N_BASE   36
 #define N_LOGO   12
 #define N_FRONT  N_LOGO

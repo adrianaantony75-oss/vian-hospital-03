@@ -87,6 +87,10 @@ static float lisTiltDeg() {  // angle between unit vertical and gravity
 static bool inaBegin() { return i2cWrite16(busMain, 0x40, 0x00, 0x4527) && i2cWrite16(busMain, 0x40, 0x05, 8192); }
 static float inaWatts() { uint8_t b[2]; if (!i2cRead(busMain, 0x40, 0x03, b, 2)) return -1; return ((b[0] << 8) | b[1]) * 25 * 0.000125f; }
 
+// ---------- AT42QT1070 touch icons on the pop-up top (I2C0, 0x1B): key0 Power, key1 Previous, key2 Next, key3 Light ----------
+static bool qtBegin() { uint8_t id; return i2cRead(busMain, 0x1B, 0, &id, 1) && id == 0x2E; }   // chip ID register 0 = 0x2E
+static uint8_t qtKeys() { uint8_t s[2]; if (!i2cRead(busMain, 0x1B, 2, s, 2)) return 0; return s[1] & 0x0F; }  // reg 2 detection, reg 3 key status
+
 // ---------- VEML7700 ambient light (I2C0, 0x10) ----------
 static bool vemlBegin() { busMain.beginTransmission(0x10); busMain.write(0x00); busMain.write(0x00); busMain.write(0x00); return busMain.endTransmission() == 0; }
 static float vemlLux() { uint8_t b[2]; busMain.beginTransmission(0x10); busMain.write(0x04); if (busMain.endTransmission(false)) return -1;

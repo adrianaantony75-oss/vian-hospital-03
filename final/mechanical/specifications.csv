@@ -1,13 +1,13 @@
 ﻿Area,Item,Specification
-Display,Type,"4.0-inch IPS colour TFT, 480 x 320 px, ST7796S driver, SPI 40 MHz; projected-capacitive touch FT6336U (I2C)"
-Display,Blended placement,"Behind ONE flush glass panel (230 x 110 mm) set into the body; the glass is back-printed in the same warm white as the body, with a clear window only over the screen. No step, no frame, nothing standing out"
-Display,Light theme UI,"Screen background is warm white (#F4F3EF) to match the glass print, dark grey text, AQI ring in the air-quality colour; by day it reads as part of the white panel"
-Display,Sizes,Active area 83.5 x 55.7 mm; screen window in the print 92 x 64 mm; glass 230 x 110 x 1.1 mm; body pocket 232 x 112 x 1.2 mm
-Display,Screens,"Home: AQI ring + number, PM2.5, PM10, humidity, temperature; buttons Power / Mode / Light / Filter. Light page: colour + effect. Filter page: DebrisGuard, LifeHEPA, OdourCore"
-Display,Brightness,"Auto from VEML7700; 0-100 % PWM backlight; off at night (< 3 lux) after 15 s, wakes on touch"
-Display,Off state,When fully off the window looks soft grey under the white print; in normal use the screen stays on (dim white) so the panel looks uniform
-Display,Logo,"VIAN logo separate, below the glass, front only, lit in the light-strip colour"
-Display,Cost (1k pcs),Module INR 650-900 + back-printed glass INR 160-240 + carrier INR 30 + display board INR 90
+Display,Size,"4.0-inch, landscape rectangle; visible window 86 x 44 mm (about 60 % of a Galaxy S23 screen's width)"
+Display,Readability,Main number about 25-28 mm tall: readable from about 5 m
+Display,No bezel,Black-printed cover glass 88 x 48 mm sits flush with the body; the module is pushed in from behind and held by 2 x M2 screws; only black glass shows
+Display,Panel (launch),"4.0-inch IPS TFT 480 x 320, ST7796S, SPI 40 MHz, 350-400 nit; the black glass print hides its edge"
+Display,Panel (upgrade),4.0-4.3 inch AMOLED (true black) with QSPI interface if the supplier offers one at a similar price
+Display,Control,"Not a touch screen: the 4 touch icons on the slope (Power, Previous, Next, Light) change pages; everything else in the app"
+Display,Pages (9),1 Air quality (AQI) · 2 PM2.5 · 3 PM10 · 4 Humidity + temperature · 5 Gases (VOC) · 6 Fan mode + noise · 7 Filter life + mesh rinse · 8 Light colour + effect · 9 Wi-Fi + app
+Display,Brightness,Auto from the VEML7700 light sensor; dims after 15 s; off at night (< 3 lux) and wakes when an icon is touched
+Display,Cost (1k pcs),"IPS module INR 650-900 (AMOLED INR 1,200-2,000) + black-printed glass INR 60-100 + display board INR 90"
 Pop-up lift,Heights,"Off 0 mm (closed), Sleep 15 mm, Auto 30 mm, Turbo 46 mm"
 Pop-up lift,Speed,"5 mm/s (quiet), StealthChop silent mode"
 Pop-up lift,Hunting guard,"In Auto, moves only after the fan mode is stable for 30 s"
@@ -15,12 +15,15 @@ Pop-up lift,Anti-pinch,StallGuard stall while closing: reverse 5 mm and stop unt
 Pop-up lift,Safety close,"Closes on Off, on tilt > 35 deg, on front panel removed, and on power loss via spring-free lead screw holding (no fall)"
 Pop-up lift,Life,"Designed for 50,000 moves (about 14 years at 10 moves a day)"
 Pop-up lift,Fail-safe,"If the lift fails, the unit runs at the speed allowed for the current height and shows a service alert in the app"
-Lighting,Groove line,"96 x SK6812 RGBW-WW, opal ring, wraps the body at z = 600-614 mm"
-Lighting,Running ring,"84 x SK6812 RGBW-WW on flex, inside frosted skirt, visible only when the cap is up"
+Lighting,Mesh light,96 x SK6812 RGBW-WW on 4 vertical strips inside the intake; light glows out through the mesh holes (strongest effect at night)
+Lighting,Pop-up running ring,"84 x SK6812 RGBW-WW on flex, inside the frosted skirt, visible when the cap is up"
 Lighting,Base halo,36 x SK6812 RGBW-WW facing the floor
-Lighting,Logo,"12 x SK6812 RGBW-WW behind VIAN mask, front only"
-Lighting,Colours,"Warm 2700 K, Sunset, Soft white, Teal, Rose, any RGB from the app, or Air quality (green / yellow-green / amber / red)"
+Lighting,VIAN logo,"12 x SK6812 RGBW-WW behind the VIAN mask, front only"
+Lighting,Touch icons,4 x SK6812MINI-E glow faintly through the icon windows; brighter when a hand comes near
+Lighting,Colours,"Any colour from the app (colour wheel), plus 6 presets: Warm 2700 K, Sunset, Soft white, Teal, Rose, Air quality (green / yellow-green / amber / red). No extra cost: colour is software"
 Lighting,Effects,"Steady, Running (ring chase), Breathing"
+Lighting,Auto colour by time,"Warm in the evening, dim amber at night, off while you sleep, soft white by day (user can edit the schedule)"
+Lighting,Sunrise wake-up,Lights fade up from dim red to warm white over 20 min before the alarm time set in the app
 Lighting,Limits,Firmware caps average brightness at 25 % (5 V rail 3 A); night mode 8 %
 Filter,System,"3 stages, like the best long-life purifiers: DebrisGuard (washable debris catcher) -> LifeHEPA 5-year H13 -> OdourCore carbon"
 Filter,Stage 1 DebrisGuard DG-360,"4 magnetic washable panels of 60-mesh (250 um) PET mesh around the filter. Catches hair, lint, pet fur, coarse dust so they never reach the HEPA. Rinse under a tap every 2-4 weeks, dry 2 h. Lifetime part; spare set INR 499"

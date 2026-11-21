@@ -1,0 +1,12 @@
+﻿Part,Tool,Cavities,Cost INR lakh (estimate),Shot life
+P01 lower intake sleeve (rear U + front panel),"Steel P20, side actions for perforation",2 tools,6.0-9.0,300k
+P03 upper shell with slope + screen pocket,"Steel P20, polished, slides",1,6.0-9.0,300k
+P05 pop-up cap with icon windows,Steel P20,1,2.5-4.0,300k
+P06 outlet grille,Steel P20,1,1.5-2.5,300k
+P07 frosted ring skirt,"Steel, high polish",1,1.5-2.5,300k
+P10 fan deck + P20 bell-mouth,"Steel P20, family tool",1+1,3.0-4.5,300k
+P11 fan scroll / outlet duct,Steel P20,1,3.0-4.5,300k
+P12 base / plinth + P13 halo ring,"Steel P20, family tool",1+1,3.5-5.0,300k
+P04 seam ring + P16 service cover + P17 rails,Family tool,3,1.5-2.5,300k
+F01 DebrisGuard frames,"Steel, insert-moulded mesh",2,1.0-1.5,300k
+"TOTAL (estimate, China / India toolmakers)",,,29.5-45.0,

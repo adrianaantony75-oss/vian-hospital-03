@@ -1,0 +1,11 @@
+﻿Idea,Saving per unit INR,Trade-off
+"Smaller LifeHEPA (3-year, 14 m2 media)","900-1,600",Filter life 3 years instead of 5
+Fixed glowing outlet gap instead of motorised pop-up,350-500,Loses the pop-up movement
+Fewer ring LEDs (60 instead of 84) + fewer mesh LEDs (64),120-180,Slightly less even light
+PMS5003 -> PMS7003 or SDS011-class PM sensor,150-300,Check accuracy at high PM
+Drop the SGP41 gas sensor (VOC page from app only),250-350,No smell/gas reading on the unit
+Use the ESP32-S3 module's own antenna + one board for display and touch,100-200,Needs careful layout
+Buy fan + display + PCB assembly from one supplier,300-800,Single-supplier dependence
+"Soft (aluminium) moulds for the first 1,000 units",Tooling -40 to -60 %,Moulds last fewer shots; upgrade later
+Family moulds (several small parts in one tool),Tooling -15 to -25 %,Same colour per shot
+Prototype bodies by 3D printing / vacuum casting before any mould,Avoids mould changes (lakhs),"INR 8,000-15,000 per sample set"

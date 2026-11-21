@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+</head><body>
+<title>VIAN Home Editor</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: 3D stage on the left, part list + properties panel on the right; stacks on phones. Product-studio look: warm paper light theme, graphite dark theme, warm LED accent. */
+:root{--bg:#EFEDE8;--panel:#F8F7F4;--card:#FFFFFF;--line:#DAD6CE;--fg:#1D2126;--muted:#5F6670;--accent:#E07A1F;--accent-ink:#FFFFFF;--sel:#FCE9D6;--stage:#E6E3DC;
+  --body:"Manrope",ui-sans-serif,system-ui,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,Consolas,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111418;--panel:#161A1F;--card:#1C2127;--line:#2C333C;--fg:#E8ECF0;--muted:#9AA5B1;--accent:#F59A42;--accent-ink:#1A1206;--sel:#3A2A1A;--stage:#0F1216;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111418;--panel:#161A1F;--card:#1C2127;--line:#2C333C;--fg:#E8ECF0;--muted:#9AA5B1;--accent:#F59A42;--accent-ink:#1A1206;--sel:#3A2A1A;--stage:#0F1216;color-scheme:dark}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font:14px/1.45 var(--body);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+button,select,input{font:inherit;color:inherit}
+button{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:7px 11px;cursor:pointer;font-weight:600;font-size:13px}
+button:hover{border-color:var(--accent)}button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto minmax(0,1fr)}
+header{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line);background:var(--panel)}
+header h1{font-size:16px;margin:0;font-weight:700}header .sub{color:var(--muted);font-size:12.5px}
+.hdr-r{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.stage{position:relative;min-height:0;background:var(--stage)}
+canvas#c{display:block;width:100%;height:100%;touch-action:none}
+.tools{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap;max-width:calc(100% - 24px)}
+.hint{position:absolute;left:12px;bottom:12px;right:12px;font-size:12px;color:var(--muted);background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:6px 10px;width:max-content;max-width:calc(100% - 24px)}
+aside{min-height:0;overflow-y:auto;border-left:1px solid var(--line);background:var(--panel);padding:14px 16px;display:grid;gap:14px;align-content:start}
+h2{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px;font-weight:700}
+.parts{display:flex;flex-wrap:wrap;gap:6px}
+.parts button{font-weight:500;padding:6px 9px}
+.parts button.is-sel{background:var(--sel);border-color:var(--accent)}
+.row{display:grid;grid-template-columns:92px minmax(0,1fr) 54px;gap:8px;align-items:center;margin:6px 0}
+.row label{font-size:12.5px;color:var(--muted)}
+.row output{font:12px var(--mono);text-align:right;color:var(--fg)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=color]{width:100%;height:30px;border:1px solid var(--line);border-radius:7px;background:var(--card);padding:2px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px}
+.sel-name{font-size:16px;font-weight:700;margin:0 0 2px}.sel-note{font-size:12.5px;color:var(--muted);margin:0 0 6px}
+.btns{display:flex;flex-wrap:wrap;gap:6px}
+textarea{width:100%;min-height:90px;font:11.5px var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:9px;padding:8px}
+.toast{font-size:12.5px;color:var(--accent);min-height:18px}
+.thumbs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-top:8px}
+.thumbs canvas{width:100%;height:auto;border-radius:4px;border:2px solid transparent;cursor:pointer;display:block}
+.thumbs canvas.on{border-color:var(--accent)}
+@media (max-width:860px){.app{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 56vh auto;height:auto;min-height:100%}aside{border-left:0;border-top:1px solid var(--line);overflow:visible}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="app">
+  <header>
+    <h1>VIAN Home Editor</h1><span class="sub">Slope Glow · tap any part to edit it</span>
+    <div class="hdr-r">
+      <button id="undo" type="button">Undo</button>
+      <button id="reset" type="button">Reset all</button>
+      <button id="night" type="button" aria-pressed="false">Night view</button>
+      <button id="offview" type="button" aria-pressed="false">Show switched off</button>
+    </div>
+  </header>
+  <section class="stage">
+    <canvas id="c" aria-label="Editable 3D model of the VIAN Home air purifier"></canvas>
+    <div class="tools" role="toolbar" aria-label="Edit tool">
+      <button type="button" data-mode="select" aria-pressed="true">Select</button>
+      <button type="button" data-mode="translate" aria-pressed="false">Move</button>
+      <button type="button" data-mode="scale" aria-pressed="false">Resize</button>
+      <button type="button" id="spin" aria-pressed="false">Turntable</button>
+    </div>
+    <div class="hint" id="hint">Drag to rotate · scroll or pinch to zoom · tap a part to select it</div>
+  </section>
+  <aside>
+    <div><h2>Parts</h2><div class="parts" id="parts"></div></div>
+    <div class="card" id="props">
+      <p class="sel-name" id="selName">Choose a part</p><p class="sel-note" id="selNote">Tap a part in the 3D view or in the list above.</p>
+      <div id="propRows" hidden>
+        <div class="row"><label for="pColor">Colour</label><input type="color" id="pColor"><span></span></div>
+        <div class="row"><label for="pOpacity">Transparency</label><input type="range" id="pOpacity" min="0" max="100" step="1"><output id="oOpacity"></output></div>
+        <div class="row"><label for="pGlow">Glow</label><input type="range" id="pGlow" min="0" max="100" step="1"><output id="oGlow"></output></div>
+        <div class="row"><label for="pScale">Size</label><input type="range" id="pScale" min="40" max="200" step="1"><output id="oScale"></output></div>
+        <div class="row"><label for="pX">Left / right</label><input type="range" id="pX" min="-200" max="200" step="1"><output id="oX"></output></div>
+        <div class="row"><label for="pY">Up / down</label><input type="range" id="pY" min="-300" max="300" step="1"><output id="oY"></output></div>
+        <div class="row"><label for="pZ">Front / back</label><input type="range" id="pZ" min="-100" max="100" step="1"><output id="oZ"></output></div>
+        <div class="btns"><button type="button" id="pVis" aria-pressed="true">Visible</button><button type="button" id="pReset">Reset this part</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>What the screen shows</h2>
+      <p class="sel-note" id="pageName">1 / 9 · Air quality</p>
+      <div class="btns"><button type="button" id="pgPrev">Previous</button><button type="button" id="pgNext">Next</button><button type="button" id="pgAuto" aria-pressed="false">Auto-play</button></div>
+      <div class="thumbs" id="thumbs"></div>
+      <p class="sel-note">Tap Previous / Next here, or tap the touch icons on the top of the model.</p>
+    </div>
+    <div class="card">
+      <h2>Whole unit</h2>
+      <div class="row"><label for="gMesh">Mesh light</label><input type="range" id="gMesh" min="0" max="100" step="1" value="60"><output id="oMesh">60 %</output></div>
+      <div class="row"><label for="gLight">Light colour</label><input type="color" id="gLight" value="#ffb36b"><span></span></div>
+      <div class="row"><label for="gLift">Pop-up top</label><input type="range" id="gLift" min="0" max="46" step="1" value="30"><output id="oLift">30 mm</output></div>
+      <div class="row"><label for="gBody">Body colour</label><input type="color" id="gBody" value="#f1f0ec"><span></span></div>
+      <div class="row"><label for="gLower">Lower colour</label><input type="color" id="gLower" value="#7fa79a"><span></span></div>
+      <div class="row"><label for="gOled">OLED size</label><select id="gOled"><option value="a">4.0 in AMOLED (88 × 44 mm)</option><option value="b">4.3 in (95 × 48 mm)</option></select><span></span></div>
+    </div>
+    <div class="card">
+      <h2>Send your design to Claude</h2>
+      <p class="sel-note">Copy your changes and paste them into the chat. I'll build them into the final model, PDF and print files.</p>
+      <div class="btns"><button type="button" id="copy">Copy my design</button></div>
+      <textarea id="out" readonly aria-label="Your design as text"></textarea>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </aside>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/TransformControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/environments/RoomEnvironment.js"></script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const canvas=$("#c"),stage=document.querySelector(".stage");
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,preserveDrawingBuffer:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.outputEncoding=THREE.sRGBEncoding;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.8;renderer.setClearColor(0,0);
+const scene=new THREE.Scene();const pm=new THREE.PMREMGenerator(renderer);scene.environment=pm.fromScene(new THREE.RoomEnvironment(),.04).texture;
+scene.add(new THREE.HemisphereLight(0xffffff,0x334455,.5));const key=new THREE.DirectionalLight(0xffffff,.7);key.position.set(-900,1600,1300);scene.add(key);
+const camera=new THREE.PerspectiveCamera(32,1,5,30000);camera.position.set(1900,1150,2300);
+const orbit=new THREE.OrbitControls(camera,canvas);orbit.enableDamping=true;orbit.target.set(0,560,0);orbit.minDistance=400;orbit.maxDistance=7000;
+const floor=new THREE.Mesh(new THREE.CircleGeometry(1500,96),new THREE.MeshStandardMaterial({color:0x9a958c,roughness:1,envMapIntensity:.2}));floor.rotation.x=-Math.PI/2;scene.add(floor);
+
+/* ---------- geometry helpers (same shapes as the final Slope Glow model) ---------- */
+function rrect(w,d,r){const s=new THREE.Shape();const x=w/2,z=d/2;s.moveTo(-x+r,-z);s.lineTo(x-r,-z);s.quadraticCurveTo(x,-z,x,-z+r);s.lineTo(x,z-r);s.quadraticCurveTo(x,z,x-r,z);s.lineTo(-x+r,z);s.quadraticCurveTo(-x,z,-x,z-r);s.lineTo(-x,-z+r);s.quadraticCurveTo(-x,-z,-x+r,-z);return s}
+function ringShape(w,d,r,t){const s=rrect(w,d,r);s.holes.push(rrect(w-2*t,d-2*t,Math.max(4,r-t)));return s}
+const SL=THREE.MathUtils.degToRad(8),ZF=249;
+function tower(o){const W=450,D=470,H=o.H||1080,R=95,y0=o.y0||70;
+  const ge=new THREE.ExtrudeGeometry(rrect(W,D,R),{depth:H-y0,bevelEnabled:true,bevelThickness:18,bevelSize:14,bevelSegments:6,steps:30,curveSegments:24});
+  ge.rotateX(-Math.PI/2);ge.translate(0,y0,0);const p=ge.attributes.position;
+  for(let i=0;i<p.count;i++){let y=p.getY(i),z=p.getZ(i);if(o.slope&&y>H-40)y+=Math.tan(o.slope)*(-z)-Math.tan(o.slope)*D/2;if(o.minY&&y<o.minY)y=o.minY;p.setY(i,y)}
+  ge.computeVertexNormals();return ge}
+function canvasTex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;draw(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t}
+const perfTex=canvasTex(240,240,(g)=>{g.fillStyle="#fff";g.fillRect(0,0,240,240);g.fillStyle="#59606a";for(let y=6;y<240;y+=12)for(let x=(((y-6)/12)%2)?0:6;x<=240;x+=12){g.beginPath();g.arc(x,y,2.6,0,7);g.fill()}});
+perfTex.wrapS=perfTex.wrapT=THREE.RepeatWrapping;perfTex.repeat.set(1/150,1/150);
+const holeEm=canvasTex(240,240,(g)=>{g.fillStyle="#000";g.fillRect(0,0,240,240);g.fillStyle="#fff";for(let y=6;y<240;y+=12)for(let x=(((y-6)/12)%2)?0:6;x<=240;x+=12){g.beginPath();g.arc(x,y,3.4,0,7);g.fill()}});
+holeEm.wrapS=holeEm.wrapT=THREE.RepeatWrapping;holeEm.repeat.set(1/150,1/150);
+const glowTex=canvasTex(128,128,(g)=>{const gr=g.createRadialGradient(64,64,4,64,64,64);gr.addColorStop(0,"rgba(255,255,255,.9)");gr.addColorStop(1,"rgba(255,255,255,0)");g.fillStyle=gr;g.fillRect(0,0,128,128)});
+
+/* ---------- materials ---------- */
+const M={
+  body:new THREE.MeshStandardMaterial({color:0xF1F0EC,metalness:.15,roughness:.42,envMapIntensity:.7}),
+  lower:new THREE.MeshStandardMaterial({color:0x7FA79A,roughness:.55,metalness:.05,map:perfTex,emissiveMap:holeEm,emissive:0xFFB36B,emissiveIntensity:1.2}),
+  graphite:new THREE.MeshStandardMaterial({color:0x2a2f35,roughness:.6,metalness:.2}),
+  light:new THREE.MeshBasicMaterial({color:0xFFB36B,toneMapped:false,transparent:true}),
+  halo:new THREE.MeshBasicMaterial({color:0xFFB36B,map:glowTex,transparent:true,opacity:.8,depthWrite:false,blending:THREE.AdditiveBlending,toneMapped:false}),
+  smoke:new THREE.MeshStandardMaterial({color:0x0b0d10,metalness:.5,roughness:.08,transparent:true}),
+};
+
+/* ---------- parts registry ---------- */
+const parts=[];const root=new THREE.Group();scene.add(root);
+function part(id,label,note,obj,mat,opts={}){obj.traverse(o=>{if(o.isMesh)o.userData.partId=id});obj.userData.partId=id;
+  const p={id,label,note,obj,mat,glowable:!!opts.glow,home:obj.position.clone(),homeScale:obj.scale.clone(),homeColor:mat?"#"+mat.color.getHexString():null,homeOpacity:mat?mat.opacity:1,lit:!!opts.lit,
+    st:{dx:0,dy:0,dz:0,s:100,color:mat?"#"+mat.color.getHexString():null,op:100,glow:opts.glow?70:0,vis:true}};parts.push(p);return p}
+
+/* base + floor halo */
+const base=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(460,480,100),{depth:70,bevelEnabled:true,bevelThickness:3,bevelSize:3,bevelSegments:2,curveSegments:32}),M.graphite.clone());base.geometry.rotateX(-Math.PI/2);root.add(base);
+part("base","Base","Graphite plinth with 2 kg steel ballast inside.",base,base.material);
+const halo=new THREE.Mesh(new THREE.PlaneGeometry(1300,1300),M.halo);halo.rotation.x=-Math.PI/2;halo.position.y=2;root.add(halo);
+part("halo","Floor halo","Soft light on the floor under the base.",halo,M.halo,{glow:true,lit:true});
+/* lower intake */
+const lower=new THREE.Mesh(tower({H:600}),M.lower);root.add(lower);
+/* mesh light: LED strips in the gap between the mesh and the filter shine out through the holes */
+const meshGlowMat=new THREE.MeshBasicMaterial({map:holeEm,color:0xFFB36B,transparent:true,opacity:.9,blending:THREE.AdditiveBlending,depthWrite:false,toneMapped:false});
+const meshGlow=new THREE.Mesh(lower.geometry,meshGlowMat);meshGlow.scale.set(1.003,1,1.003);meshGlow.renderOrder=2;root.add(meshGlow);
+part("lower","Lower intake (360°)","Perforated all round: air comes in from every side. Mesh light glows out through the holes (LED strips in the gap between mesh and filter).",lower,M.lower);
+/* seam between the two tones (was the light line) */
+const groove=new THREE.Mesh(new THREE.ExtrudeGeometry(ringShape(456,476,97,4),{depth:8,bevelEnabled:false,curveSegments:32}),M.graphite.clone());groove.geometry.rotateX(-Math.PI/2);groove.position.y=603;root.add(groove);
+part("groove","Seam","Thin graphite seam between the two tones (the light line is removed).",groove,groove.material);
+/* upper shell */
+const upper=new THREE.Mesh(tower({slope:SL,minY:614}),M.body);root.add(upper);
+part("upper","Upper body","White upper shell with the 8° sloped top.",upper,M.body);
+/* pop-up cap group (tilted with the slope) */
+const capPivot=new THREE.Group();capPivot.position.set(0,1080-Math.tan(SL)*235+18,0);capPivot.rotation.x=-Math.PI/2+SL;root.add(capPivot);
+const cap=new THREE.Group();capPivot.add(cap);
+const slab=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(436,456,92),{depth:22,bevelEnabled:true,bevelThickness:6,bevelSize:6,bevelSegments:4,curveSegments:24}),M.body);cap.add(slab);
+const grille=new THREE.Mesh(new THREE.ShapeGeometry(rrect(380,330,70),16),M.graphite.clone());grille.position.set(0,35,29);cap.add(grille);
+part("cap","Pop-up top","Lifts 0–46 mm with fan speed. Touch icons sit on its front strip.",cap,null);
+part("grille","Outlet grille","Graphite grille where clean air leaves the top.",grille,grille.material);
+const ringMat=M.light.clone();const ringM=new THREE.Mesh(new THREE.ExtrudeGeometry(ringShape(426,446,88,4),{depth:1,bevelEnabled:false,curveSegments:24}),ringMat);capPivot.add(ringM);
+part("ring","Pop-up light ring","Light ring visible in the gap when the top is up.",ringM,ringMat,{glow:true,lit:true});
+/* touch icons on the cap's front strip (hidden till lit) */
+function iconTex(kind){return canvasTex(128,128,(g)=>{g.strokeStyle="#fff";g.fillStyle="#fff";g.lineWidth=9;g.lineCap="round";g.lineJoin="round";
+  if(kind==="power"){g.beginPath();g.arc(64,68,34,-Math.PI*.28,Math.PI*1.28);g.stroke();g.beginPath();g.moveTo(64,20);g.lineTo(64,62);g.stroke()}
+  if(kind==="prev"){g.beginPath();g.moveTo(78,28);g.lineTo(42,64);g.lineTo(78,100);g.stroke()}
+  if(kind==="next"){g.beginPath();g.moveTo(50,28);g.lineTo(86,64);g.lineTo(50,100);g.stroke()}
+  if(kind==="light"){for(let k=0;k<8;k++){const a=k*Math.PI/4;g.beginPath();g.moveTo(64+Math.cos(a)*26,64+Math.sin(a)*26);g.lineTo(64+Math.cos(a)*44,64+Math.sin(a)*44);g.stroke()}g.beginPath();g.arc(64,64,14,0,7);g.fill()}})}
+[["power","Touch icon: Power",-72],["prev","Touch icon: Previous",-24],["next","Touch icon: Next",24],["light","Touch icon: Light",72]].forEach(([k,label,x])=>{
+  const mat=new THREE.MeshBasicMaterial({map:iconTex(k),color:0xFFB36B,transparent:true,depthWrite:false,toneMapped:false});
+  const m=new THREE.Mesh(new THREE.PlaneGeometry(22,22),mat);m.position.set(x,-200,29.2);cap.add(m);
+  part("icon_"+k,label,"Hidden under the plastic: only a faint icon, it glows when your hand comes near. Touch, no pressing.",m,mat,{glow:true,lit:true})});
+/* OLED screen above the VIAN logo */
+/* screen pages (what the OLED shows) */
+const PAGES=[
+ ["Air quality","24","AQI · GOOD","#9fe1cb"],["PM2.5","8","µg/m³ · fine dust","#9fe1cb"],["PM10","14","µg/m³ · coarse dust","#9fe1cb"],
+ ["Humidity","46%","27 °C · comfortable","#cfd6dd"],["Gases (VOC)","LOW","smells · fumes","#9fe1cb"],["Fan","AUTO","speed 2 of 4 · 37 dB","#cfd6dd"],
+ ["Filter","92%","LifeHEPA · rinse mesh in 9 days","#cfd6dd"],["Light","WARM","running · 60 %","#FFB36B"],["Wi-Fi","ON","app connected","#9fe1cb"]];
+function drawPage(g,w,h,i){const P=PAGES[i];g.fillStyle="#000";g.fillRect(0,0,w,h);g.textAlign="center";g.fillStyle="#8a929c";g.font=`600 ${h*.1}px Manrope, sans-serif`;g.fillText(P[0].toUpperCase(),w/2,h*.14);
+  g.fillStyle="#fff";g.font=`700 ${h*.64}px Manrope, sans-serif`;g.fillText(P[1],w/2,h*.7);g.fillStyle=P[3];g.font=`600 ${h*.1}px Manrope, sans-serif`;g.fillText(P[2],w/2,h*.85);
+  for(let k=0;k<PAGES.length;k++){g.beginPath();g.fillStyle=k===i?"#fff":"#3a3f45";g.arc(w/2+(k-(PAGES.length-1)/2)*h*.07,h*.955,h*.02,0,7);g.fill()}}
+const oledCanvas=document.createElement("canvas");oledCanvas.width=512;oledCanvas.height=256;const oledTex=new THREE.CanvasTexture(oledCanvas);oledTex.encoding=THREE.sRGBEncoding;
+let page=0;function showPage(i){page=(i+PAGES.length)%PAGES.length;drawPage(oledCanvas.getContext("2d"),512,256,page);oledTex.needsUpdate=true;const el=document.getElementById("pageName");if(el)el.textContent=(page+1)+" / "+PAGES.length+" · "+PAGES[page][0];
+  document.querySelectorAll(".thumbs canvas").forEach((c,k)=>c.classList.toggle("on",k===page))}
+/* no bezel: only the OLED's own black glass, flush with the body, screwed in from behind */
+const oled=new THREE.Group();const glass=new THREE.Mesh(new THREE.ExtrudeGeometry(rrect(90,48,3),{depth:1.1,bevelEnabled:false,curveSegments:8}),M.smoke);oled.add(glass);
+const scrMat=new THREE.MeshBasicMaterial({map:oledTex,toneMapped:false,transparent:true});const scr=new THREE.Mesh(new THREE.PlaneGeometry(86,44),scrMat);scr.position.z=1.15;oled.add(scr);
+oled.position.set(0,905,ZF-0.6);root.add(oled);
+part("oled","OLED screen","No bezel: only the OLED glass shows, flush with the body. The module is pushed in from behind and held by 2 screws inside.",oled,M.smoke);
+/* VIAN logo */
+const LOGO=[[[0,1],[.35,0],[.7,1]],[[1,1],[1,0]],[[1.3,0],[1.65,1],[2,0]],[[2.3,0],[2.3,1],[2.95,0],[2.95,1]]];
+const logoMat=M.light.clone();const logo=new THREE.Group();const lh=30,lr=lh*.11;
+LOGO.forEach(st=>{for(let i=0;i<st.length-1;i++){const a=new THREE.Vector3((st[i][0]-1.475)*lh,(st[i][1]-.5)*lh,0),b=new THREE.Vector3((st[i+1][0]-1.475)*lh,(st[i+1][1]-.5)*lh,0);
+  const m=new THREE.Mesh(new THREE.BoxGeometry(a.distanceTo(b)+lr,lr,1.5),logoMat);m.position.copy(a).add(b).multiplyScalar(.5);m.rotation.z=Math.atan2(b.y-a.y,b.x-a.x);logo.add(m)}});
+logo.position.set(0,800,ZF+1);root.add(logo);
+part("logo","VIAN logo","Lit logo, front only, same colour as the light strip.",logo,logoMat,{glow:true,lit:true});
+
+/* ---------- apply state ---------- */
+const onSlope=p=>p.id.startsWith("icon_")||p.id==="cap"||p.id==="grille"||p.id==="ring";   /* local axes of the tilted top: x = left/right, z = up, -y = front */
+function applyPart(p){const s=p.st;
+  if(onSlope(p))p.obj.position.set(p.home.x+s.dx,p.home.y-s.dz,p.home.z+s.dy+(p.id==="cap"?liftMm:0));
+  else p.obj.position.set(p.home.x+s.dx,p.home.y+s.dy,p.home.z+s.dz);
+  const k=s.s/100;p.obj.scale.set(p.homeScale.x*k*(p.id==="oled"&&oledWide?1.08:1),p.homeScale.y*k,p.homeScale.z*k);
+  p.obj.visible=s.vis;
+  if(p.mat){p.mat.color.set(s.color);if(p.glowable)p.mat.color.multiplyScalar(.25+s.glow/100*1.0);p.mat.opacity=(s.op/100)*(offView&&p.lit?.06:1);p.mat.transparent=true;p.mat.depthWrite=s.op>=99&&!p.lit;p.mat.needsUpdate=true}
+  if(p.id==="oled"){scrMat.opacity=offView?0:s.op/100}
+}
+let oledWide=false,offView=false;
+function applyAll(){parts.forEach(applyPart);const rp=parts.find(p=>p.id==="ring");ringM.scale.z=Math.max(.01,liftMm)*(rp.st.s/100);ringM.visible=liftMm>2&&rp.st.vis}
+let liftMm=30;
+
+/* ---------- selection + UI ---------- */
+let sel=null;const tc=new THREE.TransformControls(camera,canvas);tc.setSize(.7);scene.add(tc);tc.enabled=false;
+tc.addEventListener("dragging-changed",e=>{orbit.enabled=!e.value;if(e.value)pushUndo()});
+tc.addEventListener("objectChange",()=>{if(!sel)return;const o=sel.obj;sel.st.dx=Math.round(o.position.x-sel.home.x);
+  if(onSlope(sel)){sel.st.dy=Math.round(o.position.z-sel.home.z-(sel.id==="cap"?liftMm:0));sel.st.dz=Math.round(sel.home.y-o.position.y)}
+  else{sel.st.dy=Math.round(o.position.y-sel.home.y);sel.st.dz=Math.round(o.position.z-sel.home.z)}
+  sel.st.s=Math.round(Math.max(.4,Math.min(2,o.scale.y/sel.homeScale.y))*100);applyPart(sel);fillProps();save()});
+let mode="select";
+$$(".tools [data-mode]").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$$(".tools [data-mode]").forEach(x=>x.setAttribute("aria-pressed",x===b));attachTc()});
+function attachTc(){if(sel&&mode!=="select"&&sel.id!=="halo"){tc.attach(sel.obj);tc.setMode(mode);tc.enabled=true;tc.visible=true}else{tc.detach();tc.enabled=false}}
+$("#parts").innerHTML=parts.map(p=>`<button type="button" data-id="${p.id}">${p.label.replace("Touch icon: ","Icon: ")}</button>`).join("");
+$$("#parts button").forEach(b=>b.onclick=()=>select(parts.find(p=>p.id===b.dataset.id)));
+function select(p){sel=p;$$("#parts button").forEach(b=>b.classList.toggle("is-sel",p&&b.dataset.id===p.id));
+  $("#selName").textContent=p?p.label:"Choose a part";$("#selNote").textContent=p?p.note:"Tap a part in the 3D view or in the list above.";$("#propRows").hidden=!p;fillProps();attachTc()}
+function fillProps(){if(!sel)return;const s=sel.st;
+  $("#pColor").disabled=!sel.mat;if(sel.mat)$("#pColor").value=s.color;
+  $("#pOpacity").value=100-s.op;$("#oOpacity").textContent=(100-s.op)+" %";
+  $("#pGlow").disabled=!sel.glowable;$("#pGlow").value=s.glow;$("#oGlow").textContent=sel.glowable?s.glow+" %":"–";
+  $("#pScale").value=s.s;$("#oScale").textContent=s.s+" %";
+  ["X","Y","Z"].forEach(a=>{$("#p"+a).value=s["d"+a.toLowerCase()];$("#o"+a).textContent=s["d"+a.toLowerCase()]+" mm"});
+  $("#pVis").setAttribute("aria-pressed",s.vis);$("#pVis").textContent=s.vis?"Visible":"Hidden"}
+function bind(id,fn){const el=$(id);el.addEventListener("pointerdown",pushUndo,{once:false});el.addEventListener("keydown",pushUndo);el.addEventListener("input",()=>{if(!sel)return;fn(el);applyPart(sel);fillProps();save()})}
+bind("#pColor",el=>sel.st.color=el.value);bind("#pOpacity",el=>sel.st.op=100-(+el.value));bind("#pGlow",el=>sel.st.glow=+el.value);bind("#pScale",el=>sel.st.s=+el.value);
+bind("#pX",el=>sel.st.dx=+el.value);bind("#pY",el=>sel.st.dy=+el.value);bind("#pZ",el=>sel.st.dz=+el.value);
+$("#pVis").onclick=()=>{if(!sel)return;pushUndo();sel.st.vis=!sel.st.vis;applyAll();fillProps();save()};
+$("#pReset").onclick=()=>{if(!sel)return;pushUndo();sel.st={dx:0,dy:0,dz:0,s:100,color:sel.homeColor,op:100,glow:sel.glowable?70:0,vis:true};applyAll();fillProps();save()};
+/* whole unit */
+const litParts=()=>parts.filter(p=>p.lit);
+$("#gLight").addEventListener("input",e=>{litParts().forEach(p=>p.st.color=e.target.value);applyAll();fillProps();save()});
+$("#gLift").addEventListener("input",e=>{liftMm=+e.target.value;$("#oLift").textContent=liftMm+" mm";applyAll();save()});
+$("#gBody").addEventListener("input",e=>{const p=parts.find(q=>q.id==="upper");p.st.color=e.target.value;applyAll();fillProps();save()});
+$("#gLower").addEventListener("input",e=>{const p=parts.find(q=>q.id==="lower");p.st.color=e.target.value;applyAll();fillProps();save()});
+$("#gOled").addEventListener("change",e=>{oledWide=e.target.value==="b";applyAll();save()});
+let meshPct=60;function applyMesh(){M.lower.emissiveIntensity=0;meshGlowMat.color.set($("#gLight").value).multiplyScalar(meshPct/100*0.55);meshGlow.visible=!offView&&meshPct>0}
+$("#gMesh").addEventListener("input",e=>{meshPct=+e.target.value;$("#oMesh").textContent=meshPct+" %";applyMesh();save()});
+$("#gLight").addEventListener("input",applyMesh);$("#offview").addEventListener("click",applyMesh);
+$("#thumbs").innerHTML=PAGES.map(()=>'<canvas width="192" height="96"></canvas>').join("");
+$$("#thumbs canvas").forEach((c,k)=>{drawPage(c.getContext("2d"),192,96,k);c.title=PAGES[k][0];c.onclick=()=>showPage(k)});
+$("#pgPrev").onclick=()=>showPage(page-1);$("#pgNext").onclick=()=>showPage(page+1);
+let auto=null;$("#pgAuto").onclick=()=>{if(auto){clearInterval(auto);auto=null}else auto=setInterval(()=>showPage(page+1),2200);$("#pgAuto").setAttribute("aria-pressed",!!auto)};
+showPage(0);applyMesh();
+$("#offview").onclick=()=>{offView=!offView;$("#offview").setAttribute("aria-pressed",offView);$("#offview").textContent=offView?"Show switched on":"Show switched off";applyAll()};
+let night=false;$("#night").onclick=()=>{night=!night;$("#night").setAttribute("aria-pressed",night);renderer.toneMappingExposure=night?.22:.8};
+let spin=false;$("#spin").onclick=()=>{spin=!spin;$("#spin").setAttribute("aria-pressed",spin)};
+/* undo / save / export */
+const undo=[];function snap(){return JSON.stringify({p:parts.map(p=>[p.id,p.st]),lift:liftMm,oled:oledWide})}
+function pushUndo(){undo.push(snap());if(undo.length>60)undo.shift()}
+function load(js){try{const d=JSON.parse(js);(d.p||[]).forEach(([id,st])=>{const p=parts.find(q=>q.id===id);if(p)p.st=Object.assign(p.st,st)});liftMm=d.lift??30;oledWide=!!d.oled;
+  $("#gLift").value=liftMm;$("#oLift").textContent=liftMm+" mm";$("#gOled").value=oledWide?"b":"a";applyAll();fillProps()}catch(e){}}
+$("#undo").onclick=()=>{const s=undo.pop();if(s){load(s);save()}};
+$("#reset").onclick=()=>{pushUndo();parts.forEach(p=>p.st={dx:0,dy:0,dz:0,s:100,color:p.homeColor,op:100,glow:p.glowable?70:0,vis:true});liftMm=30;oledWide=false;$("#gLift").value=30;$("#oLift").textContent="30 mm";$("#gOled").value="a";applyAll();fillProps();save()};
+function exportText(){const ch=parts.filter(p=>{const s=p.st;return s.dx||s.dy||s.dz||s.s!==100||s.op!==100||!s.vis||(p.mat&&s.color!==p.homeColor)||(p.glowable&&s.glow!==70)})
+  .map(p=>{const s=p.st,o=[];if(s.dx||s.dy||s.dz)o.push(`moved ${s.dx} mm left/right, ${s.dy} mm up/down, ${s.dz} mm front/back`);if(s.s!==100)o.push(`size ${s.s} %`);
+    if(p.mat&&s.color!==p.homeColor)o.push(`colour ${s.color}`);if(s.op!==100)o.push(`transparency ${100-s.op} %`);if(p.glowable&&s.glow!==70)o.push(`glow ${s.glow} %`);if(!s.vis)o.push("hidden");return `- ${p.label}: ${o.join(", ")}`});
+  return "VIAN Home editor changes:\n"+(ch.length?ch.join("\n"):"- no part changes")+`\n- pop-up top: ${liftMm} mm\n- mesh light: ${meshPct} %\n- screen: ${oledWide?"4.3 in":"4.0 in AMOLED"}\n\nDATA ${snap()}`}
+function save(){const t=exportText();$("#out").value=t;try{localStorage.setItem("vian-editor-2",snap())}catch(e){}}
+$("#copy").onclick=()=>{const t=exportText();$("#out").value=t;
+  navigator.clipboard.writeText(t).then(()=>{$("#toast").textContent="Copied. Paste it into the chat."}).catch(()=>{$("#out").focus();$("#out").select();$("#toast").textContent="Text selected. Press Ctrl+C (or long-press, Copy), then paste it into the chat."})};
+/* picking */
+const ray=new THREE.Raycaster(),pt=new THREE.Vector2();let downAt=null;
+canvas.addEventListener("pointerdown",e=>{downAt=[e.clientX,e.clientY]});
+canvas.addEventListener("pointerup",e=>{if(!downAt||Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>5||tc.dragging)return;const r=canvas.getBoundingClientRect();
+  pt.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(pt,camera);
+  const hits=ray.intersectObjects(root.children,true).filter(h=>h.object.visible&&h.object.userData.partId&&h.object.userData.partId!=="halo");
+  if(hits.length){const id=hits[0].object.userData.partId;
+    if(mode==="select"&&sel&&sel.id===id&&(id==="icon_prev"||id==="icon_next")){showPage(page+(id==="icon_next"?1:-1));return}   /* second tap on a touch icon works it */
+    select(parts.find(p=>p.id===id));if(id==="icon_prev"||id==="icon_next")$("#toast").textContent="Tap the icon again to change the screen page."}});
+/* render */
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.fov=w/h<1?48:32;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(stage);resize();
+let last=performance.now();function loop(now){const dt=Math.max(0,Math.min(.05,(now-last)/1000));last=now;if(spin)root.rotation.y+=dt*.3;orbit.update();renderer.render(scene,camera);requestAnimationFrame(loop)}
+try{const s=localStorage.getItem("vian-editor-2");if(s)load(s)}catch(e){}
+applyAll();save();requestAnimationFrame(loop);
+window.VIANED={frames:(n=30)=>{for(let i=0;i<n;i++){orbit.update();renderer.render(scene,camera)}},select:id=>select(parts.find(p=>p.id===id)),cam:(x,y,z,ty)=>{camera.position.set(x,y,z);orbit.target.set(0,ty,0)}};
+})();
+</script>
+
+</body></html>

@@ -1,9 +1,10 @@
-// Outside colour touch display: 4.0-inch IPS 480 x 320, ST7796S over SPI, FT6336U capacitive touch on I2C0.
-// Drawn into a PSRAM sprite and pushed in one go (no flicker).
+// VIAN Home 700 screen: 4.0-inch IPS 480 x 320 (ST7796S, SPI) mounted landscape behind black-printed glass.
+// Only the centre 480 x 264 px (86 x 44 mm) shows through the glass window. Not a touch screen:
+// pages are changed with the touch icons on the pop-up top (AT42QT1070, see sensors.h).
+// Drawn into a PSRAM sprite and pushed in one go (no flicker). True-black background blends with the glass.
 #pragma once
 #define LGFX_USE_V1
 #include <LovyanGFX.hpp>
-#include <Wire.h>
 #include "config.h"
 
 class VianLCD : public lgfx::LGFX_Device {
@@ -19,97 +20,47 @@ class VianLCD : public lgfx::LGFX_Device {
   }
 };
 
-// ---------- FT6336U touch (I2C0, 0x38) ----------
-struct TouchPt { bool down; int16_t x, y; };
-static TouchPt touchRead() {
-  TouchPt t{false, 0, 0};
-  Wire.beginTransmission(0x38); Wire.write(0x02); if (Wire.endTransmission(false) != 0) return t;
-  if (Wire.requestFrom((uint8_t)0x38, (uint8_t)5) != 5) return t;
-  uint8_t n = Wire.read() & 0x0F, xh = Wire.read(), xl = Wire.read(), yh = Wire.read(), yl = Wire.read();
-  if (n == 0 || n > 2) return t;
-  int16_t rx = ((xh & 0x0F) << 8) | xl, ry = ((yh & 0x0F) << 8) | yl;   // panel portrait 320 x 480
-  t.down = true; t.x = ry; t.y = 319 - rx;                                // landscape rotation 1; confirm on first module
-  return t;
-}
-
-// ---------- UI ----------
-enum Page : uint8_t { PG_HOME, PG_LIGHT, PG_FILTER };
+// ---------- the 9 pages ----------
+enum PageId : uint8_t { P_AQI, P_PM25, P_PM10, P_HUM, P_VOC, P_FAN, P_FILTER, P_LIGHT, P_WIFI, P_COUNT };
+static const char *PAGE_TITLE[P_COUNT] = {"AIR QUALITY", "PM2.5", "PM10", "HUMIDITY", "GASES (VOC)", "FAN", "FILTER", "LIGHT", "WI-FI"};
 struct UiData {
-  int aqi; float pm25, pm10, rh, t; int32_t voc; uint8_t fanPct; const char *mode; bool wifi;
-  uint32_t accent; uint8_t hepa, odour, debrisDays; bool alarm; const char *alarmText; uint8_t fx; bool lightOn;
+  int aqi; float pm25, pm10, rh, t; int32_t voc; uint8_t fanPct; const char *mode; uint8_t dB; bool wifi; uint8_t units;
+  uint32_t accent; uint8_t hepa, odour, debrisDays; bool alarm; const char *alarmText; const char *fxName; uint8_t bright; bool locked;
 };
 static uint16_t c565(uint32_t rgb) { return lgfx::color565((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255); }
-static const uint16_t TRACK = lgfx::color565(0xE3, 0xE2, 0xDD);   // light grey tracks and buttons
 static uint32_t aqiRgb(int a) { return a <= 50 ? 0x43D18F : a <= 100 ? 0xA6D84B : a <= 200 ? 0xF2B33D : 0xFF5A4F; }
 static const char *aqiWord(int a) { return a <= 50 ? "GOOD" : a <= 100 ? "SATISFACTORY" : a <= 200 ? "MODERATE" : a <= 300 ? "POOR" : "VERY POOR"; }
 
-struct Button { int16_t x, y, w, h; const char *label; };
-static const Button BTN[4] = {{8, 262, 112, 50, "Power"}, {124, 262, 112, 50, "Mode"}, {240, 262, 112, 50, "Light"}, {356, 262, 116, 50, "Filter"}};
-static int hitButton(int16_t x, int16_t y) { for (int i = 0; i < 4; i++) if (x >= BTN[i].x && x < BTN[i].x + BTN[i].w && y >= BTN[i].y && y < BTN[i].y + BTN[i].h) return i; return -1; }
-
 class VianUI {
  public:
-  VianLCD lcd; LGFX_Sprite spr{&lcd}; Page page = PG_HOME;
-  void begin() {
-    lcd.init(); lcd.setRotation(1); lcd.setBrightness(0); lcd.fillScreen(TFT_BLACK);
-    spr.setPsram(true); spr.setColorDepth(16); spr.createSprite(480, 320);
-  }
+  VianLCD lcd; LGFX_Sprite spr{&lcd}; uint8_t page = P_AQI;
+  static const int Y0 = 28, H = 264;   // visible window inside the 320 px panel height
+  void begin() { lcd.init(); lcd.setRotation(1); lcd.setBrightness(0); lcd.fillScreen(TFT_BLACK); spr.setPsram(true); spr.setColorDepth(16); spr.createSprite(480, 320); }
   void brightness(uint8_t b) { lcd.setBrightness(b); }
+  void next(int d) { page = (page + P_COUNT + d) % P_COUNT; }
   void draw(const UiData &d) {
-    const uint16_t bg = c565(0xF4F3EF), fg = c565(0x1D2126), mut = c565(0x7B8794), acc = c565(d.accent);   // light theme: blends with the white glass
-    spr.fillSprite(bg); spr.setTextDatum(textdatum_t::top_left);
-    // top bar
-    spr.setFont(&fonts::Font2); spr.setTextColor(mut);
-    spr.drawString(d.mode, 12, 8); spr.drawString(d.wifi ? "Wi-Fi" : "Wi-Fi off", 200, 8);
-    char b[48]; snprintf(b, sizeof b, "Filter %u%%", d.hepa); spr.drawRightString(b, 468, 8);
-    if (page == PG_HOME) home(d, fg, mut, acc); else if (page == PG_LIGHT) light(d, fg, mut, acc); else filter(d, fg, mut, acc);
-    if (d.alarm) { spr.fillRoundRect(90, 110, 300, 60, 10, c565(0xFF5A4F)); spr.setTextColor(TFT_WHITE); spr.setFont(&fonts::FreeSansBold12pt7b);
-      spr.setTextDatum(textdatum_t::middle_center); spr.drawString(d.alarmText, 240, 140); spr.setTextDatum(textdatum_t::top_left); }
-    // buttons
-    spr.setFont(&fonts::FreeSans9pt7b);
-    for (int i = 0; i < 4; i++) { const Button &k = BTN[i]; bool on = (i == 2 && page == PG_LIGHT) || (i == 3 && page == PG_FILTER);
-      spr.fillRoundRect(k.x, k.y, k.w, k.h, 12, on ? acc : TRACK); spr.setTextColor(fg);
-      spr.setTextDatum(textdatum_t::middle_center); spr.drawString(k.label, k.x + k.w / 2, k.y + k.h / 2); }
-    spr.setTextDatum(textdatum_t::top_left);
+    const uint16_t fg = TFT_WHITE, mut = c565(0x8A929C), acc = c565(d.accent);
+    spr.fillSprite(TFT_BLACK); spr.setTextDatum(textdatum_t::middle_center);
+    char big[16] = "", sub[48] = ""; uint16_t subc = mut;
+    switch (page) {
+      case P_AQI: snprintf(big, sizeof big, "%d", d.aqi); snprintf(sub, sizeof sub, "AQI  %s", aqiWord(d.aqi)); subc = c565(aqiRgb(d.aqi)); break;
+      case P_PM25: snprintf(big, sizeof big, "%.0f", d.pm25); snprintf(sub, sizeof sub, "ug/m3  fine dust"); break;
+      case P_PM10: snprintf(big, sizeof big, "%.0f", d.pm10); snprintf(sub, sizeof sub, "ug/m3  coarse dust"); break;
+      case P_HUM: snprintf(big, sizeof big, "%.0f%%", d.rh); snprintf(sub, sizeof sub, "%.0f C  %s", d.t, d.rh > 70 ? "humid" : d.rh < 30 ? "dry" : "comfortable"); break;
+      case P_VOC: snprintf(big, sizeof big, "%s", d.voc < 150 ? "LOW" : d.voc < 250 ? "MID" : "HIGH"); snprintf(sub, sizeof sub, "smells and fumes  index %ld", (long)d.voc); break;
+      case P_FAN: snprintf(big, sizeof big, "%s", d.mode); snprintf(sub, sizeof sub, "fan %u %%  about %u dB", d.fanPct, d.dB); break;
+      case P_FILTER: snprintf(big, sizeof big, "%u%%", d.hepa); snprintf(sub, sizeof sub, d.debrisDays >= DEBRIS_WASH_DAYS ? "rinse the mesh now" : "carbon %u %%  rinse mesh in %d days", d.odour, DEBRIS_WASH_DAYS - d.debrisDays); break;
+      case P_LIGHT: snprintf(big, sizeof big, "%s", d.fxName); snprintf(sub, sizeof sub, "brightness %u %%", d.bright); subc = acc; break;
+      case P_WIFI: snprintf(big, sizeof big, "%s", d.wifi ? "ON" : "OFF"); snprintf(sub, sizeof sub, d.wifi ? "app connected  %u VIAN in home" : "open the VIAN app to connect", d.units); break;
+    }
+    spr.setFont(&fonts::FreeSansBold9pt7b); spr.setTextColor(mut); spr.drawString(PAGE_TITLE[page], 240, Y0 + 24);
+    spr.setFont(&fonts::FreeSansBold24pt7b); spr.setTextColor(fg); spr.setTextSize(3);   // about 25-28 mm tall
+    if (spr.textWidth(big) > 460) spr.setTextSize(2);                                      // long words (RUNNING, BREATHE) still fit
+    spr.drawString(big, 240, Y0 + 128); spr.setTextSize(1);
+    spr.setFont(&fonts::FreeSansBold12pt7b); spr.setTextColor(subc); spr.drawString(sub, 240, Y0 + 214);
+    for (int k = 0; k < P_COUNT; k++) spr.fillCircle(240 + (k - (P_COUNT - 1) / 2.0f) * 16, Y0 + 248, 4, k == page ? fg : c565(0x3A3F45));
+    if (d.locked) { spr.setFont(&fonts::Font2); spr.setTextColor(mut); spr.drawString("LOCKED", 440, Y0 + 24); }
+    if (d.alarm) { spr.fillRoundRect(60, Y0 + 92, 360, 72, 12, c565(0xFF5A4F)); spr.setTextColor(TFT_WHITE); spr.setFont(&fonts::FreeSansBold12pt7b); spr.drawString(d.alarmText, 240, Y0 + 128); }
     spr.pushSprite(0, 0);
-  }
- private:
-  void home(const UiData &d, uint16_t fg, uint16_t mut, uint16_t acc) {
-    uint16_t ac = c565(aqiRgb(d.aqi)); int ang = 135 + min(d.aqi, 500) * 270 / 500;
-    spr.fillArc(130, 145, 100, 86, 135, 405, TRACK); spr.fillArc(130, 145, 100, 86, 135, ang, ac);
-    spr.setTextDatum(textdatum_t::middle_center); spr.setTextColor(fg); spr.setFont(&fonts::FreeSansBold24pt7b);
-    spr.drawNumber(d.aqi, 130, 135); spr.setFont(&fonts::FreeSans9pt7b); spr.setTextColor(ac); spr.drawString(aqiWord(d.aqi), 130, 178);
-    spr.setTextColor(mut); spr.drawString("AQI", 130, 98); spr.setTextDatum(textdatum_t::top_left);
-    row(260, 44, "PM2.5", d.pm25, "ug/m3", fg, mut); row(260, 92, "PM10", d.pm10, "ug/m3", fg, mut);
-    row(260, 140, "Humidity", d.rh, "%", fg, mut); row(260, 188, "Temp", d.t, "C", fg, mut);
-    spr.fillRoundRect(260, 236, 200, 4, 2, acc);
-  }
-  void row(int x, int y, const char *l, float v, const char *u, uint16_t fg, uint16_t mut) {
-    spr.setFont(&fonts::Font2); spr.setTextColor(mut); spr.drawString(l, x, y);
-    spr.setFont(&fonts::FreeSansBold18pt7b); spr.setTextColor(fg); char b[16]; snprintf(b, sizeof b, "%.0f", v); spr.drawString(b, x, y + 14);
-    int w = spr.textWidth(b); spr.setFont(&fonts::Font2); spr.setTextColor(mut); spr.drawString(u, x + w + 6, y + 28);
-  }
-  void light(const UiData &d, uint16_t fg, uint16_t mut, uint16_t acc) {
-    spr.setFont(&fonts::FreeSansBold12pt7b); spr.setTextColor(fg); spr.drawString("Ambient light", 16, 40);
-    static const uint32_t sw[6] = {0xFFB36B, 0xFF7A45, 0xFFF0DA, 0x4FE3D0, 0xFF7FB0, 0x43D18F};
-    for (int i = 0; i < 6; i++) { spr.fillCircle(50 + i * 75, 120, 26, c565(sw[i])); if (sw[i] == d.accent) spr.drawCircle(50 + i * 75, 120, 31, fg); }
-    static const char *fx[3] = {"Steady", "Running", "Breathing"};
-    spr.setFont(&fonts::FreeSans9pt7b);
-    for (int i = 0; i < 3; i++) { spr.fillRoundRect(16 + i * 152, 180, 140, 46, 10, i == d.fx ? acc : TRACK);
-      spr.setTextColor(i == d.fx ? TFT_BLACK : fg); spr.setTextDatum(textdatum_t::middle_center); spr.drawString(fx[i], 86 + i * 152, 203); }
-    spr.setTextDatum(textdatum_t::top_left); spr.setTextColor(mut); spr.setFont(&fonts::Font2);
-    spr.drawString(d.lightOn ? "Hold Light 1 s to switch lights off" : "Lights are off - hold Light 1 s to switch on", 16, 236);
-  }
-  void filter(const UiData &d, uint16_t fg, uint16_t mut, uint16_t acc) {
-    spr.setFont(&fonts::FreeSansBold12pt7b); spr.setTextColor(fg); spr.drawString("Filters", 16, 36);
-    bar(70, "DebrisGuard (washable)", d.debrisDays >= 21 ? 0 : 100 - d.debrisDays * 100 / 21, d.debrisDays >= 21 ? "Rinse now" : "OK", fg, mut, acc);
-    bar(130, "LifeHEPA 5-year H13", d.hepa, d.hepa < 10 ? "Change soon" : "OK", fg, mut, acc);
-    bar(190, "OdourCore carbon", d.odour, d.odour < 10 ? "Change soon" : "OK", fg, mut, acc);
-    spr.setFont(&fonts::Font2); spr.setTextColor(mut); spr.drawString("Hold Filter 5 s after changing or rinsing to reset", 16, 240);
-  }
-  void bar(int y, const char *l, int pct, const char *st, uint16_t fg, uint16_t mut, uint16_t acc) {
-    spr.setFont(&fonts::FreeSans9pt7b); spr.setTextColor(fg); spr.drawString(l, 16, y);
-    char b[24]; snprintf(b, sizeof b, "%d%%  %s", pct, st); spr.setTextColor(mut); spr.drawRightString(b, 464, y);
-    spr.fillRoundRect(16, y + 26, 448, 10, 5, TRACK); spr.fillRoundRect(16, y + 26, max(10, 448 * pct / 100), 10, 5, pct < 10 ? c565(0xFF5A4F) : acc);
   }
 };
