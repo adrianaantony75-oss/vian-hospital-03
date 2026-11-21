@@ -4,7 +4,6 @@
 <style>body{margin:0}[hidden]{display:none!important}</style>
 </head><body>
 <title>VIAN Home Editor</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
@@ -102,8 +101,8 @@ textarea{width:100%;min-height:90px;font:11.5px var(--mono);background:var(--car
       <div class="row"><label for="gOled">OLED size</label><select id="gOled"><option value="a">4.0 in AMOLED (88 × 44 mm)</option><option value="b">4.3 in (95 × 48 mm)</option></select><span></span></div>
     </div>
     <div class="card">
-      <h2>Send your design to Claude</h2>
-      <p class="sel-note">Copy your changes and paste them into the chat. I'll build them into the final model, PDF and print files.</p>
+      <h2>Export your design</h2>
+      <p class="sel-note">Copy your changes as text to share them with the design team. They can be applied to the final model, PDF and print files.</p>
       <div class="btns"><button type="button" id="copy">Copy my design</button></div>
       <textarea id="out" readonly aria-label="Your design as text"></textarea>
       <div class="toast" id="toast" role="status"></div>
@@ -292,7 +291,7 @@ function exportText(){const ch=parts.filter(p=>{const s=p.st;return s.dx||s.dy||
   return "VIAN Home editor changes:\n"+(ch.length?ch.join("\n"):"- no part changes")+`\n- pop-up top: ${liftMm} mm\n- mesh light: ${meshPct} %\n- screen: ${oledWide?"4.3 in":"4.0 in AMOLED"}\n\nDATA ${snap()}`}
 function save(){const t=exportText();$("#out").value=t;try{localStorage.setItem("vian-editor-2",snap())}catch(e){}}
 $("#copy").onclick=()=>{const t=exportText();$("#out").value=t;
-  navigator.clipboard.writeText(t).then(()=>{$("#toast").textContent="Copied. Paste it into the chat."}).catch(()=>{$("#out").focus();$("#out").select();$("#toast").textContent="Text selected. Press Ctrl+C (or long-press, Copy), then paste it into the chat."})};
+  navigator.clipboard.writeText(t).then(()=>{$("#toast").textContent="Copied to clipboard."}).catch(()=>{$("#out").focus();$("#out").select();$("#toast").textContent="Text selected. Press Ctrl+C (or long-press, Copy), to copy it."})};
 /* picking */
 const ray=new THREE.Raycaster(),pt=new THREE.Vector2();let downAt=null;
 canvas.addEventListener("pointerdown",e=>{downAt=[e.clientX,e.clientY]});
