@@ -1,4 +1,4 @@
-// VIAN Home 700 screen: 4.0-inch IPS 480 x 320 (ST7796S, SPI) mounted landscape behind black-printed glass.
+// VIAN Home 700 screen: 4.0-inch IPS 480 x 320 (ST7796S, SPI 8 MHz) mounted landscape behind black-printed glass.
 // Only the centre 480 x 264 px (86 x 44 mm) shows through the glass window. Not a touch screen:
 // pages are changed with the touch icons on the pop-up top (AT42QT1070, see sensors.h).
 // Drawn into a PSRAM sprite and pushed in one go (no flicker). True-black background blends with the glass.
@@ -11,7 +11,7 @@ class VianLCD : public lgfx::LGFX_Device {
   lgfx::Panel_ST7796 panel; lgfx::Bus_SPI bus; lgfx::Light_PWM light;
  public:
   VianLCD() {
-    { auto c = bus.config(); c.spi_host = SPI2_HOST; c.spi_mode = 0; c.freq_write = 40000000; c.freq_read = 16000000;
+    { auto c = bus.config(); c.spi_host = SPI2_HOST; c.spi_mode = 0; c.freq_write = 8000000; c.freq_read = 4000000;   // long cable W5
       c.pin_sclk = PIN_LCD_SCK; c.pin_mosi = PIN_LCD_MOSI; c.pin_miso = -1; c.pin_dc = PIN_LCD_DC; c.dma_channel = SPI_DMA_CH_AUTO; bus.config(c); panel.setBus(&bus); }
     { auto c = panel.config(); c.pin_cs = PIN_LCD_CS; c.pin_rst = -1;   // reset is tied to ESP_EN on the board
       c.panel_width = 320; c.panel_height = 480; c.readable = false; c.invert = true; c.rgb_order = false; c.bus_shared = false; panel.config(c); }

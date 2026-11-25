@@ -28,7 +28,7 @@ IO39,LED2_3V,out,Pop-up ring + icon glow data CH2,"Via 74AHCT125, 84 ring + 4 ic
 IO40,LED3_3V,out,Base halo data CH3,"Via 74AHCT125, 36 LEDs"
 IO41,LED4_3V,out,VIAN logo CH4,"Via 74AHCT125, 12 LEDs"
 IO42,LCD_CS,out,Display SPI chip select,ST7796S
-IO47,LCD_SCK,out,Display SPI clock,40 MHz
+IO47,LCD_SCK,out,Display SPI clock,8 MHz (long cable)
 IO48,LCD_MOSI,out,Display SPI data,
 IO45,LCD_DC,out,Display data / command,Strapping pin: 10 k pull-down R35 keeps flash at 3.3 V
 IO43,LCD_BL,out,Display backlight PWM,Direct to module LED control pin via 100 R; confirm on the module datasheet

@@ -6,9 +6,9 @@ P04,Seam ring between the two tones,PC/ABS V-0,Injection moulding,Graphite,1.5 m
 P05,Pop-up cap,PC/ABS V-0,Injection moulding,Matte warm white,"2.5 mm, 0.8 mm at the 4 icon windows",436 x 456 x 28 mm,1,"4 touch-icon windows on the front strip (laser-etched icons, light shines through); bosses for the lift plate and touch board"
 P06,Outlet grille,PC/ABS V-0,Injection moulding,Graphite,2.0 mm,340 x 290 mm,1,"Slots 3 x 40 mm, about 52 % open; clips into P05; sealed by P21 when the top is closed"
 P07,Glow-fin ring under the cap,"PC, frosted, light-guide grade",Injection moulding (4 segments),Frosted clear,3 mm fins,"424 x 444 mm ring, 84 fins 3 x 8 x 46 mm",1,"Each LED of RB lights one hanging fin from above, so the gap glows from inside while about 84 % stays open for air; fins slide down inside P03 when closed"
-P21,Closing plate + lift base,PC/ABS V-0 + 2 mm silicone gasket,Injection moulding,Graphite,3.0 mm,"360 x 310 mm, 4 legs to P03",1,"Fixed below the cap. When the top comes down, the grille seats on it and the outlet is shut. Carries the lift motor and guide bushings"
-P08,"Lift spider (open frame, not a solid plate)","Aluminium 5052, 2 mm",Laser cut + bend,Natural,2 mm,"360 x 380 mm, >= 75 % open",1,Four arms carry the cap so air reaches the grille; 2 guide bushings + lead-screw nut; earthed
-P09,Lift guide rods,Stainless steel 304,Ground rod,-,6 mm dia,6 x 100 mm,2,With igus JFM-0608-06 polymer bushings
+P21,Closing plate + lift base,PC/ABS V-0 + 2 mm silicone gasket,Injection moulding,Graphite,3.0 mm,"360 x 310 mm, 4 L-shaped legs 65 mm deep to P03",1,"Fixed below the cap. When the top comes down, the grille seats on it and the outlet is shut. Carries the lift motor and guide bushings"
+P08,Lift spider (open frame),"Aluminium 5052, 2 mm",Laser cut + bend,Natural,2 mm,"360 x 250 mm, >= 75 % open",1,Centre clamp holds the screw so it cannot turn (2 x M3); 2 holes for rods (M4); 4 x M3 into the cap; tab for the home switch; earthed
+P09,Lift guide rods (2),Stainless steel 304,"Ground rod, M4 thread in the top end",-,6 mm dia,6 x 100 mm,2,Top end screwed to spider P08; slide through 25 mm long igus bushings pressed into P21
 P10,Fan deck / filter seal plate,PP + 30 % glass fibre,Injection moulding,Black,3.0 mm,440 x 460 mm,1,Inlet ring 230 mm dia; PU foam seal to filter top; grommet G1 for cables
 P11,Fan scroll / outlet duct,"ABS V-0, 3 mm ribbed walls",Injection moulding,Black,3.0 mm,400 x 420 x 260 mm,1,Guides fan air to the 360 deg cap gap; lined with P19 foam; ribs stop panel drumming
 P12,Base / plinth,PC/ABS V-0 + 1.2 kg steel ballast plate,Injection moulding,Graphite,3.0 mm,460 x 480 x 70 mm,1,Tip-over stable to 10 deg; 4 rubber feet; DC jack at rear
@@ -24,8 +24,8 @@ F03,OdourCore OC-12: inner carbon sleeve,1.3 kg coconut-shell activated carbon (
 M01,"Quiet EC centrifugal fan, backward curved","24 V DC EC, sine-wave (FOC) drive, PWM + FG",Bought-in,-,-,"250 mm impeller, 9 blades, uneven pitch, serrated trailing edges",1,"750 m3/h at 150 Pa static, <= 65 W, fluid-dynamic or low-noise ball bearings, PWM 25 kHz"
 P19,Acoustic lining of fan scroll + outlet,"Melamine foam (Basotect UL94 V-0) 10 mm, film-faced",Die-cut + adhesive,Grey,10 mm,0.35 m2 per unit,1,"Absorbs fan noise inside the duct; washable film face, no fibres in the air"
 P20,Inlet bell-mouth ring,PP + 30 % GF,Injection moulding,Black,2.5 mm,"180 mm inlet, R25 radius",1,Smooth air entry to the fan: less turbulence noise
-M02,Micro stepper linear actuator,"NEMA 8 (20 mm) 2-phase, T6 x 2 mm lead screw, 80 mm",Bought-in,-,-,20 x 20 x 30 mm + screw,1,"0.5 A, 200 steps/rev, anti-backlash nut"
-M03,Home micro-switch,Omron D2F-01L,Bought-in,-,-,-,1,Closed when the cap is fully down
+M02,"Lift motor: NEMA 11 NON-CAPTIVE linear stepper (hollow motor, screw slides through, does not stick out of the top)","28 mm 2-phase 4-wire, Tr5 x 2 mm screw, 110 mm long",Bought-in,-,-,"28 x 28 x about 32 mm, 4 x M2.5 on 23 mm",1,"1.8 deg, about 0.67 A/phase, >= 60 N at 5 mm/s; must hold >= 30 N with power off (supplier to confirm)"
+M03,Home micro-switch,Omron D2F-01L,Bought-in,-,-,12.8 x 5.8 x 6.5 mm,1,"On P21, 2 x M2 screws; a tab on spider P08 presses it when the top is fully down"
 M04,Power adapter 24 V 4 A,Mean Well GST96A24-P1M or BIS-approved equivalent,Bought-in,-,-,-,1,"IEC 62368-1, BIS IS 13252, level VI efficiency"
 M05,DC panel jack 5.5 x 2.5 mm,CUI PJ-063AH or equivalent,Bought-in,-,-,-,1,Rear of base
 M06,Mesh light LED strips 4 x 0.4 m,"SK6812 RGBW-WW, 60/m, 10 mm, IP30, with 3 mm opal diffuser film",Bought-in,-,-,96 LEDs,1,"On the 4 filter-tray corner posts, facing the mesh from 20 mm inside; light glows out through the holes"

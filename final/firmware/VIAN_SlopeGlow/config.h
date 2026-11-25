@@ -66,7 +66,7 @@
 #define LIFT_STEPS_PER_MM 1600L
 #define LIFT_MAX_MM       46
 #define LIFT_SPEED_MM_S   5.0f      // slow and quiet
-#define LIFT_RUN_CURRENT  350       // mA RMS
+#define LIFT_RUN_CURRENT  450       // mA RMS, NEMA 11 (0.67 A peak); tune on the prototype
 #define LIFT_STALL_THRS   60        // TMC2209 SGTHRS, tune on first build
 #define LIFT_SETTLE_MS    30000UL   // only move after fan mode has been stable this long (Auto)
 #define LIFT_H_SLEEP 15

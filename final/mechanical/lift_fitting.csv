@@ -1,0 +1,14 @@
+﻿Item,Detail
+What it does,Pushes the whole top up and down by 0 to 46 mm
+Motor to buy (M02),"NEMA 11 (28 mm) NON-CAPTIVE linear stepper: 2-phase, 4 wires, 1.8 deg, about 0.67 A per phase, Tr5 x 2 mm screw, 110 mm long. Ask for at least 60 N push at 5 mm/s"
+Why non-captive,"The nut is inside the motor and the screw slides through it, down into empty space when closed. A normal screw would stick out of the top"
+Where the motor sits,"Bolted under the centre of closing plate P21, about 30 mm below the top, above the fan duct. It never moves"
+What holds the motor,"4 x M2.5 x 8 screws, 23 mm apart, into a wedge block moulded in P21 (wedge = 8 deg, so the motor is upright under the sloped top)"
+What holds the plate,"4 L-shaped legs: 65 mm down, then out to the wall, so the light fins can slide down above them. 4 x M4 x 12 screws into posts moulded inside P03"
+What moves,"Lead screw + 2 rods P09 + spider P08 + cap P05 + grille + light ring + touch board: one block, about 1.5 kg"
+What stops it tilting,"2 steel rods 6 mm, one each side of the motor, sliding in 25 mm long plastic bushings in P21"
+How it knows it is closed,"Tab on the spider presses switch M03 (wire W4, main board J4)"
+Driver chip,"TMC2209 on the main board; wire W3 from J3 (pins 1-2 = coil A, 3-4 = coil B)"
+How it senses a hand,"The driver feels the motor load rise (StallGuard), then firmware reverses 5 mm. Limit must be set and force-measured on the prototype"
+Wrong direction?,Swap pins 1 and 2 of W3
+Not proven yet,"Push force, holding with power off, noise, 50,000-cycle life, finger safety"

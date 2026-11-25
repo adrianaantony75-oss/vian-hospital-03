@@ -2,7 +2,7 @@
 Display,Size,"4.0-inch, landscape rectangle; visible window 86 x 44 mm (about 60 % of a Galaxy S23 screen's width)"
 Display,Readability,Main number about 25-28 mm tall: readable from about 5 m
 Display,No bezel,Black-printed cover glass 88 x 48 mm sits flush with the body; the module is pushed in from behind and held by 2 x M2 screws; only black glass shows
-Display,Panel (launch),"4.0-inch IPS TFT 480 x 320, ST7796S, SPI 40 MHz, 350-400 nit; the black glass print hides its edge"
+Display,Panel (launch),"4.0-inch IPS TFT 480 x 320, ST7796S, SPI 8 MHz (long cable), 350-400 nit; the black glass print hides its edge"
 Display,Panel (upgrade),4.0-4.3 inch AMOLED (true black) with QSPI interface if the supplier offers one at a similar price
 Display,Control,"Not a touch screen: the 4 touch icons on the slope (Power, Previous, Next, Light) change pages; everything else in the app"
 Display,Pages (9),1 Air quality (AQI) · 2 PM2.5 · 3 PM10 · 4 Humidity + temperature · 5 Gases (VOC) · 6 Fan mode + noise · 7 Filter life + mesh rinse · 8 Light colour + effect · 9 Wi-Fi + app

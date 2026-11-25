@@ -1,18 +1,18 @@
 ﻿Wire,From,To,Conductors,Gauge,Length (mm),Connector at from,Connector at to,Notes
-W1,DC jack (rear base),MB J1,"2: VIN_RAW, GND",18 AWG,650,Panel jack solder lugs,Molex 39-01-2020 housing + 39-00-0039 crimps,"Route up the rear cable channel, 2 clips"
+W1,DC jack (rear base),MB J1,"2: VIN_RAW, GND",18 AWG,900,Panel jack solder lugs,Molex 39-01-2020 housing + 39-00-0039 crimps,"Route up the rear cable channel, 2 clips"
 W2,MB J2,EC fan,"4: 24V, GND, PWM, FG",20 AWG power / 26 AWG signal,350,JST XHP-4 + SXH-001T-P0.6,Fan maker connector,Keep away from LED data wires
-W3,MB J3,Lift stepper,"4: A1, A2, B1, B2",26 AWG,450,JST PHR-4 + SPH-002T-P0.5S,Motor pigtail,"Fixed run, no flex"
+W3,MB J3,Lift stepper,"4: A1, A2, B1, B2",26 AWG,450,JST PHR-4 + SPH-002T-P0.5S,Motor pigtail,"Find the two coil pairs with a meter: A1-A2 and B1-B2. Fixed run, the motor does not move"
 W4,MB J4,Home switch,"2: HOME, GND",26 AWG,450,JST PHR-2,Faston 2.8 / solder,
-W5,MB J5,DB J1,"14: see pinout (SPI display, touch, backlight, logo data)",28 AWG,300,JST PHR-14,JST PHR-14,Keep SPI lines < 300 mm; twist I2C pair with GND
+W5,MB J5,DB J1,"14: see pinout (SPI display, backlight, logo data)","28 AWG, SCK and MOSI each twisted with GND",900,JST PHR-14,JST PHR-14,Long run round the right side: SPI limited to 8 MHz; PCB engineer to confirm signal quality
 W6,DB J3,LB J1,"3: 5V, DATA, GND",26 AWG,160,JST PHR-3,JST PHR-3,
 W7,MB J6,Mesh light: 4 vertical strips x 24 LEDs,"3: 5V, DATA, GND",22 AWG,900,JST XHP-3,JST SM 3-pin (strip pigtail),"Strips chained corner to corner with 3-wire jumpers (W7a-c, 150 mm); 5 V injected at strip 3"
 W8,MB J7,Pop-up ring RB J1,"8: 5V x2, GND x2, DATA, SDA, SCL, CHANGE","24 AWG silicone, high-flex",700,JST PHR-8,JST PHR-8,"150 mm coiled service loop for the 46 mm lift; rated 100,000 cycles"
-W8b,RB J2,Touch board TB J1,"6: 5V, GND, DATA, SDA, SCL, CHANGE",FFC 0.5 mm / 28 AWG,120,JST SHR-06V-S,JST SHR-06V-S,"Moves with the cap, no flex"
+W8b,RB J2,Touch board TB J1,"6: 5V, GND, DATA, SDA, SCL, CHANGE",28 AWG,120,JST SHR-06V-S,JST SHR-06V-S,"Inside the cap, moves with it, so it never flexes. The ring data returns on a flex track from LED 84 at the rear to J2 at the front"
 W9,MB J8,Base halo strip (36 LEDs),"3: 5V, DATA, GND",22 AWG,900,JST XHP-3,JST SM 3-pin,Down the rear cable channel
 W10,MB J9,SB J1,8: see pinout,"26 AWG, I2C pair twisted with GND",800,JST PHR-8,JST PHR-8,Through fan-deck grommet G1
 W11,SB J2,PMS5003,8 (sensor cable),supplied,150,Molex 51021-0800,PMS5003 G7 socket,Supplied with sensor
-W12,MB J10,Door reed switch,"2: DOOR, GND",26 AWG,750,JST PHR-2,Reed pigtail,Magnet in removable front intake panel
-W13,MB J11,Filter hall sensor,"3: 3V3, OUT, GND",26 AWG,800,JST PHR-3,Sensor on 10 x 15 mm carrier,Magnet moulded in filter frame corner
+W12,MB J10,Door reed switch,"2: DOOR, GND",26 AWG,1200,JST PHR-2,Reed pigtail,Magnet in removable front intake panel
+W13,MB J11,Filter hall sensor,"3: 3V3, OUT, GND",26 AWG,900,JST PHR-3,Sensor on 10 x 15 mm carrier,Magnet moulded in filter frame corner
 W14,MB J12,UV-C LED module (Hospital/Pro),"2: 24V, GND",22 AWG,400,JST XHP-2,Module connector,Not fitted on Home
 W15,MB J14,UV interlock micro-switch (Hospital/Pro),2: loop,22 AWG,750,JST PHR-2,Faston 2.8,Opens the relay coil when the panel is removed; not fitted on Home
 G,Earth / ESD,Metal lift plate to GND,1,20 AWG,200,Ring M3,MB TP4 via M3 screw,ESD path for touch-through metal

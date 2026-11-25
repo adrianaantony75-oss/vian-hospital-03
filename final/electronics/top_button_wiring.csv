@@ -1,0 +1,8 @@
+﻿Step,Where,What
+1,Finger,Touches the icon on the top. The plastic there is 0.8 mm thin
+2,Touch board VSG-TB,"Copper ring under each icon; chip U2 (AT42QT1070) feels the finger. KEY0 Power, KEY1 Previous, KEY2 Next, KEY3 Light"
+3,"Cable W8b, 6 wires, 120 mm","TB J1 to light ring RB J2: 1 5V, 2 GND, 3 icon LED data, 4 SDA, 5 SCL, 6 CHANGE. Moves with the top"
+4,Light ring VSG-RB,Copper tracks carry the signals from the front plug J2 to the rear plug J1
+5,"Cable W8, 8 wires, coiled","RB J1 to main board J7: 1-2 5V, 3-4 GND, 5 ring LED data, 6 SDA, 7 SCL, 8 CHANGE. The coil stretches as the top moves"
+6,Main board VSG-MB,"ESP32 reads SDA on GPIO8, SCL on GPIO9, CHANGE on GPIO6; ring and icon LED data leaves on GPIO39"
+7,Result,Power: on/off. Previous / Next: change screen page. Light: change effect
