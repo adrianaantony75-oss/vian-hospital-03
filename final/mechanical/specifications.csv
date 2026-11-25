@@ -15,7 +15,7 @@ Pop-up lift,Safety close,"Closes on Off, on tilt > 35 deg and when the front pan
 Pop-up lift,Life,"Designed for 50,000 moves (about 14 years at 10 moves a day)"
 Pop-up lift,Fail-safe,"If the lift fails, the unit runs at the speed allowed for the current height and shows a service alert in the app"
 Lighting,Mesh light,96 x SK6812 RGBW-WW on 4 vertical strips inside the intake; light glows out through the mesh holes (strongest effect at night)
-Lighting,Pop-up running ring,"84 x SK6812 RGBW-WW on flex, inside the frosted skirt, visible when the cap is up"
+Lighting,Pop-up glow ring (halo inside the gap),"84 x SK6812 RGBW-WW in the cap, each edge-lighting one frosted fin; the gap glows from inside, air passes between the fins"
 Lighting,Base halo,36 x SK6812 RGBW-WW facing the floor
 Lighting,VIAN logo,"12 x SK6812 RGBW-WW behind the VIAN mask, front only"
 Lighting,Touch icons,4 x SK6812MINI-E glow faintly through the icon windows; brighter when a hand comes near
@@ -23,7 +23,7 @@ Lighting,Colours,"Any colour from the app (colour wheel), plus 6 presets: Warm 2
 Lighting,Effects,"Steady, Running (ring chase), Breathing"
 Lighting,Auto colour by time,"Warm in the evening, dim amber at night, off while you sleep, soft white by day (user can edit the schedule)"
 Lighting,Sunrise wake-up,Lights fade up from dim red to warm white over 20 min before the alarm time set in the app
-Lighting,Limits,Firmware caps brightness at about 19 % (5 V rail 3 A); night mode 8 %
+Lighting,Limits,Firmware caps LED current at about 19 % (5 V rail 3 A); levels by room darkness are in the light-level table
 Filter,System,"3 stages, like the best long-life purifiers: DebrisGuard (washable debris catcher) -> LifeHEPA 5-year H13 -> OdourCore carbon"
 Filter,Stage 1 DebrisGuard DG-360,"4 magnetic washable panels of 60-mesh (250 um) PET mesh around the filter. Catches hair, lint, pet fur, coarse dust so they never reach the HEPA. Rinse under a tap every 2-4 weeks, dry 2 h. Lifetime part"
 Filter,Stage 2 LifeHEPA LF-5,"H13 (99.95 % at MPPS, EN 1822) glass-fibre mini-pleat, 60 mm deep, 4 mm pitch, 370 x 370 x 480 mm square tube. Media area about 21 m2 (about 20 x a normal flat HEPA)"

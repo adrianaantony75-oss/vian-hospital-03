@@ -1,0 +1,6 @@
+﻿Room,Lux,Glow ring,Mesh,Floor halo,Logo,Icons,Screen
+Bright day,over 150,100 %,off (not visible),40 %,60 %,8 %,100 %
+Normal room / evening,30-150,70 %,40 %,50 %,45 %,8 %,70 %
+Dim evening,3-30,35 %,30 %,30 %,25 %,5 %,35 %
+Dark room,under 3,8 %,5 %,8 %,4 %,off until touched,off after 15 s
+Sleep schedule 23:00-06:00,any,off,off,off,off,off until touched,off until touched

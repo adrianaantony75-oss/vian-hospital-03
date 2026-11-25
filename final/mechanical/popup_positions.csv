@@ -1,0 +1,5 @@
+﻿Mode,Lift,Side opening,Notes
+Off,0 mm,0 cm2,"Fully shut: grille sits on the closing plate, fins inside the body"
+Sleep,15 mm,195 cm2,Small gap
+Auto,30 mm,391 cm2,"Medium gap, moves only after 30 s steady"
+Turbo,46 mm,599 cm2,Fully open

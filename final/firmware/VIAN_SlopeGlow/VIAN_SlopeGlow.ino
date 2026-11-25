@@ -117,28 +117,39 @@ uint32_t timeColour(float &k) {
 }
 uint32_t currentColor() { return st.aqColor ? aqiRgb(st.aqi) : st.color; }
 void fillAll(Adafruit_NeoPixel &s, uint32_t c) { for (uint16_t i = 0; i < s.numPixels(); i++) s.setPixelColor(i, c); }
+// light levels by room darkness (LIGHT_LEVELS table): ring, mesh, floor halo, logo
+Zone zoneLevels() {
+  float l = st.lux < 0 ? 100 : st.lux;
+  if (l > 150) return {1.00f, 0.00f, 0.40f, 0.60f};
+  if (l > 30)  return {0.70f, 0.40f, 0.50f, 0.45f};
+  if (l > 3)   return {0.35f, 0.30f, 0.30f, 0.25f};
+  return {0.08f, 0.05f, 0.08f, 0.04f};
+}
 void lightingFrame(uint32_t now) {
+  static Zone z = {0.7f, 0.4f, 0.5f, 0.45f};                      // fade between levels, no jumps
+  Zone g = zoneLevels(); const float a = 0.02f;
+  z.ring += (g.ring - z.ring) * a; z.mesh += (g.mesh - z.mesh) * a; z.halo += (g.halo - z.halo) * a; z.logo += (g.logo - z.logo) * a;
   bool off = !st.lightOn || st.mode == M_OFF;
-  float user = st.bright / 100.0f * (st.night ? 0.08f : 1.0f);
+  float user = st.bright / 100.0f;
   uint32_t col = currentColor(); float tk; uint32_t tc = timeColour(tk);
   if (tc && !st.aqColor && millis() - st.lastTouch > 3600000UL) { col = tc; user *= tk; }
   float br = (st.fx == FX_BREATHE) ? 0.35f + 0.65f * (0.5f + 0.5f * sinf(now / 1000.0f * 1.6f)) : 1.0f;
-  uint32_t base = off ? 0 : scaleColor(col, user * br);
-  fillAll(ledGroove, base); fillAll(ledBase, base);   // ledGroove drives the mesh light strips (CH1)
+  fillAll(ledGroove, off ? 0 : scaleColor(col, user * br * z.mesh));   // CH1 = mesh light
+  fillAll(ledBase, off ? 0 : scaleColor(col, user * br * z.halo));
   bool ringOn = !off && st.liftMm > 3;   // running ring only when the cap is open
   for (int i = 0; i < N_RING_LEDS; i++) {
     float b = 1;
     if (st.fx == FX_RUN) { float ph = fmodf((float)i / N_RING_LEDS - now / 1000.0f * 0.22f + 10, 1.0f);
       float q = min(min(ph, 1 - ph), fabsf(ph - 0.5f)); b = 0.4f + 0.6f * powf(max(0.0f, 1 - q * 9), 2); }
-    ledRing.setPixelColor(i, ringOn ? scaleColor(col, user * br * b) : 0);
+    ledRing.setPixelColor(i, ringOn ? scaleColor(col, user * br * b * z.ring) : 0);
   }
   // touch-icon glow: faint all the time, brighter for 5 s after a touch, off at night unless touched
   bool recent = millis() - st.lastTouch < 5000;
   for (int i = N_RING_LEDS; i < N_RING; i++) ledRing.setPixelColor(i, scaleColor(0xFFB36B, recent ? 0.6f : (st.night ? 0.0f : 0.08f)));
   // VIAN logo (front only) follows the strip colour; soft white is shown warm gold on the white body
   uint32_t fc = (col == 0xFFF0DA) ? 0xE3A55A : col;
-  uint32_t logo = scaleColor(fc, st.night ? 0.05f : (st.mode == M_OFF ? 0.15f : max(0.3f, user)));
-  for (int i = 0; i < N_FRONT; i++) ledFront.setPixelColor(i, st.lightOn ? logo : 0);
+  uint32_t logo = scaleColor(fc, (st.mode == M_OFF ? 0.15f : max(0.3f, user)) * z.logo);
+  for (int i = 0; i < N_FRONT; i++) ledFront.setPixelColor(i, (st.lightOn && user > 0) ? logo : 0);
   ledGroove.show(); ledRing.show(); ledBase.show(); ledFront.show();
 }
 

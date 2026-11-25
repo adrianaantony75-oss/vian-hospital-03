@@ -98,3 +98,5 @@ static const uint8_t FAN_SKIP_BANDS[][2] = {{0, 0}};  // resonance bands to skip
 // ---------- Wi-Fi ----------
 #define AP_PREFIX "VIAN-"
 #define AP_PASS   "vianair123"    // change per unit at end-of-line (printed on label)
+
+struct Zone { float ring, mesh, halo, logo; };   // light level per zone (0..1)
