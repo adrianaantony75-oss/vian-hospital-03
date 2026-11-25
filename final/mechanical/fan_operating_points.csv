@@ -1,5 +1,5 @@
 ﻿Mode,Speed rpm,Airflow m3/h,Pressure Pa,Fan power W,Noise dB(A) est.,Pop-up lift mm
-Turbo,1200,750,130,46.0,45,46
-Auto (typical),840,525,64,15.8,37,30
-Auto (clean air),540,338,26,4.2,28,30
-Sleep,420,262,16,2.0,22,15
+Turbo,1800,750,150,57.0,56,46
+Auto (typical),1260,525,74,19.6,48,30
+Auto (clean air),810,338,30,5.2,39,30
+Sleep,630,262,18,2.4,33,15

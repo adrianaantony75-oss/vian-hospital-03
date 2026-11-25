@@ -6,7 +6,7 @@ IO4,FAN_PWM_DRV,out,EC fan PWM 25 kHz via 2N7002,Open drain to fan PWM input; fi
 IO5,FAN_TACH,in,EC fan FG tach,"2 pulses / rev; 10 k pull-up, RC filter"
 IO6,TOUCH_CHANGE,in,Touch-icon controller CHANGE (AT42QT1070 on the pop-up top),"Open drain, 10 k pull-up, via the ring flex cable"
 IO7,BUZ_DRV,out,Buzzer via 2N7002,2.7 kHz
-IO8,I2C0_SDA,i/o,I2C0 data,"LIS2DH12, INA226, VEML7700, AT42QT1070 touch icons (via ring flex); 400 kHz"
+IO8,I2C0_SDA,i/o,I2C0 data,"LIS2DH12, INA226, VEML7700, AT42QT1070 touch icons (via ring flex); 100 kHz (long cable)"
 IO9,I2C0_SCL,out,I2C0 clock,4.7 k pull-ups on MB
 IO10,TMC_TX,out,TMC2209 UART TX,Through 1 k into PDN_UART
 IO11,TMC_UART,in,TMC2209 UART RX,"Single-wire UART, 115200"
@@ -31,7 +31,7 @@ IO42,LCD_CS,out,Display SPI chip select,ST7796S
 IO47,LCD_SCK,out,Display SPI clock,40 MHz
 IO48,LCD_MOSI,out,Display SPI data,
 IO45,LCD_DC,out,Display data / command,Strapping pin: 10 k pull-down R35 keeps flash at 3.3 V
-IO43,LCD_BL,out,Display backlight PWM,Via AO3400 on display board
+IO43,LCD_BL,out,Display backlight PWM,Direct to module LED control pin via 100 R; confirm on the module datasheet
 IO44,spare,-,Spare,Factory logs go over USB-C
 IO46,spare,-,Spare (strapping),Leave unconnected
 IO0,BOOT,in,Boot button,Hold during reset to flash

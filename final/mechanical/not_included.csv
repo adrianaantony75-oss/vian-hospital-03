@@ -1,5 +1,5 @@
 ﻿Feature,Status,Why
-Dehumidifier (compressor),Not included,"Adds 10-15 kg, 200-300 W, a water tank to empty and INR 4,000-7,000; it would make the tower bigger and heavier (less stable) and puts water next to the filter (mould risk)"
+Dehumidifier (compressor),Not included,"Adds 10-15 kg, 200-300 W, a water tank to empty and cost; it would make the tower bigger and heavier (less stable) and puts water next to the filter (mould risk)"
 Dehumidifier (Peltier),Not included,"Removes only 0.25-0.5 L/day, too little for a room"
 Heater to lower humidity,Not included,"Only lowers relative humidity by heating the room (bad in Indian summers), needs 1,000-2,000 W and adds fire risk"
 Humidifier (water mist),Not included,Needs a water tank and daily cleaning; wet air on the HEPA and carbon shortens their life and can grow mould; ultrasonic types spread white dust from tap water

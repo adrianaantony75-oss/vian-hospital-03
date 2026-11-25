@@ -48,7 +48,7 @@ class VianUI {
       case P_PM10: snprintf(big, sizeof big, "%.0f", d.pm10); snprintf(sub, sizeof sub, "ug/m3  coarse dust"); break;
       case P_HUM: snprintf(big, sizeof big, "%.0f%%", d.rh); snprintf(sub, sizeof sub, "%.0f C  %s", d.t, d.rh > 70 ? "humid" : d.rh < 30 ? "dry" : "comfortable"); break;
       case P_VOC: snprintf(big, sizeof big, "%s", d.voc < 150 ? "LOW" : d.voc < 250 ? "MID" : "HIGH"); snprintf(sub, sizeof sub, "smells and fumes  index %ld", (long)d.voc); break;
-      case P_FAN: snprintf(big, sizeof big, "%s", d.mode); snprintf(sub, sizeof sub, "fan %u %%  about %u dB", d.fanPct, d.dB); break;
+      case P_FAN: snprintf(big, sizeof big, "%s", d.mode); snprintf(sub, sizeof sub, "fan speed %u %%", d.fanPct); break;
       case P_FILTER: snprintf(big, sizeof big, "%u%%", d.hepa); snprintf(sub, sizeof sub, d.debrisDays >= DEBRIS_WASH_DAYS ? "rinse the mesh now" : "carbon %u %%  rinse mesh in %d days", d.odour, DEBRIS_WASH_DAYS - d.debrisDays); break;
       case P_LIGHT: snprintf(big, sizeof big, "%s", d.fxName); snprintf(sub, sizeof sub, "brightness %u %%", d.bright); subc = acc; break;
       case P_WIFI: snprintf(big, sizeof big, "%s", d.wifi ? "ON" : "OFF"); snprintf(sub, sizeof sub, d.wifi ? "app connected  %u VIAN in home" : "open the VIAN app to connect", d.units); break;

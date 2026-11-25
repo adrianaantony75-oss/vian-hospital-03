@@ -199,7 +199,7 @@ function iconTex(kind){return canvasTex(128,128,(g)=>{g.strokeStyle="#fff";g.fil
 /* screen pages (what the OLED shows) */
 const PAGES=[
  ["Air quality","24","AQI · GOOD","#9fe1cb"],["PM2.5","8","µg/m³ · fine dust","#9fe1cb"],["PM10","14","µg/m³ · coarse dust","#9fe1cb"],
- ["Humidity","46%","27 °C · comfortable","#cfd6dd"],["Gases (VOC)","LOW","smells · fumes","#9fe1cb"],["Fan","AUTO","speed 2 of 4 · 37 dB","#cfd6dd"],
+ ["Humidity","46%","27 °C · comfortable","#cfd6dd"],["Gases (VOC)","LOW","smells · fumes","#9fe1cb"],["Fan","AUTO","speed 2 of 4","#cfd6dd"],
  ["Filter","92%","LifeHEPA · rinse mesh in 9 days","#cfd6dd"],["Light","WARM","running · 60 %","#FFB36B"],["Wi-Fi","ON","app connected","#9fe1cb"]];
 function drawPage(g,w,h,i){const P=PAGES[i];g.fillStyle="#000";g.fillRect(0,0,w,h);g.textAlign="center";g.fillStyle="#8a929c";g.font=`600 ${h*.1}px Manrope, sans-serif`;g.fillText(P[0].toUpperCase(),w/2,h*.14);
   g.fillStyle="#fff";g.font=`700 ${h*.64}px Manrope, sans-serif`;g.fillText(P[1],w/2,h*.7);g.fillStyle=P[3];g.font=`600 ${h*.1}px Manrope, sans-serif`;g.fillText(P[2],w/2,h*.85);

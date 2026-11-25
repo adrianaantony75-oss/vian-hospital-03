@@ -12,7 +12,7 @@
 <line x1="260" y1="65" x2="380" y2="220" stroke="#555" stroke-width="1.6"/>
 <text x="324.0" y="138.5" fill="#666" font-size="11">W1 24 V</text>
 <rect x="30" y="140" width="230" height="70" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
-<text x="145.0" y="162" text-anchor="middle" font-weight="700">EC fan 225 mm</text>
+<text x="145.0" y="162" text-anchor="middle" font-weight="700">EC fan 250 mm</text>
 <text x="145.0" y="182" text-anchor="middle" fill="#334">24 V, PWM, FG</text>
 <line x1="260" y1="175" x2="380" y2="250" stroke="#555" stroke-width="1.6"/>
 <text x="324.0" y="208.5" fill="#666" font-size="11">W2</text>
@@ -33,24 +33,23 @@
 <text x="324.0" y="421.0" fill="#666" font-size="11">W14 W15</text>
 <rect x="740" y="30" width="230" height="90" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
 <text x="855.0" y="52" text-anchor="middle" font-weight="700">VSG-DB display board</text>
-<text x="855.0" y="72" text-anchor="middle" fill="#334">HT1622 + VA LCD</text>
-<text x="855.0" y="89" text-anchor="middle" fill="#334">touch QT1070, VEML7700</text>
-<text x="855.0" y="106" text-anchor="middle" fill="#334">8 backlight LEDs</text>
+<text x="855.0" y="72" text-anchor="middle" fill="#334">4.0 in ST7796S screen</text>
+<text x="855.0" y="89" text-anchor="middle" fill="#334">VEML7700 light sensor</text>
 <line x1="620" y1="220" x2="740" y2="75" stroke="#555" stroke-width="1.6"/>
-<text x="684.0" y="143.5" fill="#666" font-size="11">W5 12-way</text>
+<text x="684.0" y="143.5" fill="#666" font-size="11">W5 14-way</text>
 <rect x="740" y="150" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
 <text x="855.0" y="172" text-anchor="middle" font-weight="700">VSG-LB logo board</text>
 <text x="855.0" y="192" text-anchor="middle" fill="#334">12 RGBW LEDs</text>
 <line x1="855" y1="120" x2="855" y2="150" stroke="#555" stroke-width="1.6"/>
 <text x="859.0" y="131.0" fill="#666" font-size="11">W6</text>
 <rect x="740" y="240" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
-<text x="855.0" y="262" text-anchor="middle" font-weight="700">Groove strip</text>
+<text x="855.0" y="262" text-anchor="middle" font-weight="700">Mesh light strips</text>
 <text x="855.0" y="282" text-anchor="middle" fill="#334">96 RGBW LEDs</text>
 <line x1="620" y1="260" x2="740" y2="270" stroke="#555" stroke-width="1.6"/>
 <text x="684.0" y="261.0" fill="#666" font-size="11">W7 CH1</text>
 <rect x="740" y="320" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>
-<text x="855.0" y="342" text-anchor="middle" font-weight="700">VSG-RB pop-up ring</text>
-<text x="855.0" y="362" text-anchor="middle" fill="#334">84 RGBW LEDs, flex</text>
+<text x="855.0" y="342" text-anchor="middle" font-weight="700">VSG-RB ring + VSG-TB touch</text>
+<text x="855.0" y="362" text-anchor="middle" fill="#334">84 + 4 LEDs, AT42QT1070</text>
 <line x1="620" y1="290" x2="740" y2="350" stroke="#555" stroke-width="1.6"/>
 <text x="684.0" y="316.0" fill="#666" font-size="11">W8 CH2</text>
 <rect x="740" y="400" width="230" height="60" rx="10" fill="#EAF6F4" stroke="#1d6f66" stroke-width="1.5"/>

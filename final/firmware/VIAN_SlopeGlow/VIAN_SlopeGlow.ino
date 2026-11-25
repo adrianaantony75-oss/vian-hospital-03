@@ -84,7 +84,7 @@ void liftTask(void *) {
       digitalWrite(PIN_LIFT_STEP, LOW); delayMicroseconds(halfPeriodUs);
       liftPos += up ? 1 : -1;
     }
-    taskYIELD();
+    vTaskDelay(1);   // let the idle task run, otherwise a long move trips the core-0 watchdog
   }
 }
 void liftHome() {  // close until home switch, at power-up
@@ -150,7 +150,7 @@ void displayFrame(uint32_t now) {
   ui.brightness(asleep ? 0 : (uint8_t)constrain(40 + st.lux * 0.6f, 40.0f, 255.0f));
   if (asleep) return;
   static const char *FX[3] = {"STEADY", "RUNNING", "BREATHE"};
-  UiData d{st.aqi, st.pm25, st.pm10, st.rh, st.t, st.voc, st.fanPct, modeTitle(st.mode), (uint8_t)(st.fanPct < 30 ? 22 : st.fanPct < 75 ? 37 : 45),
+  UiData d{st.aqi, st.pm25, st.pm10, st.rh, st.t, st.voc, st.fanPct, modeTitle(st.mode), (uint8_t)0,
            WiFi.status() == WL_CONNECTED, st.units, currentColor(), st.hepaLife, st.odourLife, st.debrisDays,
            st.tilted || st.doorOpen || st.filterMissing,
            st.tilted ? "Unit tilted - fan off" : st.doorOpen ? "Front panel open" : "Fit the filter", FX[st.fx], st.bright, st.locked};
@@ -277,12 +277,12 @@ void setup() {
   pinMode(PIN_LIFT_STEP, OUTPUT); pinMode(PIN_LIFT_DIR, OUTPUT); pinMode(PIN_LIFT_EN, OUTPUT); digitalWrite(PIN_LIFT_EN, HIGH);
   pinMode(PIN_UV_RELAY, OUTPUT); digitalWrite(PIN_UV_RELAY, LOW); pinMode(PIN_BUZZER, OUTPUT);
   pinMode(PIN_FAN_TACH, INPUT); attachInterrupt(PIN_FAN_TACH, onTach, FALLING);
-  busMain.begin(PIN_I2C0_SDA, PIN_I2C0_SCL, 400000); busSens.begin(PIN_I2C1_SDA, PIN_I2C1_SCL, 100000);
+  busMain.begin(PIN_I2C0_SDA, PIN_I2C0_SCL, 100000); busSens.begin(PIN_I2C1_SDA, PIN_I2C1_SCL, 100000);
   lisBegin(); inaBegin(); vemlBegin(); qtBegin(); pmsBegin(); sgpStart = millis();
   for (auto *s : {&ledGroove, &ledRing, &ledBase, &ledFront}) { s->begin(); s->setBrightness(LED_MAX_BRIGHT); s->clear(); s->show(); }
   ui.begin();
   TMCSerial.begin(115200, SERIAL_8N1, PIN_TMC_RX, PIN_TMC_TX);
-  tmc.begin(); tmc.toff(4); tmc.rms_current(LIFT_RUN_CURRENT); tmc.microsteps(16); tmc.en_spreadCycle(false);   // StealthChop = silent
+  tmc.begin(); tmc.I_scale_analog(false); tmc.toff(4); tmc.rms_current(LIFT_RUN_CURRENT); tmc.microsteps(16); tmc.en_spreadCycle(false);   // StealthChop = silent
   tmc.pwm_autoscale(true); tmc.TCOOLTHRS(0xFFFFF); tmc.SGTHRS(LIFT_STALL_THRS);
   xTaskCreatePinnedToCore(liftTask, "lift", 4096, nullptr, 2, nullptr, 0);
   prefs.begin("vian", false);

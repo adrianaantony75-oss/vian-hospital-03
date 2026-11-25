@@ -4,8 +4,8 @@ Screen,"Can you supply it with a black-printed cover glass 88 x 48 mm (1.1 mm, a
 Screen,Interface pin-out and datasheet; driver IC; example code; can it run from 3.3 V; current draw.
 Screen,"Price at 500 / 1,000 / 5,000 pcs; MOQ; sample cost and time; lead time; warranty; reject rate (dead pixels)."
 Screen,"Your ready-made display board will not run our sensors, lights and app: can you make a CUSTOM board (PCB design + assembly) from our netlist and BOM? Price, lead time, testing."
-Fan,"24 V DC EC (brushless) backward-curved centrifugal fan, 250 mm impeller, >= 950 m3/h free air at <= 1,400 rpm, <= 50 W; PWM 25 kHz speed input + FG tach output; sine-wave (FOC) drive?"
-Fan,"Noise (dB(A)) at 420, 840 and 1,200 rpm; fan curve (pressure vs airflow); balancing grade (G1.0?); bearing type and L10 life."
+Fan,"24 V DC EC (brushless) backward-curved centrifugal fan, 250 mm impeller, 750 m3/h at 150 Pa static, <= 65 W; PWM 25 kHz speed input + FG tach output; sine-wave (FOC) drive?"
+Fan,Noise (dB(A)) at the duty point and at 70 % and 35 % speed; fan curve (pressure vs airflow); balancing grade (G1.0?); bearing type and L10 life.
 Fan,Can the impeller have serrated trailing edges and uneven blade spacing (quiet design)? Tooling cost if custom.
 Fan,"Price at 500 / 1,000 / 5,000 pcs; MOQ; samples; lead time; certifications (CE / UL recognised motor); warranty."
 Both,Do you sign an NDA? Can you share BIS / CE / RoHS documents for your parts? Payment terms? Who is the engineering contact?

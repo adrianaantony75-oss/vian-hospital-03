@@ -2,14 +2,14 @@
 Power-up,"24 V in: 3V3 = 3.30 +/- 0.1 V, 5V_LED = 5.0 +/- 0.15 V at TP2/TP3",Pass / fail
 Firmware,"USB-C flash, version VSG-1.x shown in /api/state",Version matches
 Sensors,"SHT40, SGP41, LIS2DH12, INA226, VEML7700, QT1070 answer on I2C; PMS5003 frames every 1 s",All present
-Fan,Sleep / Auto / Turbo: RPM within +/- 8 % of the golden unit; Turbo power <= 55 W,Within limits
+Fan,Sleep / Auto / Turbo: RPM within +/- 8 % of the golden unit; Turbo power <= 65 W,Within limits
 Lift,Homes in < 15 s; reaches 15 / 30 / 46 mm; stall test with 2 kg block reverses 5 mm,"Moves, anti-pinch works"
 Lights,Each channel white / red / green / blue / warm; LED count check by camera,No dead LEDs
 Display,"Colour bars + white + black test screens; check dead pixels, backlight 0-100 %","No dead pixels, even backlight"
-Touch,Tap the 4 corners and the 4 on-screen buttons; hold Filter 5 s = filter reset beep,All points respond
+Touch,Touch each of the 4 icons; hold Light 5 s = filter reset beep; Previous + Next 3 s = child lock,All 4 respond
 Safety,Remove front panel: fan stops < 1 s; remove filter: fan stays off; tilt 40 deg: off + beep,All 3 interlocks
 Air leak,Smoke pen around LifeHEPA top gasket at Turbo: no bypass,No leak
 Filter pressure,dP across LifeHEPA + OdourCore at 700 m3/h <= 150 Pa (golden filter),Within limit
-Noise,"Sleep <= 23 dB(A), Auto <= 38, Turbo <= 46 dB(A) at 1 m; no tone > 6 dB above the broadband (sample 1 in 50)",Within limits
+Noise,Limits set from the approved prototype; no tone > 6 dB above the broadband (sample 1 in 50),Within limits
 Stability,10 deg tilt in all 4 directions with filters out: must not fall; push test 40 N at top,Does not tip
 Hi-pot / earth,Adapter is certified; check earth continuity lift plate to GND < 0.5 ohm,Pass

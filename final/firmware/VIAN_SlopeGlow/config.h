@@ -35,7 +35,7 @@
 #define PIN_LED_RING   39   // CH2 pop-up running ring, 84 LEDs
 #define PIN_LED_BASE   40   // CH3 base halo, 36 LEDs
 #define PIN_LED_FRONT  41   // CH4 VIAN logo, 12 LEDs (through the display board)
-// Outside display: 4.0" IPS ST7796S on SPI2 + FT6336U touch on I2C0 (0x38). LCD/touch reset = ESP_EN.
+// Outside display: 4.0" IPS ST7796S on SPI2, no touch. LCD reset = ESP_EN.
 #define PIN_LCD_CS     42
 #define PIN_LCD_SCK    47
 #define PIN_LCD_MOSI   48
@@ -59,7 +59,7 @@
 #define N_LOGO   12
 #define N_FRONT  N_LOGO
 // Global LED current cap: 5 V LED rail is 3 A. Firmware limits average brightness.
-#define LED_MAX_BRIGHT 64   // of 255, about 25 % -> worst case ~2.5 A all channels white
+#define LED_MAX_BRIGHT 48   // of 255, about 19 % -> worst case ~2.5 A all channels white
 
 // ---------- Lift mechanics ----------
 // Lead screw 2 mm/rev, 200 full steps/rev, 16 microsteps -> 1600 steps per mm
@@ -77,7 +77,7 @@
 #define FAN_PWM_HZ    25000
 #define FAN_PWM_BITS  10
 #define FAN_MIN_PCT   18     // below this the EC fan stops
-#define FAN_SLEEP_PCT 35     // 578 rpm, 262 m3/h, ~29 dB(A)
+#define FAN_SLEEP_PCT 35     // tune on the prototype
 #define FAN_TURBO_PCT 100
 // Quiet behaviour
 #define FAN_RAMP_PCT_PER_S 4      // speed changes slowly: no sudden roar

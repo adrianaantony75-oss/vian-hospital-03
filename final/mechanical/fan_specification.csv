@@ -2,9 +2,9 @@
 Type,"Backward-curved centrifugal impeller with 24 V DC EC (brushless, electronically commutated) outer-rotor motor"
 Impeller,"250 mm diameter, 9 blades with uneven (modulated) spacing and serrated trailing edges, 180 mm inlet, PA66-GF30, balanced G1.0"
 Position,"Horizontal on the fan deck at z = 600-760 mm, sucking up through the filter centre and blowing out to the 360 deg pop-up gap"
-Max speed,"1,600 rpm limit; Turbo set point 1,200 rpm (a bigger wheel turning slower is much quieter)"
-Free air,">= 950 m3/h at 1,400 rpm"
+Speed,"Estimated 1,650-2,000 rpm for a 250 mm backward-curved wheel at the duty point; supplier to confirm. A larger wheel allows a lower speed"
+Free air,Supplier to state; the duty point above decides
 Control,"Sine-wave (FOC) motor drive inside the fan, so no electrical whine; PWM 25 kHz (above hearing), FG tach 2 pulses/rev, INA226 power monitor"
 Bearings,"Ball bearings, L10 life >= 40,000 h at 40 deg C (about 9 years at 12 h/day)"
 Mounting,4 x M4 on soft silicone isolators (30 Shore A) to a floating fan deck; inlet bell-mouth P20 sealed with PU foam
-System pressure at Turbo,DebrisGuard 5 + LifeHEPA 60 + OdourCore 50 + outlet/cap 15 = 130 Pa at 750 m3/h
+Duty point the supplier must meet,750 m3/h at 150 Pa static (DebrisGuard 5 + LifeHEPA 80 + OdourCore 50 + outlet 15). The supplier confirms the speed from a fan curve
