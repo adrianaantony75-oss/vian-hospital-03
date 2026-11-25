@@ -9,7 +9,7 @@ VIAN logo window,"Front, upper shell",Centre at z = 800 mm,"132 x 40 mm, wall 0.
 Seam line,"All round, z = 600-608 mm",Between P01 and P03,8 mm graphite ring,Visual split between the two tones
 Mesh light,"Inside the lower sleeve, all 4 sides",z = 120-520 mm,Through the 2.0 mm intake holes,Light glows out through the mesh
 Base halo slot,"Underside of base, all round",z = 3-8 mm,5 mm opal ring,Floor glow
-Front intake panel,"Front, lower sleeve",z = 75-600 mm,310 x 525 mm,Remove to rinse DebrisGuard and change filters (door switch)
+Front intake panel,"Front, lower sleeve",z = 75-600 mm,"450 x 525 mm U-shape, 440 mm clear opening",Remove to rinse DebrisGuard and change filters (door switch)
 DC jack 24 V,Rear of base,"z = 35 mm, centre",8 mm hole for PJ-063AH,Power in
 Cable clip,Rear of base,Next to DC jack,R-clip for 3.5 mm cable,Strain relief
 USB-C service port,"Rear of upper shell, under P16 cover",z = 700 mm,9.5 x 3.6 mm,Firmware + diagnostics

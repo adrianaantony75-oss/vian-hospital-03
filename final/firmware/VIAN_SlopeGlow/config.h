@@ -88,7 +88,7 @@ static const uint8_t FAN_SKIP_BANDS[][2] = {{0, 0}};  // resonance bands to skip
 #define TILT_LIMIT_DEG 35.0f
 
 // ---------- Filters (3 stages) ----------
-#define HEPA_CAPACITY_G   920.0f   // LifeHEPA LF-5: 23 m2 x 40 g/m2 (confirm with lab dust-loading test)
+#define HEPA_CAPACITY_G   840.0f   // LifeHEPA: 21 m2 x 40 g/m2 (assumed, confirm by lab)
 #define HEPA_MAX_HOURS    21900.0f // 5 years x 12 h/day hygiene limit
 #define FILTER_POWER_RISE 0.25f    // +25 % fan power at Turbo -> HEPA end of life
 #define ODOUR_MAX_HOURS   4380.0f  // OdourCore OC-12: 12 months x 12 h/day

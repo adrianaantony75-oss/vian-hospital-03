@@ -3,7 +3,7 @@
 Serrated trailing edges (owl-wing idea),Small saw-tooth edges on each blade break up the swirl that makes the 'whoosh',not measured,
 Uneven blade spacing,"9 blades at slightly different angles spread the humming tone over many frequencies, so there is no single whine",not measured,
 Sine-wave (FOC) motor drive,"Smooth current to the motor: no electrical buzz, PWM at 25 kHz is above human hearing",not measured,
-Huge low-resistance filter,"23 m2 LifeHEPA: air passes at 0.85 cm/s, about 150 Pa total, so the fan works gently",not measured,
+Huge low-resistance filter,"21 m2 LifeHEPA: air passes at about 1 cm/s, about 150 Pa total, so the fan works gently",not measured,
 Smooth inlet bell-mouth,"Rounded 180 mm inlet ring, no sharp edge for air to tear on",not measured,
 Acoustic foam lining,10 mm melamine foam (V-0) in the fan scroll and outlet absorbs fan noise before it leaves,not measured,
 "Wide, slow 360 deg outlet","Pop-up gap all round: air leaves more slowly, so no rushing sound",not measured,
